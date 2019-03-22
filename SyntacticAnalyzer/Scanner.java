@@ -130,6 +130,10 @@ public final class Scanner {
 
     case '.':
       takeIt();
+      if(currentChar == '.'){
+        takeIt();
+        return Token.DOUBLEDOT;
+      }
       return Token.DOT;
 
     case ':':
@@ -137,6 +141,13 @@ public final class Scanner {
       if (currentChar == '=') {
         takeIt();
         return Token.BECOMES;
+      }
+      else if(currentChar == ':'){
+        takeIt();
+        if(currentChar == '='){
+          takeIt();
+          return Token.SINGLEDECLARATION;
+        }
       } else
         return Token.COLON;
 
@@ -151,6 +162,14 @@ public final class Scanner {
     case '~':
       takeIt();
       return Token.IS;
+
+    case '|':
+      takeIt();
+      return Token.PIPE;
+
+    case '$':
+      takeIt();
+      return Token.DOLLAR;
 
     case '(':
       takeIt();
@@ -211,5 +230,4 @@ public final class Scanner {
       System.out.println(tok);
     return tok;
   }
-
 }

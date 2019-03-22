@@ -29,6 +29,6 @@ public class SourcePosition {
   }
 
   public String toString() {
-    return "(" + start + ", " + finish + ")";
+    return "(" + start + ", " + finish + ") AKA = el espejo";
   }
 }
