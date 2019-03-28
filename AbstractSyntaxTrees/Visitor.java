@@ -19,12 +19,36 @@ public interface Visitor {
   // Commands
   public abstract Object visitAssignCommand(AssignCommand ast, Object o);
   public abstract Object visitCallCommand(CallCommand ast, Object o);
+  public abstract Object visitChooseCommand(ChooseCommand ast, Object o);  
   public abstract Object visitEmptyCommand(EmptyCommand ast, Object o);
   public abstract Object visitIfCommand(IfCommand ast, Object o);
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
 
+  //Loops
+  public abstract Object visitLoopCasesWhile(LoopCasesWhile ast, Object o);
+  public abstract Object visitLoopCasesUntil(LoopCasesUntil ast, Object o);
+  public abstract Object visitLoopCasesDo(LoopCasesDo ast, Object o);
+  public abstract Object visitLoopCasesFOR(LoopCasesFOR ast, Object o);
+  public abstract Object visitDoLoopUntil(DoLoopUntil ast, Object o);
+  public abstract Object visitDoLoopWhile(DoLoopWhile ast, Object o);
+  public abstract Object visitCallLoopCases(CallLoopCases ast, Object o);
+
+  // Cases
+  public abstract Object visitCases(Cases ast, Object o);
+  public abstract Object visitElseCase(ElseCase ast, Object o);
+  public abstract Object visitSequentialCase(SequentialCase ast, Object o);
+  public abstract Object visitCaseWhen(CaseWhen ast, Object o);
+  public abstract Object visitCaseLiterals(CaseLiterals ast, Object o);
+  public abstract Object visitCaseRangeCase(CaseRangeCase ast, Object o);
+  public abstract Object visitSequentialCaseRange(SequentialCaseRange ast, Object o);
+  public abstract Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o);
+  public abstract Object visitCaseLiteralINT(CaseLiteralINT ast, Object o);
+
+  //Selector
+  public abstract Object visitBracketSelector(BracketSelector ast, Object o);
+  public abstract Object visitDotSelector(DotSelector ast, Object o);
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
@@ -38,16 +62,26 @@ public interface Visitor {
   public abstract Object visitRecordExpression(RecordExpression ast, Object o);
   public abstract Object visitUnaryExpression(UnaryExpression ast, Object o);
   public abstract Object visitVnameExpression(VnameExpression ast, Object o);
+  public abstract Object visitIntLiteralExpression(IntLiteralExpression ast, Object o);
+  public abstract Object visitOperatorExpression(OperatorExpression ast, Object o);
+
 
   // Declarations
   public abstract Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o);
   public abstract Object visitConstDeclaration(ConstDeclaration ast, Object o);
   public abstract Object visitFuncDeclaration(FuncDeclaration ast, Object o);
   public abstract Object visitProcDeclaration(ProcDeclaration ast, Object o);
+  public abstract Object visitPackDeclaration(PackageDeclaration ast, Object o);
   public abstract Object visitSequentialDeclaration(SequentialDeclaration ast, Object o);
+  public abstract Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o);
+  public abstract Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o);
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
+  public abstract Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o);
+  public abstract Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o);
+  public abstract Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o);
+  public abstract Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o);
 
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
