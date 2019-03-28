@@ -1,5 +1,5 @@
 /*
- * @(#)Identifier.java                        2.1 2003/10/07
+ * @(#)VarDeclaration.java                        2.1 2003/10/07
  *
  * Copyright (C) 1999, 2003 D.A. Watt and D.F. Brown
  * Dept. of Computing Science, University of Glasgow, Glasgow G12 8QQ Scotland
@@ -16,14 +16,19 @@ package Triangle.AbstractSyntaxTrees;
 
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class CompoundIdentifier extends AST {
+public class ProcFuncProcFuncsz extends ProcFunc {
 
-  public CompoundIdentifier (PackageIdentifier piAST, Identifier idAST,SourcePosition thePosition) {
+  public ProcFuncProcFuncsz (ProcFunc pf1AST, ProcFunc pf2AST, CommaProcFuncnd pf3AST,
+                         SourcePosition thePosition) {
     super (thePosition);
-    package = piAST;
-    identifier = idAST;
+    PF1 = pf1AST;
+    PF2 = pf2AST;
+    PF3 = pf3AST;
   }
 
-  public PackageIdentifier package;
-  public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
+  public Object visit(Visitor v, Object o) {
+    return v.visitProcFuncProcFuncsz(this, o);
+  }
+
+  public ProcFunc PF1, PF2, PF3;
 }

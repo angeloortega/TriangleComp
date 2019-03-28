@@ -1,5 +1,5 @@
 /*
- * @(#)Identifier.java                        2.1 2003/10/07
+ * @(#)UnaryExpression.java                        2.1 2003/10/07
  *
  * Copyright (C) 1999, 2003 D.A. Watt and D.F. Brown
  * Dept. of Computing Science, University of Glasgow, Glasgow G12 8QQ Scotland
@@ -16,14 +16,17 @@ package Triangle.AbstractSyntaxTrees;
 
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class CompoundIdentifier extends AST {
+public class LParenExpression extends Expression {
 
-  public CompoundIdentifier (PackageIdentifier piAST, Identifier idAST,SourcePosition thePosition) {
+  public LParenExpression (Expression eAST,
+                          SourcePosition thePosition) {
     super (thePosition);
-    package = piAST;
-    identifier = idAST;
+    E = eAST;
   }
 
-  public PackageIdentifier package;
-  public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
+  public Object visit(Visitor v, Object o) {
+    return v.visitLParenExpression(this, o);
+  }
+
+  public Expression E;
 }

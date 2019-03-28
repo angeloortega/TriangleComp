@@ -1,5 +1,5 @@
 /*
- * @(#)Identifier.java                        2.1 2003/10/07
+ * @(#)IfExpression.java                        2.1 2003/10/07
  *
  * Copyright (C) 1999, 2003 D.A. Watt and D.F. Brown
  * Dept. of Computing Science, University of Glasgow, Glasgow G12 8QQ Scotland
@@ -16,14 +16,19 @@ package Triangle.AbstractSyntaxTrees;
 
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class CompoundIdentifier extends AST {
+public class LIdentifierExpression extends Expression {
 
-  public CompoundIdentifier (PackageIdentifier piAST, Identifier idAST,SourcePosition thePosition) {
+  public LIdentifierExpression (LongIdentifier liAST, ActualParameterSequence apsAST,
+             SourcePosition thePosition) {
     super (thePosition);
-    package = piAST;
-    identifier = idAST;
+    LI = liAST;
+    APS = apsAST;
   }
 
-  public PackageIdentifier package;
-  public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
+  public Object visit(Visitor v, Object o) {
+    return v.visitLIdentifierExpression(this, o);
+  }
+
+  public LongIdentifier LI;
+  public ActualParameterSequence APS;
 }

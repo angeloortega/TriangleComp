@@ -25,6 +25,14 @@ public interface Visitor {
   public abstract Object visitLetCommand(LetCommand ast, Object o);
   public abstract Object visitSequentialCommand(SequentialCommand ast, Object o);
   public abstract Object visitWhileCommand(WhileCommand ast, Object o);
+  public abstract Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object o);
+
+  //PROCS & FUNCS
+  public abstract Object visitProcFuncProcFuncsz(ProcFuncProcFuncsz ast, Object o);
+  public abstract Object visitProcProcFunc(ProcProcFunc ast, Object o);
+  public abstract Object visitFuncProcFunc(FuncProcFunc ast, Object o);
+  public abstract Object visitSequentialProcFuncs(SequentialProcFuncs ast, Object o);
+
 
   //Loops
   public abstract Object visitLoopCasesWhile(LoopCasesWhile ast, Object o);
@@ -56,6 +64,7 @@ public interface Visitor {
   public abstract Object visitCallExpression(CallExpression ast, Object o);
   public abstract Object visitCharacterExpression(CharacterExpression ast, Object o);
   public abstract Object visitEmptyExpression(EmptyExpression ast, Object o);
+  public abstract Object visitSecExpression(SecExpression ast, Object o);
   public abstract Object visitIfExpression(IfExpression ast, Object o);
   public abstract Object visitIntegerExpression(IntegerExpression ast, Object o);
   public abstract Object visitLetExpression(LetExpression ast, Object o);
@@ -64,6 +73,10 @@ public interface Visitor {
   public abstract Object visitVnameExpression(VnameExpression ast, Object o);
   public abstract Object visitIntLiteralExpression(IntLiteralExpression ast, Object o);
   public abstract Object visitOperatorExpression(OperatorExpression ast, Object o);
+  public abstract Object visitLParenExpression(LParenExpression ast, Object o);
+  public abstract Object visitLCurlyExpression(LCurlyExpression ast, Object o);
+  public abstract Object visitLBracketExpression(LBracketExpression ast, Object o);
+  public abstract Object visitLIdentifierExpression(LIdentifierExpression ast, Object o);
 
 
   // Declarations
@@ -79,6 +92,7 @@ public interface Visitor {
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
   public abstract Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o);
+  public abstract Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o);
   public abstract Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o);
   public abstract Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o);
   public abstract Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o);
@@ -90,6 +104,8 @@ public interface Visitor {
   // Record Aggregates
   public abstract Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o);
   public abstract Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o);
+  public abstract Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o);
+  public abstract Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o);
 
   // Formal Parameters
   public abstract Object visitConstFormalParameter(ConstFormalParameter ast, Object o);
