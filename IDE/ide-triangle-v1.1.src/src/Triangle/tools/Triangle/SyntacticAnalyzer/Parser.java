@@ -339,7 +339,8 @@ public class Parser {
         DoLoop doLoopAST = parseDoLoop();
         finish(loopCasesPos);
         loopCasesAST = new LoopCasesDo(commandAST,doLoopAST, loopCasesPos);
-      }
+      }break;
+      
       case Token.FOR:{
         acceptIt();
         Identifier identifierAST = parseIdentifier();
@@ -350,8 +351,9 @@ public class Parser {
         ForLoop forLoopAST = parseForLoop();
         finish(loopCasesPos);
         loopCasesAST = new LoopCasesFOR(identifierAST,eAST,e2AST,forLoopAST,loopCasesPos);
-      }
-    	case Token.UNTIL:{
+      }break;
+      
+      case Token.UNTIL:{
         acceptIt();
         Expression eAST = parseExpression();
         accept(Token.DO);
@@ -359,7 +361,7 @@ public class Parser {
         accept(Token.END);
         finish(loopCasesPos);
         loopCasesAST = new LoopCasesUntil(eAST,commandAST, loopCasesPos);
-      }
+      } break;
         
       case Token.WHILE:{
         acceptIt();
@@ -369,7 +371,7 @@ public class Parser {
         accept(Token.END);
         finish(loopCasesPos);
         loopCasesAST = new LoopCasesWhile(eAST,commandAST, loopCasesPos);
-      }
+      }break;
 
       default:
       syntacticError("\"%\" cannot start a LoopCases",
@@ -920,7 +922,7 @@ public class Parser {
      
         default:
           try{
-            SingleDeclaration sdAST = (SingleDeclaration) parseSingleDeclaration();
+            Declaration sdAST = (Declaration) parseSingleDeclaration();
             finish(compoundDeclarationPos);
             compoundDeclarationAST = new CompoundDeclarationSingleDeclaration(sdAST, compoundDeclarationPos); 
           }
@@ -999,7 +1001,6 @@ public class Parser {
       {
         acceptIt();
         Identifier iAST = parseIdentifier();
-        accept(Token.COLON);
         VarSingleDeclaration vsdAST = parseVarSingleDeclaration();
         finish(declarationPos);
         declarationAST = new VarDeclaration(iAST, vsdAST, declarationPos);
@@ -1369,7 +1370,7 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     SourcePosition packageDeclarationPos = new SourcePosition();
     start(packageDeclarationPos);
     accept(Token.PACKAGE);
-    PackageIdentifier iAST = (PackageIdentifier) parseIdentifier();
+    Identifier iAST = (Identifier) parseIdentifier();
     accept(Token.IS);
     Declaration dAST = parseDeclaration();
     accept(Token.END);

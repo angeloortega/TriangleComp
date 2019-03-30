@@ -18,7 +18,7 @@ import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class CompoundDeclarationSingleDeclaration extends CompoundDeclaration {
 
-  public CompoundDeclarationSingleDeclaration (SingleDeclaration sdAST,
+  public CompoundDeclarationSingleDeclaration (Declaration sdAST,
                     SourcePosition thePosition) {
     super (thePosition);
     SD = sdAST;
@@ -28,5 +28,5 @@ public class CompoundDeclarationSingleDeclaration extends CompoundDeclaration {
     return v.visitCompoundDeclarationSingleDeclaration(this, o);
   }
 
-  public SingleDeclaration SD;
+  public Declaration SD;
 }
