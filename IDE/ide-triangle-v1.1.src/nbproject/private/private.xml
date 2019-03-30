@@ -4,17 +4,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/CodeGenerator/Encoder.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/LongIdentifier.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/GUI/Main.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/VarDeclaration.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/TreeDrawer/LayoutVisitor.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/Identifier.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Core/Visitors/TableVisitor.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/VarSingleDeclaration.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/ContextualAnalyzer/Checker.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/SequentialSingleDeclaration.java</file>
-            <file>file:/C:/Users/jose%20pablo/Desktop/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/SyntacticAnalyzer/Parser.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/TreeDrawer/LayoutVisitor.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/SyntacticAnalyzer/Token.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Core/Visitors/TreeVisitor.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/Visitor.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/ContextualAnalyzer/Checker.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/IDECompiler.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/ProcFuncs.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Core/Visitors/TableVisitor.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/AssignExpression.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/SyntacticAnalyzer/Parser.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/SyntacticAnalyzer/Scanner.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/CodeGenerator/Encoder.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/GUI/Main.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/AbstractSyntaxTrees/RTypeDenoter.java</file>
+            <file>file:/C:/Users/jose%20pablo/Desktop/BD/TriangleComp/IDE/ide-triangle-v1.1.src/src/Triangle/tools/Triangle/TreeDrawer/Drawer.java</file>
         </group>
     </open-files>
 </project-private>

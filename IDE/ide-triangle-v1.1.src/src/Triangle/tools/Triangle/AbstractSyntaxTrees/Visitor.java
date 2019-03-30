@@ -30,8 +30,6 @@ public interface Visitor {
   //PROCS & FUNCS
   public abstract Object visitProcProcFunc(ProcProcFunc ast, Object o);
   public abstract Object visitFuncProcFunc(FuncProcFunc ast, Object o);
-  public abstract Object visitSequentialProcFuncs(ProcFuncs ast, Object o);
-
 
   //Loops
   public abstract Object visitLoopCasesWhile(LoopCasesWhile ast, Object o);
@@ -41,6 +39,9 @@ public interface Visitor {
   public abstract Object visitDoLoopUntil(DoLoopUntil ast, Object o);
   public abstract Object visitDoLoopWhile(DoLoopWhile ast, Object o);
   public abstract Object visitCallLoopCases(CallLoopCases ast, Object o);
+  public abstract Object visitForLoopDo(ForLoopDo ast, Object o);
+  public abstract Object visitForLoopUntil(ForLoopUntil ast, Object o);
+  public abstract Object visitForLoopWhile(ForLoopWhile ast, Object o);
 
   // Cases
   public abstract Object visitCases(Cases ast, Object o);
@@ -59,6 +60,7 @@ public interface Visitor {
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
+   public abstract Object visitAssignExpression(AssignExpression ast, Object o);
   public abstract Object visitBinaryExpression(BinaryExpression ast, Object o);
   public abstract Object visitCallExpression(CallExpression ast, Object o);
   public abstract Object visitCharacterExpression(CharacterExpression ast, Object o);
@@ -83,7 +85,7 @@ public interface Visitor {
   public abstract Object visitConstDeclaration(ConstDeclaration ast, Object o);
   public abstract Object visitFuncDeclaration(FuncDeclaration ast, Object o);
   public abstract Object visitProcDeclaration(ProcDeclaration ast, Object o);
-  public abstract Object visitPackDeclaration(PackageDeclaration ast, Object o);
+  public abstract Object visitPackageDeclaration(PackageDeclaration ast, Object o);
   public abstract Object visitSequentialDeclaration(SequentialDeclaration ast, Object o);
   public abstract Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o);
   public abstract Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o);
@@ -144,6 +146,8 @@ public interface Visitor {
   public abstract Object visitIdentifier(Identifier ast, Object o);
   public abstract Object visitIntegerLiteral(IntegerLiteral ast, Object o);
   public abstract Object visitOperator(Operator ast, Object o);
+  public abstract Object visitLongIdentifier(LongIdentifier ast, Object o);
+  public abstract Object visitCompoundIdentifier(CompoundIdentifier ast, Object o);
 
   // Value-or-variable names
   public abstract Object visitDotVname(DotVname ast, Object o);
@@ -153,14 +157,8 @@ public interface Visitor {
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
 
-    public Object visitForLoopDo(ForLoopDo aThis, Object o);
-
-    public Object visitForLoopUntil(ForLoopUntil aThis, Object o);
-
-    public Object visitForLoopWhile(ForLoopWhile aThis, Object o);
+    public Object visitProcFuncs(ProcFuncs aThis, Object o);
 
     public Object visitRTypeDenoter(RTypeDenoter aThis, Object o);
-
-    public Object visitAssignExpression(AssignExpression aThis, Object o);
 
 }

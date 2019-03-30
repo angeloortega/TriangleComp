@@ -12,7 +12,7 @@ public class ProcFuncs extends ProcFunc {
   }
 
   public Object visit(Visitor v, Object o) {
-    return v.visitSequentialProcFuncs(this, o);
+    return v.visitProcFuncs(this, o);
   }
 
   public ProcFunc PF1, PF2;

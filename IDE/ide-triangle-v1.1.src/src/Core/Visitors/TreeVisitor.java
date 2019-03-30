@@ -130,10 +130,6 @@ public class TreeVisitor implements Visitor {
     public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
         return(createTernary("Unary Operator Declaration", ast.O, ast.ARG, ast.RES));
     }
-    
-    public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
-        return(createBinary("Variable Declaration", ast.I, ast.T));
-    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
@@ -396,11 +392,6 @@ public class TreeVisitor implements Visitor {
     }
 
     @Override
-    public Object visitSequentialProcFuncs(ProcFuncs ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -432,6 +423,21 @@ public class TreeVisitor implements Visitor {
 
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitForLoopDo(ForLoopDo ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -526,7 +532,7 @@ public class TreeVisitor implements Visitor {
     }
 
     @Override
-    public Object visitPackDeclaration(PackageDeclaration ast, Object o) {
+    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -572,6 +578,26 @@ public class TreeVisitor implements Visitor {
 
     @Override
     public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitVarDeclaration(VarDeclaration ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitAssignExpression(AssignExpression ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -4,7 +4,7 @@ import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class IntLiteralExpression extends Expression {
 
-  public IntLiteralExpression (SecondaryExpression secAST, SourcePosition thePosition) {
+  public IntLiteralExpression ( BinaryExpression secAST, SourcePosition thePosition) {
     super (thePosition);
     SECEXP = secAST;
   }
@@ -13,5 +13,5 @@ public class IntLiteralExpression extends Expression {
     return v.visitIntLiteralExpression(this, o);
   }
 
-  public SecondaryExpression SECEXP;
+  public BinaryExpression SECEXP;
 }

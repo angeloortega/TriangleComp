@@ -15,7 +15,7 @@ public class PackageDeclaration extends Declaration {
   }
 
   public Object visit(Visitor v, Object o) {
-    return v.visitPackDeclaration(this, o);
+    return v.visitPackageDeclaration(this, o);
   }
 
   public Declaration DEC;

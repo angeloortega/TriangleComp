@@ -42,6 +42,7 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.ChooseCommand;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.CompoundDeclarationPrivate;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.CompoundDeclarationRecursive;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.CompoundDeclarationSingleDeclaration;
+import Triangle.tools.Triangle.AbstractSyntaxTrees.CompoundIdentifier;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.ConstActualParameter;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.ConstFormalParameter;
@@ -75,6 +76,7 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.LIdentifierExpression;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LParenExpression;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LetExpression;
+import Triangle.tools.Triangle.AbstractSyntaxTrees.LongIdentifier;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LoopCasesDo;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LoopCasesFOR;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.LoopCasesUntil;
@@ -609,10 +611,6 @@ public class LayoutVisitor implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitSequentialProcFuncs(ProcFuncs ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
@@ -739,10 +737,7 @@ public class LayoutVisitor implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitPackDeclaration(PackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
@@ -811,6 +806,26 @@ public class LayoutVisitor implements Visitor {
 
     @Override
     public Object visitAssignExpression(AssignExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitProcFuncs(ProcFuncs aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
