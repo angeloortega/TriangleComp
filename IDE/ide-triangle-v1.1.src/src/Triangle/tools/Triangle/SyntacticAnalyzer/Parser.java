@@ -172,6 +172,7 @@ public class Parser {
 
   LongIdentifier parseLongIdentifier() throws SyntaxError {
     Identifier initAST = parseIdentifier();
+    LongIdentifier LiAST;
     PackageIdentifier pckgAST = null;
     Identifier iAST = null;
     SourcePosition longIdentifierPos = new SourcePosition();
@@ -180,12 +181,14 @@ public class Parser {
       acceptIt();
       pckgAST = (PackageIdentifier) initAST;
       iAST = parseIdentifier();
+      LiAST = new LongIdentifier(pckgAST, iAST, longIdentifierPos);
     }
     else{
       iAST = initAST;
+       LiAST = new LongIdentifier(iAST, longIdentifierPos);
     }
     finish(longIdentifierPos);
-    return new LongIdentifier(pckgAST, iAST, longIdentifierPos);
+    return LiAST;
   }
 // parseOperator parses an operator, and constructs a leaf AST to
 // represent it.

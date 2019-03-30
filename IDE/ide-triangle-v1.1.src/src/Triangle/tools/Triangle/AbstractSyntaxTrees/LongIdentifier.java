@@ -23,6 +23,11 @@ public class LongIdentifier extends Identifier {
     packageIdentifier = piAST;
     identifier = idAST;
   }
+  
+    public LongIdentifier (Identifier idAST,SourcePosition thePosition) {
+    super ( idAST.spelling, thePosition);
+    identifier = idAST;
+  }
 
   public PackageIdentifier packageIdentifier;
   public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
