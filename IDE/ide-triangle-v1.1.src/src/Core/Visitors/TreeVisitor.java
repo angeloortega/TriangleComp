@@ -497,7 +497,8 @@ public class TreeVisitor implements Visitor {
     // Programs
     @Override
     public Object visitProgram(Program ast, Object obj) {
-        return(createBinary("Program",ast.P, ast.C));
+        return ast.P == null ? createUnary("Program", ast.C) : createBinary("Program",ast.P, ast.C);
+
     }
     // </editor-fold>
 
