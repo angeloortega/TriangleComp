@@ -25,128 +25,316 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Commands ">    
     // Commands  
+    @Override
     public Object visitAssignCommand(AssignCommand ast, Object o) {
         return(createBinary("Assign Command", ast.V, ast.E));
     }
     
+    @Override
     public Object visitCallCommand(CallCommand ast, Object o) {
         return(createBinary("Call Command", ast.I, ast.APS));
     }
     
+    @Override
+    public Object visitChooseCommand(ChooseCommand ast, Object o) {
+        return(createBinary("Call Command", ast.EXP, ast.COM));
+    }
+    
+    @Override
     public Object visitEmptyCommand(EmptyCommand ast, Object o) {
         return(createNullary("Empty Command"));
     }
     
+    @Override
     public Object visitIfCommand(IfCommand ast, Object obj) {
         return(createTernary("If Command", ast.E, ast.C1, ast.C2));
     }
     
+    @Override
     public Object visitLetCommand(LetCommand ast, Object obj) {
         return(createBinary("Let Command", ast.D, ast.C));
     }
     
+    @Override
     public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
         return(createBinary("Sequential Command", ast.C1, ast.C2));
     }
     
-    public Object visitWhileCommand(WhileCommand ast, Object obj) {
-        return(createBinary("While Command", ast.E, ast.C));
+    @Override
+    public Object visitCallLoopCases(CallLoopCases ast, Object obj) {
+        return(createUnary("Call Loop Cases", ast.LOOP));
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" PROCS & FUNCS ">
+    // PROCS
+    @Override
+    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
+        return(createTernary("Proc Proc Func", ast.ID, ast.FPS, ast.COM));
+    }
+
+    @Override
+    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
+        return(createQuaternary("Func Proc Func", ast.ID, ast.FPS, ast.TD, ast.EXP));
+    }
+    
+    @Override
+    public Object visitProcFuncs(ProcFuncs ast, Object o) {
+        return(createBinary("Proc Proc Func", ast.PF1, ast.PF2));
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" Loops ">
+    // Loops
+    @Override
+    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
+        return(createBinary("Loop Cases While", ast.EXP, ast.COM));
+    }
+
+    @Override
+    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
+        return(createBinary("Loop Cases Until", ast.EXP, ast.COM));
+    }
+
+    @Override
+    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
+        return(createBinary("Loop Cases Do", ast.COM, ast.DO));
+    }
+
+    @Override
+    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
+        return(createQuaternary("Loop Cases FOR", ast.ID, ast.EXP, ast.EXP2, ast.FOR));
+    }
+
+    @Override
+    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
+        return(createUnary("Do Loop Until", ast.EXP));
+    }
+
+    @Override
+    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+        return(createUnary("Do Loop While", ast.EXP));
+    }
+
+    @Override
+    public Object visitForLoopDo(ForLoopDo ast, Object o) {
+        return(createUnary("For Loop Do", ast.COM));
+    }
+
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
+        return(createBinary("For Loop Until", ast.EXP, ast.COM));
+    }
+
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
+        return(createBinary("For Loop While", ast.EXP, ast.COM));
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc=" Cases ">
+    // Cases
+    @Override
+    public Object visitCases(Cases ast, Object o) {
+        return(createBinary("Cases", ast.CASE1, ast.CASE2));
+    }
+
+    @Override
+    public Object visitElseCase(ElseCase ast, Object o) {
+        return(createUnary("Else Case", ast.COM));
+    }
+
+    @Override
+    public Object visitSequentialCase(SequentialCase ast, Object o) {
+        return(createBinary("Sequential Case", ast.C1, ast.C2));
+    }
+
+    @Override
+    public Object visitCaseWhen(CaseWhen ast, Object o) {
+        return(createBinary("Case When", ast.CASELIT, ast.COM));
+    }
+
+    @Override
+    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
+        return(createUnary("Case Literals", ast.CASERANGE));
+    }
+
+    @Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
+        return(createBinary("Case Range Case", ast.CASELIT, ast.CASELIT2));
+    }
+
+    @Override
+    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
+        return(createBinary("Sequential Case Range", ast.C1, ast.C2));
+    }
+
+    @Override
+    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
+        return(createUnary("Case Literal CHAR", ast.CHARLIT));
+    }
+
+    @Override
+    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
+        return(createUnary("Case Literal INT", ast.INTLIT));
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
     // Expressions
-    public Object visitArrayExpression(ArrayExpression ast, Object obj) {
-        return(createUnary("Array Expression", ast.AA));
-    }
-    
+    @Override
     public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
         return(createTernary("Binary Expression", ast.E1, ast.O, ast.E2));
     }
     
+    @Override
     public Object visitCallExpression(CallExpression ast, Object obj) {
         return(createBinary("Call Expression", ast.I, ast.APS));
     }
     
+    @Override
+    public Object visitAssignExpression(AssignExpression ast, Object o) {
+        return(createUnary("Assign Expression", ast.V));
+    }
+    
+    @Override
     public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
         return(createUnary("Character Expression", ast.CL));
     }
     
-    public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
-        return(createNullary("Empty Expression"));
-    }
-    
+    @Override
     public Object visitIfExpression(IfExpression ast, Object obj) {
         return(createTernary("If Expression", ast.E1, ast.E2, ast.E3));
     }
     
+    @Override
     public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
         return(createUnary("Integer Expression", ast.IL));
     }
     
+    @Override
     public Object visitLetExpression(LetExpression ast, Object obj) {
         return(createBinary("Let Expression", ast.D, ast.E));
     }
     
-    public Object visitRecordExpression(RecordExpression ast, Object obj) {
-        return(createUnary("Record Expression", ast.RA));
+    @Override
+    public Object visitSecExpression(SecExpression ast, Object o) {
+        return(createUnary("Sec Expression", ast.type));
     }
-    
-    public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
-        return(createBinary("Unary Expression", ast.O, ast.E));
+
+    @Override
+    public Object visitOperatorExpression(OperatorExpression ast, Object o) {
+        return(createBinary("Operator Expression", ast.O, ast.E));
     }
-    
-    public Object visitVnameExpression(VnameExpression ast, Object obj) {
-        return(createUnary("Vname Expression", ast.V));
+
+    @Override
+    public Object visitLParenExpression(LParenExpression ast, Object o) {
+        return(createUnary("LParen Expression", ast.E));
+    }
+
+    @Override
+    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
+        return(createUnary("LCurly Expression", ast.type));
+    }
+
+    @Override
+    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
+        return(createUnary("LBracket Expression", ast.AA));
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Declarations ">
     // Declarations
-    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
-        return(createQuaternary("Binary Operator Declaration", ast.O, ast.ARG1, ast.ARG2, ast.RES));
-    }
-    
+    @Override
     public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
         return(createBinary("Constant Declaration", ast.I, ast.E));
     }
     
+    @Override
     public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
     }
     
+    @Override
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         return(createTernary("Procedure Declaration", ast.I, ast.FPS, ast.C));        
     }
     
+    @Override
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         return(createBinary("Sequential Declaration", ast.D1, ast.D2));
     }
     
+    @Override
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         return(createBinary("Type Declaration", ast.I, ast.T));
     }
     
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
-        return(createTernary("Unary Operator Declaration", ast.O, ast.ARG, ast.RES));
+    @Override
+    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
+        return(createBinary("Package Declaration", ast.ID, ast.DEC));
+    }
+
+    @Override
+    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
+        return(createBinary("Sequential Single Declaration", ast.D1, ast.D2));
+    }
+
+    @Override
+    public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
+        return(createBinary("Sequential Package Declaration", ast.D1, ast.D2));
+    }
+
+    @Override
+    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
+        return(createUnary("Compound Declaration Recursive", ast.PF));
+    }
+
+    @Override
+    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
+        return(createBinary("Compound Declaration Private", ast.D1, ast.D2));
+    }
+
+    @Override
+    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
+        return(createUnary("Compound Declaration Single Declaration", ast.SD));
+    }
+
+    @Override
+    public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
+        return(createUnary("Var Single Declaration Colon", ast.T));
+    }
+
+    @Override
+    public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
+        return(createUnary("Var Single Declaration Single Declaration", ast.T));
+    }
+    
+    @Override
+    public Object visitVarDeclaration(VarDeclaration ast, Object o) {
+        return(createBinary("Var Declaration", ast.I, ast.V));
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
     // Array Aggregates
+    @Override
     public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
         return(createBinary("Multiple Array Aggregate", ast.E, ast.AA));
     }
     
+    @Override
     public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
         return(createUnary("Single Array Aggregate", ast.E));
     }
     
     // Record Aggregates
+    @Override
     public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
         return(createTernary("Multiple Record Aggregate", ast.I, ast.E, ast.RA));
     }
     
+    @Override
     public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
         return(createBinary("Single Record Aggregate", ast.I, ast.E));
     }
@@ -154,59 +342,73 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Parameters ">
     // Formal Parameters   
+    @Override
     public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
         return(createBinary("Constant Formal Parameter", ast.I, ast.T));
     }
     
+    @Override
     public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
         return(createTernary("Function Formal Parameter", ast.I, ast.FPS, ast.T));
     }
     
+    @Override
     public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
         return(createBinary("Procedure Formal Parameter", ast.I, ast.FPS));
     }
     
+    @Override
     public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
         return(createBinary("Variable Formal Parameter", ast.I, ast.T));
     }
     
+    @Override
     public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
         return(createNullary("Empty Formal Parameter Sequence"));
     }
     
+    @Override
     public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
         return(createBinary("Multiple Formal Parameter Sequence", ast.FP, ast.FPS));
     }
     
+    @Override
     public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
         return(createUnary("Single Formal Parameter Sequence", ast.FP));
     }
     
     // Actual Parameters
+    @Override
     public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
         return(createUnary("Constant Actual Parameter", ast.E));
     }
     
+    @Override
     public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
         return(createUnary("Function Actual Parameter", ast.I));
     }
     
+    @Override
     public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
         return(createUnary("Procedure Actual Parameter", ast.I));
     }
     
+    @Override
     public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
         return(createUnary("Variable Actual Parameter", ast.V));
     }
     
+    @Override
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
         return(createNullary("Empty Actual Parameter Sequence"));
     }
     
+    @Override
     public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
         return(createBinary("Multiple Actual Parameter Sequence", ast.AP, ast.APS));
     }
     
+    @Override
     public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
         return(createUnary("Single Actual Parameter Sequence", ast.AP));
     }
@@ -214,80 +416,86 @@ public class TreeVisitor implements Visitor {
         
     // <editor-fold defaultstate="collapsed" desc=" Type Denoters ">
     // Type Denoters
-    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
-        return(createNullary("any"));
-    }
-    
+    @Override
     public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
         return(createBinary("Array Type Denoter", ast.IL, ast.T));
     }
     
-    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
-        return(createNullary("bool"));
+    @Override
+    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+        return(createTernary("Multiple Record Type Denoter", ast.ID, ast.TD, ast.RTD));
+    }
+
+    @Override
+    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        return(createBinary("Single Record Type Denoter", ast.ID, ast.TD));
     }
     
-    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
-        return(createNullary("char"));
+    @Override
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o){
+        return(createUnary("Type Denoter Long Identifier", ast.longIdentifier));
     }
     
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
-        return(createNullary("error"));
-    }
-    
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
-        return(createUnary("Simple Type Denoter", ast.I));
-    }
-    
-    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
-        return(createNullary("int"));
-    }
-    
-    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
-        return(createUnary("Record Type Denoter", ast.FT));
-    }
-    
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
-        return(createTernary("Multiple Field Type Denoter", ast.I, ast.T, ast.FT));
-    }
-    
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
-        return(createBinary("Single Field Type Denoter", ast.I, ast.T));
+    @Override
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o){
+        return(createUnary("RType Denoter", ast.REC));
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Literals, Identifiers and Operators ">
     // Literals, Identifiers and Operators
+    @Override
     public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
         return(createNullary(ast.spelling));
     }
     
+    @Override
     public Object visitIdentifier(Identifier ast, Object obj) {
         return(createNullary(ast.spelling));
     }
     
+    @Override
     public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
         return(createNullary(ast.spelling));
     }
     
+    @Override
     public Object visitOperator(Operator ast, Object obj) {
         return(createNullary(ast.spelling));
+    }
+    
+    @Override
+    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
+        return(createBinary("Long Identifier", ast.packageIdentifier, ast.identifier));
+    }
+
+    @Override
+    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
+        return(createBinary("Compound Identifier", ast.identifier, ast.packageIdentifier));
     }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Values or Variable Names ">
     // Values or Variable Names
+    @Override
     public Object visitDotVname(DotVname ast, Object obj) {
         return(createBinary("Dot Vname", ast.I, ast.V));
     }
     
+    @Override
     public Object visitSimpleVname(SimpleVname ast, Object obj) {
-        return(createUnary("Simple Vname", ast.I));
+        return(createBinary("Simple Vname", ast.I, ast.P));
     }
     
+    @Override
     public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
         return(createBinary("Subscript Vname", ast.V, ast.E));
     }
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc=" Programs ">
+    // Programs
+    @Override
     public Object visitProgram(Program ast, Object obj) {
         return(createUnary("Program", ast.C));
     }
@@ -370,244 +578,4 @@ public class TreeVisitor implements Visitor {
         return(t);             
     }
     // </editor-fold>
-
-    @Override
-    public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopDo(ForLoopDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCases(Cases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitElseCase(ElseCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialCase(SequentialCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseWhen(CaseWhen ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitBracketSelector(BracketSelector ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDotSelector(DotSelector ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSecExpression(SecExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitOperatorExpression(OperatorExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLParenExpression(LParenExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLIdentifierExpression(LIdentifierExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitAssignExpression(AssignExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitProcFuncs(ProcFuncs aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
