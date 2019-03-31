@@ -24,6 +24,7 @@ public class LCurlyExpression extends Expression {
     RA = raAST;
   }
 
+  @Override
   public Object visit(Visitor v, Object o) {
     return v.visitLCurlyExpression(this, o);
   }

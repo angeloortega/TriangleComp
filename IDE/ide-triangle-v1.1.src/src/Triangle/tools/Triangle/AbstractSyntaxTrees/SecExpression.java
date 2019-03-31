@@ -23,9 +23,9 @@ public class SecExpression extends Expression {
     secExpression = theSecExpression;
   }
 
-    Expression secExpression;
+    public Expression secExpression;
     @Override
     public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return v.visitSecExpression(this, o);
     }
 }

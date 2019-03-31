@@ -32,8 +32,9 @@ public class LongIdentifier extends Identifier {
   public PackageIdentifier packageIdentifier;
   public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
 
-    @Override
-    public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public Object visit (Visitor v, Object o) {
+    return v.visitLongIdentifier(this, o);
+  }
+
 }

@@ -26,9 +26,9 @@ public class TypeDenoterLongIdentifier extends TypeDenoter{
   
   public LongIdentifier longIdentifier;
 
-    @Override
-    public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  @Override
+  public Object visit (Visitor v, Object o) {
+    return v.visitTypeDenoterLongIdentifier(this, o);
+  }
 
 }

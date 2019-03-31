@@ -179,7 +179,7 @@ public class Parser {
     start(longIdentifierPos);
     if(currentToken.kind == Token.DOLLAR){
       acceptIt();
-      pckgAST = (PackageIdentifier) initAST;
+      pckgAST =  new PackageIdentifier(initAST.spelling, initAST.position);
       iAST = parseIdentifier();
       LiAST = new LongIdentifier(pckgAST, iAST, longIdentifierPos);
     }
@@ -870,6 +870,7 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     CompoundDeclaration cdAST = parseCompoundDeclaration();
+    declarationAST = cdAST;
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
       Declaration cd1AST =(Declaration) parseCompoundDeclaration();
@@ -1090,12 +1091,12 @@ ProcFuncs parseProcFuncs() throws SyntaxError {
     ProcFunc procFuncAST = parseProcFunc();
     accept(Token.PIPE);
     ProcFunc procFunc1AST = parseProcFunc();
-    procFuncAST = new ProcFuncs(procFuncAST, procFunc1AST, procFuncsPos);
+    procFuncsAST = new ProcFuncs(procFuncAST, procFunc1AST, procFuncsPos);
     while (currentToken.kind == Token.PIPE) {
       acceptIt();
       procFunc1AST = parseProcFunc();
       finish(procFuncsPos);
-      procFuncAST = new ProcFuncs(procFuncAST, procFunc1AST, procFuncsPos);
+      procFuncsAST = new ProcFuncs(procFuncsAST, procFunc1AST, procFuncsPos);
     }
     return procFuncsAST;
   }

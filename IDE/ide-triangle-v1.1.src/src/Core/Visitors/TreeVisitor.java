@@ -80,7 +80,7 @@ public class TreeVisitor implements Visitor {
     
     @Override
     public Object visitProcFuncs(ProcFuncs ast, Object o) {
-        return(createBinary("Proc Proc Func", ast.PF1, ast.PF2));
+        return(createBinary("Proc Funcs", ast.PF1, ast.PF2));
     }
     // </editor-fold>
     
@@ -219,7 +219,7 @@ public class TreeVisitor implements Visitor {
     
     @Override
     public Object visitSecExpression(SecExpression ast, Object o) {
-        return(createUnary("Sec Expression", ast.type));
+        return(createUnary("Secondary Expression",ast.secExpression));
     }
 
     @Override
@@ -234,7 +234,7 @@ public class TreeVisitor implements Visitor {
 
     @Override
     public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
-        return(createUnary("LCurly Expression", ast.type));
+        return(createUnary("LCurly Expression", ast.RA));
     }
 
     @Override
@@ -466,7 +466,7 @@ public class TreeVisitor implements Visitor {
     
     @Override
     public Object visitLongIdentifier(LongIdentifier ast, Object o) {
-        return(createBinary("Long Identifier", ast.packageIdentifier, ast.identifier));
+        return ast.packageIdentifier == null ? createUnary("Long Identifier", ast.identifier) : (createBinary("Long Identifier", ast.packageIdentifier, ast.identifier));
     }
 
     @Override
@@ -484,7 +484,7 @@ public class TreeVisitor implements Visitor {
     
     @Override
     public Object visitSimpleVname(SimpleVname ast, Object obj) {
-        return(createBinary("Simple Vname", ast.I, ast.P));
+        return ast.P == null ? createUnary("Simple Vname", ast.I) : createBinary("Simple Vname", ast.I, ast.P);
     }
     
     @Override
@@ -578,4 +578,114 @@ public class TreeVisitor implements Visitor {
         return(t);             
     }
     // </editor-fold>
+
+    @Override
+    public Object visitAnyTypeDenoter(AnyTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitArrayExpression(ArrayExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitBracketSelector(BracketSelector aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitDotSelector(DotSelector aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitEmptyExpression(EmptyExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRecordExpression(RecordExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitUnaryExpression(UnaryExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitVnameExpression(VnameExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitWhileCommand(WhileCommand aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

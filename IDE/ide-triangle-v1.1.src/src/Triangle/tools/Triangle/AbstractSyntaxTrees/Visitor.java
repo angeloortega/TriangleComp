@@ -10,7 +10,7 @@
  * This software is provided free for educational use only. It may
  * not be used for commercial purposes without the prior written permission
  * of the authors.
- */ 
+ */
 
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
@@ -135,5 +135,49 @@ public interface Visitor {
 
   // Programs
   public abstract Object visitProgram(Program ast, Object o);
+
+    public Object visitAnyTypeDenoter(AnyTypeDenoter aThis, Object o);
+
+    public Object visitArrayExpression(ArrayExpression aThis, Object o);
+
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration aThis, Object o);
+
+    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o);
+
+    public Object visitBracketSelector(BracketSelector aThis, Object o);
+
+    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o);
+
+    public Object visitDotSelector(DotSelector aThis, Object o);
+
+    public Object visitEmptyExpression(EmptyExpression aThis, Object o);
+
+    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o);
+
+    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o);
+
+    public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o);
+
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o);
+
+    public Object visitRecordExpression(RecordExpression aThis, Object o);
+
+    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o);
+
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o);
+
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o);
+
+    public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o);
+
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o);
+
+    public Object visitUnaryExpression(UnaryExpression aThis, Object o);
+
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration aThis, Object o);
+
+    public Object visitVnameExpression(VnameExpression aThis, Object o);
+
+    public Object visitWhileCommand(WhileCommand aThis, Object o);
 
 }
