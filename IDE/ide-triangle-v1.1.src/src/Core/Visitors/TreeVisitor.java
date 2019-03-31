@@ -282,7 +282,7 @@ public class TreeVisitor implements Visitor {
 
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
-        return(createBinary("Sequential Package Declaration", ast.D1, ast.D2));
+       return ast.D2 == null ? createUnary("Package Declaration", ast.D1) : createBinary("Sequential Package Declaration", ast.D1, ast.D2);
     }
 
     @Override
@@ -497,7 +497,7 @@ public class TreeVisitor implements Visitor {
     // Programs
     @Override
     public Object visitProgram(Program ast, Object obj) {
-        return(createUnary("Program", ast.C));
+        return(createBinary("Program",ast.P, ast.C));
     }
     // </editor-fold>
 

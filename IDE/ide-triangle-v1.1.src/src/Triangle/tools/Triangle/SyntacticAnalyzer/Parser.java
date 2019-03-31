@@ -85,14 +85,19 @@ public class Parser {
     previousTokenPosition.finish = 0;
     currentToken = lexicalAnalyser.scan();
     PackageDeclaration packageAST = null;
-    
+    PackageDeclaration pckdcl2AST = null;
     SourcePosition programPos = new SourcePosition();
     
     start(programPos);
     
     try {
       while(currentToken.kind == Token.PACKAGE){
-        PackageDeclaration pckdcl2AST = parsePackageDeclaration();
+          if(packageAST == null){
+            packageAST = parsePackageDeclaration();
+        }
+          else{
+            pckdcl2AST = parsePackageDeclaration();
+            }
         finish(programPos);
         packageAST = new SequentialPackageDeclaration(packageAST, pckdcl2AST,programPos);
         accept(Token.SEMICOLON);
