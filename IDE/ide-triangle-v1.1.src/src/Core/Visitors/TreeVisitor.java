@@ -479,7 +479,7 @@ public class TreeVisitor implements Visitor {
     // Values or Variable Names
     @Override
     public Object visitDotVname(DotVname ast, Object obj) {
-        return(createBinary("Dot Vname", ast.I, ast.V));
+        return(createBinary("Dot Vname", ast.V,ast.I));
     }
     
     @Override
