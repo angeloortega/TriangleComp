@@ -680,7 +680,8 @@ public class Parser {
       {
         CompoundIdentifier ciAST = parseCompoundIdentifier();
         if(currentToken.kind == Token.LPAREN){  //Long Identifier
-          LongIdentifier liAST = new LongIdentifier(ciAST.packageIdentifier, ciAST.identifier, ciAST.position);
+          LongIdentifier liAST;
+          liAST = ciAST.packageIdentifier == null ?  new LongIdentifier(ciAST.identifier, ciAST.position) : new LongIdentifier(ciAST.packageIdentifier, ciAST.identifier, ciAST.position);
           acceptIt();
           ActualParameterSequence apsAST = parseActualParameterSequence();
           accept(Token.RPAREN);
@@ -803,7 +804,7 @@ public class Parser {
     start(compoundIdentifierPos);
     if(currentToken.kind == Token.DOLLAR){
       acceptIt();
-      pckgAST = (PackageIdentifier) initAST;
+      pckgAST = new PackageIdentifier(initAST.spelling,initAST.position);
       iAST = parseIdentifier();
     }
     else{
@@ -890,9 +891,9 @@ public class Parser {
   
        case Token.PAR:{
         acceptIt();
-        SingleDeclaration sdAST = (SingleDeclaration) parseSingleDeclaration();
+        Declaration sdAST = parseSingleDeclaration();
         accept(Token.PIPE);
-        SingleDeclaration sd2AST = (SingleDeclaration) parseSingleDeclaration();
+        Declaration sd2AST = parseSingleDeclaration();
         compoundDeclarationAST = new SequentialSingleDeclaration(sdAST,sd2AST,compoundDeclarationPos);
         
         while (currentToken.kind == Token.PIPE) {
@@ -1087,6 +1088,7 @@ ProcFuncs parseProcFuncs() throws SyntaxError {
     SourcePosition procFuncsPos = new SourcePosition();
     start(procFuncsPos);
     ProcFunc procFuncAST = parseProcFunc();
+    accept(Token.PIPE);
     ProcFunc procFunc1AST = parseProcFunc();
     procFuncAST = new ProcFuncs(procFuncAST, procFunc1AST, procFuncsPos);
     while (currentToken.kind == Token.PIPE) {
