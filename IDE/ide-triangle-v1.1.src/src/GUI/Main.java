@@ -37,6 +37,10 @@ import Core.ExampleFileFilter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import Core.Visitors.TreeVisitor;
+import Triangle.tools.Triangle.TreeWriterXML.WriterVisitor;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -618,6 +622,13 @@ public class Main extends javax.swing.JFrame {
                 output.setDelegate(delegateTAMCode);
                 //disassembler.Disassemble(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".tam"));
                ((FileFrame)desktopPane.getSelectedFrame()).setTree((DefaultMutableTreeNode)treeVisitor.visitProgram(compiler.getAST(), null));
+                try {
+                    writerVisitor.setFileWriter(new FileWriter(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".xml")));
+                    writerVisitor.visitProgram(compiler.getAST(), null);
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+              
                 //((FileFrame)desktopPane.getSelectedFrame()).setTable(tableVisitor.getTable(compiler.getAST()));
                 
                 runMenuItem.setEnabled(false);
@@ -862,6 +873,7 @@ public class Main extends javax.swing.JFrame {
     OutputRedirector output = new OutputRedirector();                       // Redirects the console output
     InputRedirector input = new InputRedirector(delegateInput);             // Redirects console input
     TreeVisitor treeVisitor = new TreeVisitor();                            // Draws the Abstract Syntax Trees
+    WriterVisitor writerVisitor = new WriterVisitor();                    // Creates an XML File containing the Abstract Syntax Tree
     TableVisitor tableVisitor = new TableVisitor();                         // Draws the Identifier Table
     File directory;                                                         // The current directory.
     // [ End of Non-GUI variables declaration ]
