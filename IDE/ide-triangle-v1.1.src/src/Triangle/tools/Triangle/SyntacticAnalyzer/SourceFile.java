@@ -22,12 +22,14 @@ public class SourceFile {
   java.io.File sourceFile;
   java.io.FileInputStream source;
   int currentLine;
+  String filename;
 
   public SourceFile(String filename) {
     try {
       sourceFile = new java.io.File(filename);
       source = new java.io.FileInputStream(sourceFile);
       currentLine = 1;
+      this.filename = filename;
     }
     catch (java.io.IOException s) {
       sourceFile = null;
@@ -54,5 +56,8 @@ public class SourceFile {
 
   int getCurrentLine() {
     return currentLine;
+  }
+  String getFilename(){
+    return this.filename;
   }
 }

@@ -13,16 +13,18 @@
  */
 
 package Triangle.tools.Triangle.SyntacticAnalyzer;
+import Triangle.tools.Triangle.HTMLWriter.Writer;
 
 
 public final class Scanner {
 
   private SourceFile sourceFile;
   private boolean debug;
-
+  private Writer htmlWriter;
   private char currentChar;
   private StringBuffer currentSpelling;
   private boolean currentlyScanningToken;
+  private String htmlCode = "";
 
   private boolean isLetter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
@@ -46,6 +48,7 @@ public final class Scanner {
 
   public Scanner(SourceFile source) {
     sourceFile = source;
+    htmlWriter = new Writer(sourceFile.getFilename());
     currentChar = sourceFile.getSource();
     debug = false;
   }
@@ -69,17 +72,28 @@ public final class Scanner {
     switch (currentChar) {
     case '!':
       {
+        htmlCode += "<p style=\"color:MediumSeaGreen;\">" + currentChar;
         takeIt();
-        while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT))
+        while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT)){
+          htmlCode += currentChar;
           takeIt();
-        if (currentChar == SourceFile.EOL)
+        }
+        if (currentChar == SourceFile.EOL){
           takeIt();
+        }
+        htmlCode += "</p>";
       }
       break;
 
-    case ' ': case '\n': case '\r': case '\t':
+    case ' ':
       takeIt();
       break;
+    case '\t':
+        htmlCode+= "&nbsp;&nbsp;&nbsp;&nbsp;";
+    case '\n': case '\r':
+        htmlCode += "<p></p>";
+        takeIt();
+        break;
     }
   }
 
@@ -100,8 +114,10 @@ public final class Scanner {
     case 'U':  case 'V':  case 'W':  case 'X':  case 'Y':
     case 'Z':
       takeIt();
-      while (isLetter(currentChar) || isDigit(currentChar))
+      while (isLetter(currentChar) || isDigit(currentChar)){
         takeIt();
+      }
+
       return Token.IDENTIFIER;
 
     case '0':  case '1':  case '2':  case '3':  case '4':
@@ -196,6 +212,7 @@ public final class Scanner {
       return Token.RCURLY;
 
     case SourceFile.EOT:
+      
       return Token.EOT;
 
     default:
@@ -223,6 +240,24 @@ public final class Scanner {
     pos.start = sourceFile.getCurrentLine();
 
     kind = scanToken();
+    if (kind == Token.IDENTIFIER) {
+      int newKind = new Token(Token.IDENTIFIER, currentSpelling.toString(), pos).kind;
+      if (newKind != kind){
+        htmlCode += "<span><b>" + currentSpelling.toString() + " </b></span>";
+      }
+      else{
+        htmlCode += currentSpelling.toString()+" ";
+      }
+    }
+    else if (kind == Token.CHARLITERAL || kind == Token.INTLITERAL){
+      htmlCode += "<span style=\"color:DarkBlue;\">"+currentSpelling.toString()+" </span>";
+    }
+    else if( kind == Token.EOT){
+      htmlWriter.write(htmlCode);
+    }
+    else{
+      htmlCode += currentSpelling.toString()+" ";
+    }
 
     pos.finish = sourceFile.getCurrentLine();
     tok = new Token(kind, currentSpelling.toString(), pos);
