@@ -58,6 +58,28 @@ final class Token extends Object {
 
   // Token classes...
 
+  /*
+  Se anaden los valores para:
+	  Palabras reservadas:
+			CHOOSE
+			FOR
+			FROM
+			LOOP
+			PACKAGE
+			PAR
+			PASS
+			PRIVATE
+			RECURSIVE
+			TO
+			TYPE
+			UNTIL
+			WHEN
+		Puntuaciones:
+			PIPE
+			SINGLEDECLARATION
+			DOLLAR
+			DOUBLEDOT
+  */
   public static final int
 
     // literals, identifiers, operators...
@@ -119,6 +141,30 @@ final class Token extends Object {
     EOT			= 48,
     ERROR		= 49;
 
+
+    /*
+    Se añaden las representaciones a la tabla de los nuevos elementos:
+	    Palabras reservadas:
+			choose
+			for
+			from
+			loop
+			package
+			par
+			pass
+			private
+			recursive
+			to
+			type
+			until
+			when
+		Puntuaciones:
+			|
+			::=
+			$
+			..
+    */
+			
   private static String[] tokenTable = new String[] {
     "<int>",
     "<char>",
