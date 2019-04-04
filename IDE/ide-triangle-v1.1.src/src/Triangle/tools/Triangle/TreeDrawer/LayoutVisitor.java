@@ -117,6 +117,7 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.SingleRecordAggregate;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.SingleRecordTypeDenoter;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.SubscriptVname;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.TypeDeclaration;
+import Triangle.tools.Triangle.AbstractSyntaxTrees.TypeDenoterLongIdentifier;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.UnaryExpression;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.VarActualParameter;
@@ -826,6 +827,11 @@ public class LayoutVisitor implements Visitor {
 
     @Override
     public Object visitProcFuncs(ProcFuncs aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
