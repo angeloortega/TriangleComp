@@ -1,0 +1,9 @@
+choose 1 from
+
+  When 0 .. 5 | 8 then putint (1)
+
+  WHEN 7 then putint(2)
+
+end
+
+! Error de casing de when
