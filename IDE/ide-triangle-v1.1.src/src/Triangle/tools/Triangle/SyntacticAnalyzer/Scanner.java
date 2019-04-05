@@ -90,6 +90,7 @@ public final class Scanner {
       break;
 
     case ' ':
+      htmlCode += "&nbsp;";
       takeIt();
       break;
     case '\t':
