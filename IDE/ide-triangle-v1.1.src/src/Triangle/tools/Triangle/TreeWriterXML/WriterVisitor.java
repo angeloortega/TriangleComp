@@ -215,8 +215,13 @@ public class WriterVisitor implements Visitor {
     @Override
     public Object visitCases(Cases ast, Object o) {
         writeLineXML("<Cases>");
-        ast.CASE1.visit(this, null);
-        ast.CASE2.visit(this, null);
+        if(ast.CASE2 == null){
+            ast.CASE1.visit(this, null);
+        }
+        else{
+            ast.CASE1.visit(this, null);
+            ast.CASE2.visit(this, null);
+        }
         writeLineXML("</Cases>");
         return null;
     }
@@ -258,8 +263,13 @@ public class WriterVisitor implements Visitor {
     @Override
     public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
         writeLineXML("<CaseRangeCase>");
-        ast.CASELIT.visit(this, null);
-        ast.CASELIT2.visit(this, null);
+        if(ast.CASELIT2 == null){
+            ast.CASELIT.visit(this, null);
+        }
+        else{
+            ast.CASELIT.visit(this, null);
+            ast.CASELIT2.visit(this, null);
+        }
         writeLineXML("</CaseRangeCase>");
         return null;
     }
@@ -471,8 +481,13 @@ public class WriterVisitor implements Visitor {
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
         writeLineXML("<SequentialPackageDeclaration>");
-        ast.D1.visit(this, null);
-        ast.D2.visit(this, null);
+        if(ast.D2 == null){
+            ast.D1.visit(this, null);
+        }
+        else{
+            ast.D1.visit(this, null);
+            ast.D2.visit(this, null);
+        }
         writeLineXML("</SequentialPackageDeclaration>");
         return null;
     }
@@ -586,7 +601,7 @@ public class WriterVisitor implements Visitor {
         ast.I.visit(this, null);
         ast.FPS.visit(this, null);
         ast.T.visit(this, null);
-        writeLineXML("<FuncFormalParameter>");
+        writeLineXML("</FuncFormalParameter>");
         return null;
     }
 
@@ -611,8 +626,7 @@ public class WriterVisitor implements Visitor {
 
     @Override
     public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
-        writeLineXML("<EmptyFormalParameterSequence>");
-        writeLineXML("</EmptyFormalParameterSequence>");
+        writeLineXML("<EmptyFormalParameterSequence/>");
         return null;
     }
 
@@ -670,8 +684,7 @@ public class WriterVisitor implements Visitor {
 
     @Override
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
-        writeLineXML("<EmptyActualParameterSequence>");
-        writeLineXML("</EmptyActualParameterSequence>");
+        writeLineXML("<EmptyActualParameterSequence/>");
         return null;
     }
 

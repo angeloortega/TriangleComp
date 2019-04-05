@@ -76,7 +76,8 @@ public class Parser {
 // PROGRAMS
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+// parseProgram parses an program, and constructs
+// an AST to represent it.
   public Program parseProgram() {
 
     Program programAST = null;
@@ -91,15 +92,15 @@ public class Parser {
     start(programPos);
     
     try {
-      while(currentToken.kind == Token.PACKAGE){
+      while(currentToken.kind == Token.PACKAGE){ //Packages are sequentially defined and looked for after the keyword "package"
           if(packageAST == null){
-            packageAST = parsePackageDeclaration();
+            packageAST = parsePackageDeclaration(); //First case
         }
           else{
-            pckdcl2AST = parsePackageDeclaration();
+            pckdcl2AST = parsePackageDeclaration(); //Second case onwards
             }
         finish(programPos);
-        packageAST = new SequentialPackageDeclaration(packageAST, pckdcl2AST,programPos);
+        packageAST = new SequentialPackageDeclaration(packageAST, pckdcl2AST,programPos); //Sequentiating packages
         accept(Token.SEMICOLON);
       }
       Command cAST = parseCommand();
@@ -175,6 +176,8 @@ public class Parser {
     return I;
   }
 
+ // parseIdentifier parses an identifier, and constructs a leaf AST to
+// represent it.     
   LongIdentifier parseLongIdentifier() throws SyntaxError {
     Identifier initAST = parseIdentifier();
     LongIdentifier LiAST;
@@ -237,30 +240,30 @@ public class Parser {
     return commandAST;
   }
 
-  /*
-   * (POSSIBLE) V-name ::= Expression  ????
-   * */
+// parseSingleCommand parses a single command, and constructs an AST
+// to represent it.
+
   Command parseSingleCommand() throws SyntaxError {  
     Command commandAST = null; // in case there's a syntactic error
 
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
 
-    switch (currentToken.kind) { //Listo
+    switch (currentToken.kind) { 
 
-    case Token.IDENTIFIER:    //Long identifier
+    case Token.IDENTIFIER:    //Can either be a LongIdentifier or a VName
       {
         CompoundIdentifier iAST = parseCompoundIdentifier();
-        if (currentToken.kind == Token.LPAREN) {
+        if (currentToken.kind == Token.LPAREN) { //If a parenthesis is found, it is a long identifier
           acceptIt();
           ActualParameterSequence apsAST = parseActualParameterSequence();
           accept(Token.RPAREN);
           finish(commandPos);
           commandAST = new CallCommand(iAST.identifier, apsAST, commandPos);
 
-        } else {
+        } else { //Else, it is a variable assignment
           VName vAST = parseRestOfVname(iAST);
-          accept(Token.SINGLEDECLARATION);
+          accept(Token.SINGLEDECLARATION); // ::=
           Expression eAST = parseExpression();
           finish(commandPos);
           commandAST = new AssignCommand(vAST, eAST, commandPos);
@@ -320,7 +323,7 @@ public class Parser {
         commandAST = new EmptyCommand(commandPos);
     }break;
         
-    case Token.EOT:{
+    case Token.EOT:{ //In case there is not a command 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);
     }break;
@@ -335,7 +338,10 @@ public class Parser {
     return commandAST;
   }
   
-  LoopCases parseLoopCases() throws SyntaxError{ //Listo
+  // parseLoopCases parses a loop command, with either while, for
+  // or until, and constructs an AST to represent it.
+  
+  LoopCases parseLoopCases() throws SyntaxError{
     LoopCases loopCasesAST = null;
     SourcePosition loopCasesPos = new SourcePosition();
     
@@ -389,6 +395,10 @@ public class Parser {
     return loopCasesAST;
   }
   
+  
+	// parseDoLoop parses a do loop command, with either until or while 
+  //and constructs an AST to represent it.
+  
   DoLoop parseDoLoop() throws SyntaxError{//Listo
     DoLoop doLoopAST = null;
     SourcePosition doLoopPos = new SourcePosition();
@@ -422,6 +432,10 @@ public class Parser {
     finish(doLoopPos);
     return doLoopAST;
   }
+  
+  // parseForLoop parses a loop command, with a for,
+  // which can either include a do, an until loop or, 
+  // a while loop. and constructs an AST to represent it.
   
   ForLoop parseForLoop() throws SyntaxError{ //Listo
     ForLoop forLoopAST = null;
@@ -472,6 +486,11 @@ public class Parser {
     return forLoopAST;
   }
 
+  
+  //parseCases parses a Choose comand, that can either contain one or more cases
+  // and that can contain the else case or not
+  //and constructs an AST to represent it.
+  
   Cases parseCases() throws SyntaxError{
     Case caseAST = null;
     ElseCase elseCaseAST = null;
@@ -493,6 +512,8 @@ public class Parser {
     return casesAST;
   }
   
+  // parseCase parses a case-when command which is composed of literals 
+  // and constructs an AST to represent it.
   Case parseCase() throws SyntaxError{
     Case caseAST = null;
     SourcePosition casePos = new SourcePosition();
@@ -506,6 +527,7 @@ public class Parser {
     return caseAST;
   }
   
+  //parseElseCase parse an else case and constructs an AST to represent it
   ElseCase parseElseCase() throws SyntaxError{
     ElseCase elseCaseAST = null;
     SourcePosition elseCasePos = new SourcePosition();
@@ -517,6 +539,9 @@ public class Parser {
     return elseCaseAST;
   }
   
+  // parseCaseLiterals parses a case-when literal, which can be composed
+  // of ranges of n literals, such as 1..2, or literals such as 'a' 
+  // separated by the '|' character and constructs an AST to represent it.
   CaseLiterals parseCaseLiterals() throws SyntaxError{
     CaseLiterals caseLiteralsAST = null;
     SourcePosition caseLiteralsPos = new SourcePosition();
@@ -533,8 +558,11 @@ public class Parser {
     caseLiteralsAST = new CaseLiterals(caseRangeAST,caseLiteralsPos);
     return caseLiteralsAST;
   }
-    
-    
+
+  //parseCaseRange parse a case literal that can either be alone or 
+  //along side another a double dot and a case literal 
+  //and constructs an AST to represent it
+  
   CaseRange parseCaseRange() throws SyntaxError{
     CaseLiteral caseLiteral2AST = null;
     
@@ -551,7 +579,8 @@ public class Parser {
     return caseRangeAST;
   }
   
-  CaseLiteral parseCaseLiteral() throws SyntaxError{ // listo
+  //parseCaseLiteral parses either a Integer literal or a Character literal. Returning it's AST.
+  CaseLiteral parseCaseLiteral() throws SyntaxError{
     CaseLiteral caseLiteralAST = null;
     SourcePosition caseLiteralPos = new SourcePosition();
     start(caseLiteralPos);
@@ -587,6 +616,10 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  //parseExpression parses an expression that can be either begin with a intliteral, a charliteral, 
+  //a identifier, a operator or one of the left parenthesis as the first case or 
+  //or an expresion that begins with either IF or LET. 
+  // and creates an AST to represent it
   Expression parseExpression() throws SyntaxError {
     Expression expressionAST = null; // in case there's a syntactic error
 
@@ -641,6 +674,9 @@ public class Parser {
     return expressionAST;
   }
 
+  //parseSecondaryExpression parses a Secondary Expression
+  //which can contain any amount of primary expressions, separated
+  //by operators. Constructing an AST to represent it
   Expression parseSecondaryExpression() throws SyntaxError {
     Expression expressionAST = null; // in case there's a syntactic error
 
@@ -652,11 +688,16 @@ public class Parser {
       Operator opAST = parseOperator();
       Expression e2AST = parsePrimaryExpression();
       expressionAST = new BinaryExpression (expressionAST, opAST, e2AST,
-        expressionPos);
+        expressionPos); //Binary Expression which contains two expressions
     }
     return expressionAST;
   }
 
+  //parsePrimaryExpression parse an expresion  that starts with intliteral, or 
+  //characterliteral, operator, Lparen ,Lbracket, LCurly, or identifier; 
+  //that can be along side a left paren and be construct
+  //as CallExpression or the else that constructs AssignExpression, 
+  //and creates an AST to represent their respective expresion
  Expression parsePrimaryExpression() throws SyntaxError {
     Expression expressionAST = null; // in case there's a syntactic error
 
@@ -753,7 +794,9 @@ public class Parser {
 // AGGREGATES
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+	//parseRecordAggregate parses a RecordAggregate
+  //which consists of a series of expressions separated by a comma
+  //and constructs an AST to represent it.
   RecordAggregate parseRecordAggregate() throws SyntaxError {
     RecordAggregate aggregateAST = null; // in case there's a syntactic error
 
@@ -776,6 +819,8 @@ public class Parser {
     return aggregateAST;
   }
 
+  //parseArrayAggregate parses a ArrayAggregate that can optionally be along side a coma
+  //and another ArrayAggregate and creates an AST to represent it
   ArrayAggregate parseArrayAggregate() throws SyntaxError {
     ArrayAggregate aggregateAST = null; // in case there's a syntactic error
 
@@ -800,7 +845,10 @@ public class Parser {
 // VALUE-OR-VARIABLE NAMES
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+  
+	//parseCompoundIdentifier parses a CompoundIdentifier
+  //which consists of an optional package identifier and an identifier
+  //and constructs an AST to represent it.
   CompoundIdentifier parseCompoundIdentifier() throws SyntaxError{
     Identifier initAST = parseIdentifier();
     PackageIdentifier pckgAST = null;
@@ -818,6 +866,11 @@ public class Parser {
     finish(compoundIdentifierPos);
     return new CompoundIdentifier(iAST,pckgAST, compoundIdentifierPos);
   }
+  
+  
+  //parseVname parses a Vname that can optionally start with a Package-Identifier
+  //along side a token DOLLAR and a Var-name or just the Var-name
+  //and constructs a AST to represent it
   VName parseVname () throws SyntaxError {
     VName vnameAST = null; // in case there's a syntactic errorReporter
     SourcePosition vnamePos = new SourcePosition();
@@ -838,12 +891,16 @@ public class Parser {
     return vnameAST;
   }
 
+	//parseRestOfVname parses the second part of a Vname, receiving the first
+  //compound identifier. Then the rest of the v-name is parsed. which consists of
+  //any amount of dot selectors or/and bracket selectors
+  //and constructs an AST to represent it.
   VName parseRestOfVname(CompoundIdentifier cmpdIdentifier) throws SyntaxError {
     SourcePosition vnamePos = new SourcePosition();
     vnamePos = cmpdIdentifier.position;
     PackageIdentifier pckgAST = cmpdIdentifier.packageIdentifier;
     Identifier identifierAST = cmpdIdentifier.identifier;
-    VName vAST = new SimpleVname(identifierAST, pckgAST, vnamePos); //TODO @giulliano Package was added to the simple Vname
+    VName vAST = new SimpleVname(identifierAST, pckgAST, vnamePos); 
 
     while (currentToken.kind == Token.DOT ||
            currentToken.kind == Token.LBRACKET) {
@@ -869,6 +926,8 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  //parseDeclaration parses a Declaration that holds one or more compounds declarations
+  //and creates an AST to represent it
   Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
@@ -886,14 +945,17 @@ public class Parser {
     return declarationAST;
   }
 
-  
+  //parseCompoundDeclaration parses a CompoundDeclaration.
+  //It can either consist of a singleDeclaration, a recursive 
+  //procedure/function declaration a private declaration or a par declaration.
+  //and constructs an AST to represent it.
   CompoundDeclaration parseCompoundDeclaration()throws SyntaxError 
   {
     CompoundDeclaration compoundDeclarationAST = null;
     SourcePosition compoundDeclarationPos = new SourcePosition();
     start(compoundDeclarationPos);
     
-    switch (currentToken.kind){//listo
+    switch (currentToken.kind){
   
        case Token.PAR:{
         acceptIt();
@@ -946,6 +1008,9 @@ public class Parser {
     return compoundDeclarationAST;
   }
 
+  //Parses part of the compound declaration that can star with either 
+  //const, var, proc, func or type, and creates a AST to represent
+  //the respective case.
   Declaration parseSingleDeclaration() throws SyntaxError {
     Declaration declarationAST = null;
 
@@ -1026,6 +1091,9 @@ public class Parser {
     return declarationAST;
   }
   
+  //parseVarSingleDeclaration parses a VarSingleDeclaration.
+  //It can either be an assignment or a type denoter,
+  //and constructs an AST to represent it.
   VarSingleDeclaration parseVarSingleDeclaration() throws SyntaxError {
     VarSingleDeclaration varSingleDAST = null; // in case there's a syntactic error
     SourcePosition varSingleDPos = new SourcePosition();
@@ -1054,6 +1122,8 @@ public class Parser {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+  //parseProcFunc parses a proc func that has to start with the token proc or with func
+  //and creates its respective AST to represent it
   ProcFunc parseProcFunc() throws SyntaxError {
     ProcFunc procFuncAST = null; // in case there's a syntactic error
     SourcePosition procFuncPos = new SourcePosition();
@@ -1089,6 +1159,10 @@ public class Parser {
     return procFuncAST;
   }
 
+
+  //parseProcFuncs parses a ProcFuncs object.
+  //It can cosnsist of at least two procedures/functions separated by a '|' character
+  //and constructs an AST to represent it.
 ProcFuncs parseProcFuncs() throws SyntaxError {
     ProcFuncs procFuncsAST = null; // in case there's a syntactic error
     SourcePosition procFuncsPos = new SourcePosition();
@@ -1112,7 +1186,8 @@ ProcFuncs parseProcFuncs() throws SyntaxError {
 // PARAMETERS
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+//parseFormalParameterSequence parses a Formal Parameter Sequence and it can be empy
+//or actually have a proper Parameter Sequence and constructs the AST 
 FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     FormalParameterSequence formalsAST = null;
 
@@ -1128,6 +1203,10 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     return formalsAST;
   }
 
+  //parseProperFormalParameterSequence that can contains one Formal parameter and 
+  //optionally another proper formal parameter sequence and creates the AST
+  //for either the formal parameter by itself or with the other sequence
+  //and creates de AST to represent it
   FormalParameterSequence parseProperFormalParameterSequence() throws SyntaxError {
     FormalParameterSequence formalsAST = null; // in case there's a syntactic error;
 
@@ -1148,13 +1227,17 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     return formalsAST;
   }
 
+  //parseFormalParameter parses a FormalParameter object.
+  //It can cosnsist of either a variable declaration, an 
+  //identifier with a type denoter, a procedure or a function
+  //and constructs an AST to represent it.
   FormalParameter parseFormalParameter() throws SyntaxError {
     FormalParameter formalAST = null; // in case there's a syntactic error;
 
     SourcePosition formalPos = new SourcePosition();
     start(formalPos);
 
-    switch (currentToken.kind) { //Listo
+    switch (currentToken.kind) {
 
     case Token.IDENTIFIER:
       {
@@ -1211,7 +1294,10 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     }
     return formalAST;
   }
-
+  
+	//parseActualParameterSequence parses a Actual Parameter Sequence and it can be empy
+	//or actually have a proper Actual Parameter Sequence and constructs the AST
+  //and creates the AST to represent it
   ActualParameterSequence parseActualParameterSequence() throws SyntaxError {
     ActualParameterSequence actualsAST;
 
@@ -1228,6 +1314,9 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     return actualsAST;
   }
 
+  //parseActualParameterSequence parses a ActualParameterSequence object.
+  //It is a sequence of commaSeparated actualParameters.
+  //It constructs an AST to represent it.
   ActualParameterSequence parseProperActualParameterSequence() throws SyntaxError {
     ActualParameterSequence actualsAST = null;
 
@@ -1248,6 +1337,9 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     return actualsAST;
   }
 
+  //parseActualParameter parses an actual parameter that can be either
+  //a expresion, a var with a Vname, proc with a identifier or a func with a identifier
+  //and create the respective AST to represent it
   ActualParameter parseActualParameter() throws SyntaxError {
     ActualParameter actualAST = null; // in case there's a syntactic error
     SourcePosition actualPos = new SourcePosition();
@@ -1301,17 +1393,21 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
 // TYPE-DENOTERS
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+  	
+  //parseTypeDenoter parses a TypeDenoter object.
+  //A TypeDenoter can be a simple Long Identifier or a collection of arrays
+  //or records.
+  //It constructs an AST to represent it.
   TypeDenoter parseTypeDenoter() throws SyntaxError {
     TypeDenoter typeAST = null; // in case there's a syntactic error
     SourcePosition typePos = new SourcePosition();
 
     start(typePos);
 
-    switch (currentToken.kind) { //Listo
+    switch (currentToken.kind) {
 
   
-    case Token.IDENTIFIER: // Long Identifier
+    case Token.IDENTIFIER: // Long Identifier case
       {
         LongIdentifier iAST = parseLongIdentifier();
         finish(typePos);
@@ -1348,6 +1444,9 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
     return typeAST;
   }
 
+  //parseRecordTypeDenoter parses a Record type denoter that has a Identifier 
+  // a token colum a type denoter and optionally another Record type another
+  //and creates the respective AST to represent it
   RecordTypeDenoter parseRecordTypeDenoter() throws SyntaxError {
     RecordTypeDenoter recordAST = null; // in case there's a syntactic error
 
@@ -1375,7 +1474,9 @@ FormalParameterSequence parseFormalParameterSequence() throws SyntaxError {
 // PACKAGE DECLARATION
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+  //parsePackageDeclaration parses a PackageDeclaration object.
+  //A PackageDeclaration consists of an identifier with declarations.
+  //It constructs an AST to represent it.
   PackageDeclaration parsePackageDeclaration() throws SyntaxError {
     PackageDeclaration packageDeclarationAST = null; // in case there's a syntactic error
     SourcePosition packageDeclarationPos = new SourcePosition();

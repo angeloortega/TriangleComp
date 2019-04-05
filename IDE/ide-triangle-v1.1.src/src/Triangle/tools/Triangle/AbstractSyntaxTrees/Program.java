@@ -21,9 +21,10 @@ public class Program extends AST {
   public Program (Command cAST, PackageDeclaration pAST,SourcePosition thePosition) {
     super (thePosition);
     C = cAST;
-    P = pAST;
+    P = pAST; //New, a package declaration which contains secluded declarations
   }
 
+  @Override
   public Object visit(Visitor v, Object o) {
     return v.visitProgram(this, o);
   }

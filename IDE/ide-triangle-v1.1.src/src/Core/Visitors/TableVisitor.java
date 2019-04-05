@@ -121,6 +121,7 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.SequentialPackageDeclaration;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.SequentialSingleDeclaration;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.SingleDeclarationCommand;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.SingleRecordTypeDenoter;
+import Triangle.tools.Triangle.AbstractSyntaxTrees.TypeDenoterLongIdentifier;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.VarSingleDeclarationColon;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.VarSingleDeclarationSingleDeclaration;
 import javax.swing.table.DefaultTableModel;
@@ -681,6 +682,11 @@ public class TableVisitor implements Visitor {
 
     @Override
     public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
