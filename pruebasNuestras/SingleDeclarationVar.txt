@@ -1,0 +1,1 @@
+let var i ::= 1=1 in pass end

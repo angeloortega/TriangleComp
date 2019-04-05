@@ -1,0 +1,1 @@
+let  func jose ( func is (  ) : ty , jose : o ): is ~ 1 in pass end

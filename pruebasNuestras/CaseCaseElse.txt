@@ -1,0 +1,1 @@
+choose a from when 'a' then pepe() when 'b' then pepb() else otra() end

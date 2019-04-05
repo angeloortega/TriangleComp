@@ -1,0 +1,1 @@
+let  type jo ~ record jo : se end in pass end

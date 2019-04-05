@@ -1,0 +1,1 @@
+let  func jose ( jo : o ): is ~ 1-1 in pass end

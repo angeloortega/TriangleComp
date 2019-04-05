@@ -1,0 +1,1 @@
+choose a  from  when 1 .. 2 | 2 | 3 then pepe() when 'a' then pepe()  else pepe() end

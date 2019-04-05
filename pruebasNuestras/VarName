@@ -1,0 +1,5 @@
+if angelo.ramirez then pass else pass end;
+if angelo.ramirez.ortega then pass else pass end;
+if angelo[1] then pass else pass end;
+if angelo[1][0] then pass else pass end;
+if angelo[1][0].Atributo then pass else pass end
