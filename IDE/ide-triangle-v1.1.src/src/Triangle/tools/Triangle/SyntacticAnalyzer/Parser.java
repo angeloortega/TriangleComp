@@ -324,10 +324,10 @@ public class Parser {
         commandAST = new EmptyCommand(commandPos);
     }break;
         
-    case Token.EOT:{ //In case there is not a command 
+   /* case Token.EOT:{ //In case there is not a command 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);
-    }break;
+    }break;*/
 
     default:
       syntacticError("\"%\" cannot start a command",
@@ -967,7 +967,7 @@ public class Parser {
         
         while (currentToken.kind == Token.PIPE) {
           acceptIt();
-          SingleDeclaration sd3AST = (SingleDeclaration) parseSingleDeclaration(); 
+          Declaration sd3AST =  parseSingleDeclaration(); 
           finish(compoundDeclarationPos);
           compoundDeclarationAST = new SequentialSingleDeclaration(compoundDeclarationAST, sd3AST, compoundDeclarationPos);
         }
