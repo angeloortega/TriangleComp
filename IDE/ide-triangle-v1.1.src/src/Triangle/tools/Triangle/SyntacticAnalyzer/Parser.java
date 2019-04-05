@@ -291,6 +291,7 @@ public class Parser {
         Command c1AST = parseCommand();
         accept(Token.ELSE);
         Command c2AST = parseCommand();
+        accept(Token.END);
         finish(commandPos);
         commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
       }
