@@ -263,7 +263,7 @@ public class Parser {
 
         } else { //Else, it is a variable assignment
           VName vAST = parseRestOfVname(iAST);
-          accept(Token.SINGLEDECLARATION); // ::=
+          accept(Token.BECOMES); // :=
           Expression eAST = parseExpression();
           finish(commandPos);
           commandAST = new AssignCommand(vAST, eAST, commandPos);
