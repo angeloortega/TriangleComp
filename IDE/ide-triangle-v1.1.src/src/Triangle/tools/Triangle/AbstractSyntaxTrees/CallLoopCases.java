@@ -12,6 +12,7 @@
  * of the authors.
  */
 
+//This class is used when there is a loop command to review all the possibles loop instructions.
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

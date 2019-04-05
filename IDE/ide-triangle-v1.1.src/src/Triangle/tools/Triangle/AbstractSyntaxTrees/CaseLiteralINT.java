@@ -1,3 +1,4 @@
+//Used to represent an integer literal in a command.
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
