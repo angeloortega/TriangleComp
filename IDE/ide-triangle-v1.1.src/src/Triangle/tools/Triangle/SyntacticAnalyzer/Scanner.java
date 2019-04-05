@@ -18,6 +18,7 @@ import Triangle.tools.Triangle.HTMLWriter.Writer;
 
 public final class Scanner {
 
+	//Se añadieron los atributos de htmlWriter y htmlCode para la creacion de archivos html
   private SourceFile sourceFile;
   private boolean debug;
   private Writer htmlWriter;
@@ -68,6 +69,9 @@ public final class Scanner {
 
   // scanSeparator skips a single separator.
 
+  /*
+  	Se modifican los casos para que se pueda representar cada uno de estos casos en el html
+  */
   private void scanSeparator() {
     switch (currentChar) {
     case '!':
@@ -97,6 +101,17 @@ public final class Scanner {
     }
   }
 
+  /*
+  En el método scanToken se añade la funcionalidad necesaria para poder implementar los nuevos tokens:
+  - Para el case donde se lee un ‘ . ‘, se definió una condición donde sí al hacer ejecutar takeIt, el 
+  	currenChar es un ‘ . ’, se retorna al token de DOUBLEDOT, sino, se retorna a DOT.
+  -	Para el case donde se lee un ‘ : ’, se expandió la condición que venía en el caso, 
+  	donde previamente se tenía la condición para el ‘=’ para retornar un BECOMES y si no lo era retornaba 
+  	COLON directamente, ahora se tiene un else if donde si el carácter que le sigue es un ‘:’ se entra a 
+  	otra condición, el cual pregunta, si al ejecutar takeIt el currentChar es un ‘=’ se retorna el SINGLEDECLARATION.
+  -	Se añade el case para el token PIPE ( | )
+  -	Se añade el case para el token DOLLAR ( $ )
+  */
   private int scanToken() {
 
     switch (currentChar) {
@@ -221,6 +236,11 @@ public final class Scanner {
     }
   }
 
+  /*
+  	Se añaden la lectura de los tokens para crear el respectivo HTML con los colores solicitados
+  	Se va creando el codigo html con las caracteristicas respectivas del token, o en dado
+  	caso de que sea un comentario. 
+  */
   public Token scan () {
     Token tok;
     SourcePosition pos;
