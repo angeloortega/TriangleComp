@@ -12,6 +12,9 @@
  * of the authors.
  */
 
+//Used to represent the expression and the command in 
+//a choose command statement
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

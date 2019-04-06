@@ -1,3 +1,5 @@
+//Used to represent the command in a do loop
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

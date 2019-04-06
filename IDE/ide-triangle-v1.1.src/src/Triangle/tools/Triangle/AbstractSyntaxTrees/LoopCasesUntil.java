@@ -1,3 +1,5 @@
+//Used to represent the command and expression in a until loop
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent an AST for a compound declaration.
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

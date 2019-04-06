@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent one Type denoter in the same expression.
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

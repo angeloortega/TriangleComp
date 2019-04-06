@@ -1,3 +1,5 @@
+//This class is used to represent a literal and a command
+//in a when statement
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

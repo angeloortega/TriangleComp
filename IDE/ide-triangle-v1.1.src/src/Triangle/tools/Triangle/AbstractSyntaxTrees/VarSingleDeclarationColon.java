@@ -11,6 +11,9 @@
  * not be used for commercial purposes without the prior written permission
  * of the authors.
  */
+//Used to represent the of the declaration of one variable when the token
+//preceding it is a colon
+
 
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 

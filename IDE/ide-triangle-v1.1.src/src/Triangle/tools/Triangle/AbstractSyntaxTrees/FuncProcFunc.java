@@ -12,6 +12,9 @@
  * of the authors.
  */
 
+//Used to represent the identifiar, fps, type denoter, and expression
+// in a function
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

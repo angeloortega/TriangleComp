@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent the AST of the declaration of one variable
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

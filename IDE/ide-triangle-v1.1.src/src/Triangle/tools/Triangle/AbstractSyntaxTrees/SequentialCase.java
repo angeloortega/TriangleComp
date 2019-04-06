@@ -1,4 +1,6 @@
 
+//Used to represent two cases when they are in the same expression
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

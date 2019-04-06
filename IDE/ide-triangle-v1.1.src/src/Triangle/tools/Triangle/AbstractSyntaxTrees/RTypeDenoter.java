@@ -11,6 +11,7 @@
  * not be used for commercial purposes without the prior written permission
  * of the authors.
  */
+//Used to represent when there is a record as a type denoter in an expression
 
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 

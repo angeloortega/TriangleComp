@@ -1,3 +1,5 @@
+//Used to represent two package declarations when they are in the same expression
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

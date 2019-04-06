@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent the array aggregate that follows a left bracket
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

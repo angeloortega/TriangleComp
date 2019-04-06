@@ -1,3 +1,7 @@
+//Used to represent a two literals in a range statement that
+//used a double dot to set the range.
+
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

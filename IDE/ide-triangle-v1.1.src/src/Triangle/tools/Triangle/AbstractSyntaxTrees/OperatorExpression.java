@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent an operator in a primary expression
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

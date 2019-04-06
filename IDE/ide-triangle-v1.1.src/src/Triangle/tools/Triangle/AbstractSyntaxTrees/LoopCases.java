@@ -1,3 +1,5 @@
+//Used to represent the AST of a loop statement
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

@@ -12,6 +12,9 @@
  * of the authors.
  */
 
+//Used to represent the of the declaration of one variable when the token
+//preceding it is a single declaration
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

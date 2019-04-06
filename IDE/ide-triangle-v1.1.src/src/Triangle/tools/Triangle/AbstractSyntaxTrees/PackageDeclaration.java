@@ -1,3 +1,5 @@
+//Used to represent the AST of a package declaration
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

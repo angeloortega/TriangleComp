@@ -1,3 +1,5 @@
+//Used to represent the expression in a do for loop.
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

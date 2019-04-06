@@ -1,3 +1,6 @@
+//Used to represent a binary expression in a
+//integer literal expression
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

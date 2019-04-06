@@ -12,6 +12,7 @@
  * of the authors.
  */
 
+// Used to represent a single declaration in a compound declaration
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

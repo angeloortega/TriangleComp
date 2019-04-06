@@ -12,6 +12,7 @@
  * of the authors.
  */
 
+// Used to represent the record aggregate thay follows a left curly parenthesis.
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

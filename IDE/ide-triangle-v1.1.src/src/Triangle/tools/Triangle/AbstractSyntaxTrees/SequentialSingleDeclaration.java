@@ -11,6 +11,7 @@
  * not be used for commercial purposes without the prior written permission
  * of the authors.
  */
+//Used to represent two declarations when they are in the same expression
 
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 

@@ -12,6 +12,8 @@
  * of the authors.
  */
 
+//Used to represent the AST of the procedures and functions
+
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

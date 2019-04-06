@@ -12,6 +12,7 @@
  * of the authors.
  */
 
+//Used to represent an AST for all types of Literals in a case statement
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
