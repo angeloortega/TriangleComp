@@ -1,0 +1,5 @@
+let
+	var j ::= 5;
+in
+	pass
+end

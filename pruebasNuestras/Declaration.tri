@@ -1,0 +1,9 @@
+package paquete  ~  
+recursive proc angelo() ~ pass end 
+| func ignacio():Integer ~ 1+2
+end;
+recursive proc manuel() ~ pass end 
+| func juan():Integer ~ 1+2
+end
+end; 
+pass

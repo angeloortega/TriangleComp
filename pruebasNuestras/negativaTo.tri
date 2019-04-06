@@ -1,0 +1,3 @@
+loop for i from 5 To 6 until i < 5 do pass;pass end
+
+!Casing del to

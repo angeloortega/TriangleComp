@@ -263,7 +263,7 @@ public class Parser {
 
         } else { //Else, it is a variable assignment
           VName vAST = parseRestOfVname(iAST);
-          accept(Token.SINGLEDECLARATION); // ::=
+          accept(Token.BECOMES); // :=
           Expression eAST = parseExpression();
           finish(commandPos);
           commandAST = new AssignCommand(vAST, eAST, commandPos);
@@ -291,6 +291,7 @@ public class Parser {
         Command c1AST = parseCommand();
         accept(Token.ELSE);
         Command c2AST = parseCommand();
+        accept(Token.END);
         finish(commandPos);
         commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
       }
@@ -323,10 +324,10 @@ public class Parser {
         commandAST = new EmptyCommand(commandPos);
     }break;
         
-    case Token.EOT:{ //In case there is not a command 
+   /* case Token.EOT:{ //In case there is not a command 
       finish(commandPos);
       commandAST = new EmptyCommand(commandPos);
-    }break;
+    }break;*/
 
     default:
       syntacticError("\"%\" cannot start a command",
@@ -966,7 +967,7 @@ public class Parser {
         
         while (currentToken.kind == Token.PIPE) {
           acceptIt();
-          SingleDeclaration sd3AST = (SingleDeclaration) parseSingleDeclaration(); 
+          Declaration sd3AST =  parseSingleDeclaration(); 
           finish(compoundDeclarationPos);
           compoundDeclarationAST = new SequentialSingleDeclaration(compoundDeclarationAST, sd3AST, compoundDeclarationPos);
         }

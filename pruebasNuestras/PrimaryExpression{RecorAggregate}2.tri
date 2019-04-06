@@ -1,0 +1,1 @@
+if {angelo ~ 1*2} then pass else pass end
