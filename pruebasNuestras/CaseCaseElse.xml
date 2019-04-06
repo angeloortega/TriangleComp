@@ -1,0 +1,47 @@
+<Program>
+<ChoooseCommand>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+<Cases>
+<SequentialCase>
+<CaseWhen>
+<CaseLiterals>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'a'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</CaseLiterals>
+<CallCommand>
+<Identifier value="pepe"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</CaseWhen>
+<CaseWhen>
+<CaseLiterals>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'b'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</CaseLiterals>
+<CallCommand>
+<Identifier value="pepb"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</CaseWhen>
+</SequentialCase>
+<ElseCase>
+<CallCommand>
+<Identifier value="otra"/>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</ElseCase>
+</Cases>
+</ChoooseCommand>
+</Program>
