@@ -1,3 +1,4 @@
+//Used to represent the literals in a command instruction.
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
