@@ -4,6 +4,11 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.Program;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/*
+* La clase Writer permite crear el archivo xml donde se pueden observar los diferentes AST creados
+* al compilar el programa. La clase recibe de parámetro en su constructor el nombre del archivo
+* xml.
+*/
 public class Writer {
 
     private String fileName;
@@ -13,6 +18,15 @@ public class Writer {
     }
 
     // Draw the AST representing a complete program.
+    /*
+    * Entradas: el AST Program
+    * Proceso: Dado que el AST inicia a partir de Program, este se pasa por parámetro con el fin
+    * de recorrer los ASTs generados, e ir escribiendo el respectivo texto xml del nombre de
+    * cada AST que se visita. Además, se crea un archivo con el nombre de archivo indicado en el
+    * constructor, al mismo se le escribe el respectivo encabezado de XML. Al terminar de escribir
+    * el xml, se cierra el archivo.
+    * Salidas: ninguna
+    */
     public void write(Program ast) {
         // Prepare the file to write
         try {
