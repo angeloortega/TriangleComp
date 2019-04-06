@@ -6,6 +6,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+* La clase WriterVisitor permite recorrer los diferentes ASTs generados por el Parser,
+* de modo que recorran en orden y se escriba el respectivo texto XML de los ASTs que
+* se visitan. Como resultado se va a lograr observar en el archivo XML el AST completo
+* que generó el Parser. El constructor recibe por parámetro el FileWriter que permite
+* escribir en el archivo. Note que la clase implementa la interface Visitor, de modo
+* que se garantice la implementación de todos los visitors necesarios que permiten
+* visitar cada uno de los ASTs generados por el Parser.
+*/
 public class WriterVisitor implements Visitor {
 
     private FileWriter fileWriter;
@@ -27,6 +36,11 @@ public class WriterVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Commands ">
     // Commands
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * VName y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitAssignCommand(AssignCommand ast, Object obj) {
         writeLineXML("<AssignCommand>");
@@ -36,6 +50,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y ActualParameterSequence con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCallCommand(CallCommand ast, Object obj) {
         writeLineXML("<CallCommand>");
@@ -45,6 +64,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitChooseCommand(ChooseCommand ast, Object o) {
         writeLineXML("<ChoooseCommand>");
@@ -54,12 +78,21 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml.
+    */
     @Override
     public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
         writeLineXML("<EmptyCommand/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression, Command1 y Command2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitIfCommand(IfCommand ast, Object obj) {
         writeLineXML("<IfCommand>");
@@ -70,6 +103,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Declaration y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLetCommand(LetCommand ast, Object obj) {
         writeLineXML("<LetCommand>");
@@ -79,6 +117,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Command1 y Command2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
         writeLineXML("<SequentialCommand>");
@@ -88,6 +131,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * LoopCases con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object o) {
         writeLineXML("<CallLoopCases>");
@@ -98,6 +146,11 @@ public class WriterVisitor implements Visitor {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" PROCS ">
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, FormalParameterSequence y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
         writeLineXML("<ProcProcFunc>");
@@ -108,6 +161,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, FormalParameterSequence, TypeDenoter y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
         writeLineXML("<FuncProcFunc>");
@@ -119,6 +177,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * ProcFunc y ProcFunc con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitProcFuncs(ProcFuncs ast, Object o) {
         writeLineXML("<ProcFuncs>");
@@ -130,6 +193,11 @@ public class WriterVisitor implements Visitor {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Loops ">
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
         writeLineXML("<LoopCasesWhile>");
@@ -139,6 +207,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
         writeLineXML("<LoopCasesUntil>");
@@ -148,6 +221,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Command y DoLoop con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
         writeLineXML("<LoopCasesDo>");
@@ -157,6 +235,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, Expression1, Expression2 y ForLoop con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
         writeLineXML("<LoopCasesFOR>");
@@ -168,6 +251,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
         writeLineXML("<DoLoopUntil>");
@@ -176,6 +264,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
         writeLineXML("<DoLoopWhile>");
@@ -184,6 +277,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitForLoopDo(ForLoopDo ast, Object o) {
         writeLineXML("<ForLoopDo>");
@@ -192,6 +290,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
         writeLineXML("<ForLoopUntil>");
@@ -201,6 +304,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
         writeLineXML("<ForLoopWhile>");
@@ -212,6 +320,12 @@ public class WriterVisitor implements Visitor {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc=" Cases ">
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Case y ElseCase, si ElseCase es diferente a null. De lo contrario
+    * se visita solo Case. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCases(Cases ast, Object o) {
         writeLineXML("<Cases>");
@@ -226,6 +340,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitElseCase(ElseCase ast, Object o) {
         writeLineXML("<ElseCase>");
@@ -234,6 +353,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Case1 y Case2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialCase(SequentialCase ast, Object o) {
         writeLineXML("<SequentialCase>");
@@ -243,6 +367,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * CaseLiterals y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCaseWhen(CaseWhen ast, Object o) {
         writeLineXML("<CaseWhen>");
@@ -252,6 +381,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * CaseRange con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCaseLiterals(CaseLiterals ast, Object o) {
         writeLineXML("<CaseLiterals>");
@@ -260,6 +394,12 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * CaseLiteral1 y CaseLiteral2, si CaseLiteral2 es diferente a null.
+    * De lo contrario solo CaseLiteral1. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
         writeLineXML("<CaseRangeCase>");
@@ -274,6 +414,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * CaseRange1 y CaseRange2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
         writeLineXML("<SequentialCaseRange>");
@@ -283,6 +428,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * CharacterLiteral con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
         writeLineXML("<CaseLiteralCHAR>");
@@ -291,6 +441,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * IntegerLiteral con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
         writeLineXML("<CaseLiteralINT>");
@@ -302,6 +457,11 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
     // Expressions
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression1, Operator y Expression2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
         writeLineXML("<BinaryExpression>");
@@ -312,6 +472,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * LongIdentifier y ActualParameterSequence con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCallExpression(CallExpression ast, Object obj) {
         writeLineXML("<CallExpression>");
@@ -321,6 +486,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * VName con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitAssignExpression(AssignExpression ast, Object o) {
         writeLineXML("<AssignExpression>");
@@ -329,6 +499,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * CharacterLiteral con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
         writeLineXML("<CharacterExpression>");
@@ -337,6 +512,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression1, Expression2 y Expression3 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitIfExpression(IfExpression ast, Object obj) {
         writeLineXML("<IfExpression>");
@@ -347,6 +527,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * IntegerLiteral con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
         writeLineXML("<IntegerExpression>");
@@ -355,6 +540,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Declaration y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLetExpression(LetExpression ast, Object obj) {
         writeLineXML("<LetExpression>");
@@ -364,6 +554,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSecExpression(SecExpression ast, Object o) {
         writeLineXML("<SecExpression>");
@@ -372,6 +567,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Operator y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitOperatorExpression(OperatorExpression ast, Object o) {
         writeLineXML("<OperatorExpression>");
@@ -380,6 +580,12 @@ public class WriterVisitor implements Visitor {
         writeLineXML("</OperatorExpression>");
         return null;
     }
+    
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLParenExpression(LParenExpression ast, Object o) {
         writeLineXML("<LParenExpression>");
@@ -388,6 +594,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * RecordAggregate con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
         writeLineXML("<LCurlyExpression>");
@@ -396,6 +607,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * ArrayAggregate con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLBracketExpression(LBracketExpression ast, Object o) {
         writeLineXML("<LBracketExpression>");
@@ -407,6 +623,11 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Declarations ">
     // Declarations
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * VName y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
         writeLineXML("<ConstDeclaration>");
@@ -416,6 +637,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, FormalParameterSequence, TypeDenoter y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
         writeLineXML("<FuncDeclaration>");
@@ -427,6 +653,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, FormalParameterSequence y Command con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         writeLineXML("<ProcDeclaration>");
@@ -437,6 +668,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * CompoundDeclaration y Declaration con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         writeLineXML("<SequentialDeclaration>");
@@ -446,6 +682,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         writeLineXML("<TypeDeclaration>");
@@ -455,6 +696,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y Declaration con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
         writeLineXML("<PackageDeclaration>");
@@ -464,6 +710,12 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * SingleDeclaration1 y SingleDeclaration2, si SingleDeclaration 2 es diferente a null.
+    * De lo contrario solo SingleDeclaration1. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
         writeLineXML("<SequentialSingleDeclaration>");
@@ -478,6 +730,12 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * PackageDeclaration1 y PackageDeclaration2, si PackageDeclaration2 es diferente a null.
+    * De lo contrario solo PackageDeclaration1. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
         writeLineXML("<SequentialPackageDeclaration>");
@@ -492,6 +750,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * ProcFuncs con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
         writeLineXML("<CompoundDeclarationRecursive>");
@@ -500,6 +763,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Declaration1 y Declaration2 con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
         writeLineXML("<CompoundDeclarationPrivate>");
@@ -509,6 +777,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Declaration con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
         writeLineXML("<CompoundDeclarationSingleDeclaration>");
@@ -517,6 +790,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
         writeLineXML("<VarSingleDeclarationColon>");
@@ -525,6 +803,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
         writeLineXML("<VarSingleDeclarationSingleDeclaration>");
@@ -533,6 +816,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y VarSingleDeclaration con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
         writeLineXML("<VarDeclaration>");
@@ -545,6 +833,11 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
     // Array Aggregates
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Expression y ArrayAggregate con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
         writeLineXML("<MultipleArrayAggregate>");
@@ -554,6 +847,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object obj) {
         writeLineXML("<SingleArrayAggregate>");
@@ -564,6 +862,11 @@ public class WriterVisitor implements Visitor {
 
 
     // Record Aggregates
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, Expression y RecordAggregate con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
         writeLineXML("<MultipleRecordAggregate>");
@@ -574,6 +877,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
         writeLineXML("<SingleRecordAggregate>");
@@ -585,6 +893,11 @@ public class WriterVisitor implements Visitor {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" Parameters ">
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     // Formal Parameters
     @Override
     public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
@@ -595,6 +908,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, FormalParameterSequence y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitFuncFormalParameter(FuncFormalParameter ast, Object obj) {
         writeLineXML("<FuncFormalParameter>");
@@ -605,6 +923,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y FormalParameterSequence con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitProcFormalParameter(ProcFormalParameter ast, Object obj) {
         writeLineXML("<ProcFormalParameter>");
@@ -614,6 +937,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitVarFormalParameter(VarFormalParameter ast, Object obj) {
         writeLineXML("<VarFormalParameter>");
@@ -623,13 +951,21 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml.
+    */
     @Override
     public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
         writeLineXML("<EmptyFormalParameterSequence/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * FormalParameter y FormalParameterSequence con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitMultipleFormalParameterSequence(MultipleFormalParameterSequence ast, Object obj) {
         writeLineXML("<MultipleFormalParameterSequence>");
@@ -639,6 +975,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * FormalParameter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
         writeLineXML("<SingleFormalParameterSequence>");
@@ -649,6 +990,11 @@ public class WriterVisitor implements Visitor {
 
 
     // Actual Parameters
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita
+    * ActualParameter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
         writeLineXML("<ConstActualParameter>");
@@ -657,6 +1003,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitFuncActualParameter(FuncActualParameter ast, Object obj) {
         writeLineXML("<FuncActualParameter>");
@@ -665,6 +1016,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Identifier con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitProcActualParameter(ProcActualParameter ast, Object obj) {
         writeLineXML("<ProcActualParameter>");
@@ -673,6 +1029,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * VName con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitVarActualParameter(VarActualParameter ast, Object obj) {
         writeLineXML("<VarActualParameter>");
@@ -681,13 +1042,21 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml
+    */
     @Override
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
         writeLineXML("<EmptyActualParameterSequence/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * ActualParameter y ActualParameterSequence con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object obj) {
         writeLineXML("<MultipleActualParameterSequence>");
@@ -697,6 +1066,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * ActualParameter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
         writeLineXML("<SingleActualParameterSequence>");
@@ -708,6 +1082,11 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Type Denoters ">
     // Type Denoters
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * IntegerLiteral y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
         writeLineXML("<ArrayTypeDenoter>");
@@ -717,6 +1096,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier, TypeDenoter y RecordTypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
         writeLineXML("<MultipleRecordTypeDenoter>");
@@ -727,6 +1111,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y TypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
         writeLineXML("<SingleRecordTypeDenoter>");
@@ -736,6 +1125,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * LongIdentifier con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
         writeLineXML("<TypeDenoterLongIdentifier>");
@@ -744,6 +1138,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * RecordTypeDenoter con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
         writeLineXML("<RTypeDenoter>");
@@ -756,30 +1155,56 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Literals, Identifiers and Operators ">
     // Literals, Identifiers and Operators
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, y se escribe
+    * el spelling.
+    */
     @Override
     public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
         writeLineXML("<CharacterLiteral value=\"" + ast.spelling + "\"/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, y se escribe
+    * el spelling.
+    */
     @Override
     public Object visitIdentifier(Identifier ast, Object obj) {
         writeLineXML("<Identifier value=\"" + ast.spelling + "\"/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, y se escribe
+    * el spelling.
+    */
     @Override
     public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
         writeLineXML("<IntegerLiteral value=\"" + ast.spelling + "\"/>");
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, y se escribe
+    * el spelling.
+    */
     @Override
     public Object visitOperator(Operator ast, Object obj) {
         writeLineXML("<Operator value=\"" + transformOperator(ast.spelling) + "\"/>");
         return null;
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * PackageIdentifier y Identifier, si packageIdentifier es diferente a null,
+    * de lo contrario solo Identifier. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitLongIdentifier(LongIdentifier ast, Object o) {
         writeLineXML("<LongIdentifier>");
@@ -794,6 +1219,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Identifier y PackageIdentifier con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
         writeLineXML("<CompoundIdentifier>");
@@ -806,6 +1236,11 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Value-or-variable names ">
     // Value-or-variable names
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * VName y Identifier con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitDotVname(DotVname ast, Object obj) {
         writeLineXML("<DotVname>");
@@ -815,6 +1250,12 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * VName y PackageIdenfier, si PackageIdentifier es diferente a null.
+    * De lo contrario, solo Identifier. Esto con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSimpleVname(SimpleVname ast, Object obj) {
         writeLineXML("<SimpleVname>");
@@ -829,6 +1270,11 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * VName y Expression con el fin de seguir el recorrido del AST compelto.
+    */
     @Override
     public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
         writeLineXML("<SubscriptVname>");
@@ -841,6 +1287,14 @@ public class WriterVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Programs ">
     // Programs
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Command y PackageDeclaration, si PackageDeclaration es diferente a null.
+    * De lo contrario, solo Command. A partir de estos ast que se visitan, se
+    * realiza el recorrido de todos los ast, y luego se cierra el fileWriter,
+    * lo que indica que ya se terminaron de escribir todos los ast en el archivo XML.
+    */
     @Override
     public Object visitProgram(Program ast, Object obj) {
         writeLineXML("<Program>");
@@ -861,6 +1315,13 @@ public class WriterVisitor implements Visitor {
     }
     // </editor-fold>
 
+    /*
+    * Entradas: el string a escribir en el archivo XML
+    * Proceso: escribir el string en una linea del archivo, y
+    * realizar un salto de linea con el fin de escribir el
+    * siguiente string que se necesitaria.
+    * Salidas: ninguna
+    */
     private void writeLineXML(String line) {
         try {
             fileWriter.write(line);
@@ -872,7 +1333,7 @@ public class WriterVisitor implements Visitor {
     }
 
     /*
-    * Convert the characters "<" & "<=" to their equivalents in html
+    * Convert the characters "<" & "<=" to their equivalents in XML
     */
     private String transformOperator(String operator) {
         if (operator.compareTo("<") == 0)
