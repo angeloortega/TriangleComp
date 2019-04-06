@@ -24,42 +24,82 @@ public class TreeVisitor implements Visitor {
     }
     
     // <editor-fold defaultstate="collapsed" desc=" Commands ">    
-    // Commands  
+    // Commands
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: VName y Expression.
+    */
     @Override
     public Object visitAssignCommand(AssignCommand ast, Object o) {
         return(createBinary("Assign Command", ast.V, ast.E));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier y ActualParameterSequence.
+    */
     @Override
     public Object visitCallCommand(CallCommand ast, Object o) {
         return(createBinary("Call Command", ast.I, ast.APS));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression y Command.
+    */
     @Override
     public Object visitChooseCommand(ChooseCommand ast, Object o) {
         return(createBinary("Call Command", ast.EXP, ast.COM));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual no contiene nada.
+    */
     @Override
     public Object visitEmptyCommand(EmptyCommand ast, Object o) {
         return(createNullary("Empty Command"));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression, Command1 y Command2.
+    */
     @Override
     public Object visitIfCommand(IfCommand ast, Object obj) {
         return(createTernary("If Command", ast.E, ast.C1, ast.C2));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Declaration y Command.
+    */
     @Override
     public Object visitLetCommand(LetCommand ast, Object obj) {
         return(createBinary("Let Command", ast.D, ast.C));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Command1 y Command2.
+    */
     @Override
     public Object visitSequentialCommand(SequentialCommand ast, Object obj) {
         return(createBinary("Sequential Command", ast.C1, ast.C2));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: LoopCases.
+    */
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object obj) {
         return(createUnary("Call Loop Cases", ast.LOOP));
@@ -68,16 +108,31 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" PROCS & FUNCS ">
     // PROCS
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier, FormalParameterSequence y Command.
+    */
     @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
         return(createTernary("Proc Proc Func", ast.ID, ast.FPS, ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier, FormalParameterSequence, TypeDenoter y Expression.
+    */
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
         return(createQuaternary("Func Proc Func", ast.ID, ast.FPS, ast.TD, ast.EXP));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: ProcFunc1 y ProcFunc2.
+    */
     @Override
     public Object visitProcFuncs(ProcFuncs ast, Object o) {
         return(createBinary("Proc Funcs", ast.PF1, ast.PF2));
@@ -86,46 +141,91 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Loops ">
     // Loops
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression y Command.
+    */
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
         return(createBinary("Loop Cases While", ast.EXP, ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression y Expression.
+    */
     @Override
     public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
         return(createBinary("Loop Cases Until", ast.EXP, ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Command y DoLoop.
+    */
     @Override
     public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
         return(createBinary("Loop Cases Do", ast.COM, ast.DO));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier, Expression1, Expression2 y ForLoop.
+    */
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
         return(createQuaternary("Loop Cases FOR", ast.ID, ast.EXP, ast.EXP2, ast.FOR));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression.
+    */
     @Override
     public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
         return(createUnary("Do Loop Until", ast.EXP));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression.
+    */
     @Override
     public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
         return(createUnary("Do Loop While", ast.EXP));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Command.
+    */
     @Override
     public Object visitForLoopDo(ForLoopDo ast, Object o) {
         return(createUnary("For Loop Do", ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression y Command.
+    */
     @Override
     public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
         return(createBinary("For Loop Until", ast.EXP, ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression y Command.
+    */
     @Override
     public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
         return(createBinary("For Loop While", ast.EXP, ast.COM));
@@ -134,46 +234,91 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Cases ">
     // Cases
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Case y ElseCase.
+    */
     @Override
     public Object visitCases(Cases ast, Object o) {
         return(createBinary("Cases", ast.CASE1, ast.CASE2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Command.
+    */
     @Override
     public Object visitElseCase(ElseCase ast, Object o) {
         return(createUnary("Else Case", ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Case1 y Case2.
+    */
     @Override
     public Object visitSequentialCase(SequentialCase ast, Object o) {
         return(createBinary("Sequential Case", ast.C1, ast.C2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CaseLiterals y Command.
+    */
     @Override
     public Object visitCaseWhen(CaseWhen ast, Object o) {
         return(createBinary("Case When", ast.CASELIT, ast.COM));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CaseRange.
+    */
     @Override
     public Object visitCaseLiterals(CaseLiterals ast, Object o) {
         return(createUnary("Case Literals", ast.CASERANGE));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CaseLiteral1 y CaseLiteral2.
+    */
     @Override
     public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
         return(createBinary("Case Range Case", ast.CASELIT, ast.CASELIT2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CaseRange1 y CaseRange2.
+    */
     @Override
     public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
         return(createBinary("Sequential Case Range", ast.C1, ast.C2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CharacterLiteral.
+    */
     @Override
     public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
         return(createUnary("Case Literal CHAR", ast.CHARLIT));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: IntegerLiteral.
+    */
     @Override
     public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
         return(createUnary("Case Literal INT", ast.INTLIT));
@@ -182,61 +327,121 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
     // Expressions
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression1, Operator y Expression2.
+    */
     @Override
     public Object visitBinaryExpression(BinaryExpression ast, Object obj) {
         return(createTernary("Binary Expression", ast.E1, ast.O, ast.E2));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: LongIdentifier y ActualParameterSequence.
+    */
     @Override
     public Object visitCallExpression(CallExpression ast, Object obj) {
         return(createBinary("Call Expression", ast.I, ast.APS));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: VName.
+    */
     @Override
     public Object visitAssignExpression(AssignExpression ast, Object o) {
         return(createUnary("Assign Expression", ast.V));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CharacterLiteral.
+    */
     @Override
     public Object visitCharacterExpression(CharacterExpression ast, Object obj) {
         return(createUnary("Character Expression", ast.CL));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression1, Expression2 y Expression3.
+    */
     @Override
     public Object visitIfExpression(IfExpression ast, Object obj) {
         return(createTernary("If Expression", ast.E1, ast.E2, ast.E3));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: IntegerLiteral.
+    */
     @Override
     public Object visitIntegerExpression(IntegerExpression ast, Object obj) {
         return(createUnary("Integer Expression", ast.IL));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Declaration y Expression.
+    */
     @Override
     public Object visitLetExpression(LetExpression ast, Object obj) {
         return(createBinary("Let Expression", ast.D, ast.E));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression.
+    */
     @Override
     public Object visitSecExpression(SecExpression ast, Object o) {
         return(createUnary("Secondary Expression",ast.secExpression));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Operator y Expression.
+    */
     @Override
     public Object visitOperatorExpression(OperatorExpression ast, Object o) {
         return(createBinary("Operator Expression", ast.O, ast.E));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Expression.
+    */
     @Override
     public Object visitLParenExpression(LParenExpression ast, Object o) {
         return(createUnary("LParen Expression", ast.E));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: RecordAggregate.
+    */
     @Override
     public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
         return(createUnary("LCurly Expression", ast.RA));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: ArrayAggregate.
+    */
     @Override
     public Object visitLBracketExpression(LBracketExpression ast, Object o) {
         return(createUnary("LBracket Expression", ast.AA));
@@ -245,61 +450,121 @@ public class TreeVisitor implements Visitor {
     
     // <editor-fold defaultstate="collapsed" desc=" Declarations ">
     // Declarations
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: VName y Expression.
+    */
     @Override
     public Object visitConstDeclaration(ConstDeclaration ast, Object obj) {
         return(createBinary("Constant Declaration", ast.I, ast.E));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier, FormalParameterSequence, TypeDenoter y Expression.
+    */
     @Override
     public Object visitFuncDeclaration(FuncDeclaration ast, Object obj) {
         return(createQuaternary("Function Declaration", ast.I, ast.FPS, ast.T, ast.E));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier, FormalParameterSequence y Command.
+    */
     @Override
     public Object visitProcDeclaration(ProcDeclaration ast, Object obj) {
         return(createTernary("Procedure Declaration", ast.I, ast.FPS, ast.C));        
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: CompoundDeclaration y Declaration.
+    */
     @Override
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         return(createBinary("Sequential Declaration", ast.D1, ast.D2));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier y TypeDenoter.
+    */
     @Override
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         return(createBinary("Type Declaration", ast.I, ast.T));
     }
     
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Identifier y Declaration.
+    */
     @Override
     public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
         return(createBinary("Package Declaration", ast.ID, ast.DEC));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: SingleDeclaration1 y SingleDeclaration2.
+    */
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
         return(createBinary("Sequential Single Declaration", ast.D1, ast.D2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: PackageDeclaration1 y PackageDeclaration2.
+    */
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
        return ast.D2 == null ? createUnary("Package Declaration", ast.D1) : createBinary("Sequential Package Declaration", ast.D1, ast.D2);
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: ProcFuncs.
+    */
     @Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
         return(createUnary("Compound Declaration Recursive", ast.PF));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Declaration1 y Declaration2.
+    */
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
         return(createBinary("Compound Declaration Private", ast.D1, ast.D2));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: Declaration.
+    */
     @Override
     public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
         return(createUnary("Compound Declaration Single Declaration", ast.SD));
     }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se crea un nodo con el nombre del ast que se visita,
+    * el cual contiene: TypeDenoter.
+    */
     @Override
     public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
         return(createUnary("Var Single Declaration Colon", ast.T));
