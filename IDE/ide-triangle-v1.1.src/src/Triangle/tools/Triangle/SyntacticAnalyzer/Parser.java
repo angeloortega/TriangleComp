@@ -362,10 +362,12 @@ public class Parser {
         accept(Token.FROM);
         Expression eAST = parseExpression();
         accept(Token.TO);
+        ConstDeclaration dclAST = new ConstDeclaration(identifierAST, eAST, loopCasesPos);
         Expression e2AST = parseExpression();
         ForLoop forLoopAST = parseForLoop();
         finish(loopCasesPos);
-        loopCasesAST = new LoopCasesFOR(identifierAST,eAST,e2AST,forLoopAST,loopCasesPos);
+        
+        loopCasesAST = new LoopCasesFOR(dclAST,e2AST,forLoopAST,loopCasesPos);
       }break;
       
       case Token.UNTIL:{

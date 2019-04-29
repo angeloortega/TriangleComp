@@ -243,8 +243,7 @@ public class WriterVisitor implements Visitor {
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
         writeLineXML("<LoopCasesFOR>");
-        ast.ID.visit(this, null);
-        ast.EXP.visit(this, null);
+        ast.DECL.visit(this, null);
         ast.EXP2.visit(this, null);
         ast.FOR.visit(this, null);
         writeLineXML("</LoopCasesFOR>");

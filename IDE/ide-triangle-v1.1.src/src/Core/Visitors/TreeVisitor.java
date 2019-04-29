@@ -178,7 +178,7 @@ public class TreeVisitor implements Visitor {
     */
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        return(createQuaternary("Loop Cases FOR", ast.ID, ast.EXP, ast.EXP2, ast.FOR));
+        return(createTernary("Loop Cases FOR", ast.DECL, ast.EXP2, ast.FOR));
     }
 
     /*
