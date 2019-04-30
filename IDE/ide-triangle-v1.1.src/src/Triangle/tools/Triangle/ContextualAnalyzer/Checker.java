@@ -894,7 +894,9 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
     }
 
     @Override
@@ -919,6 +921,21 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Object visitForLoopDo(ForLoopDo aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -1059,21 +1076,6 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopDo(ForLoopDo aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopUntil(ForLoopUntil aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopWhile(ForLoopWhile aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
