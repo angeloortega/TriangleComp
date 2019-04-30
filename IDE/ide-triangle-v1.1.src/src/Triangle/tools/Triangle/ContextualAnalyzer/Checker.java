@@ -894,7 +894,10 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        ast.EXP.visit(this, null);
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError ("Integer expression expected here", "",
+				ast.EXP.position);
         ast.COM.visit(this, null);
         return null;
     }
