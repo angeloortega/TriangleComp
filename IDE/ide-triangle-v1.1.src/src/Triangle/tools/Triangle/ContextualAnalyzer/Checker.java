@@ -1056,7 +1056,14 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        idTable.openScope();
+        IdEntry startPoint = idTable.getLatest();
+        ast.D1.visit(this, o);
+        IdEntry inStart = idTable.getLatest();
+        ast.D2.visit(this, o);
+        inStart.previous = startPoint;
+        idTable.closeScope();
+        return null;
     }
 
     @Override
