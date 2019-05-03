@@ -169,6 +169,13 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
+    public Object visitChooseCommand(ChooseCommand ast, Object o) {
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+
+        return(null);
+    }
+
     public Object visitEmptyCommand(EmptyCommand ast, Object o) { 
         return(null);
     }
@@ -195,26 +202,181 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitWhileCommand(WhileCommand ast, Object o) { 
-        ast.E.visit(this, null);
-        ast.C.visit(this, null);
+    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
+        ast.LOOP.visit(this, null);
 
         return(null);
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc=" PROCS ">
+
+    @Override
+    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
+        ast.ID.visit(this, null);
+        ast.FPS.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
+        ast.ID.visit(this, null);
+        ast.FPS.visit(this, null);
+        ast.TD.visit(this, null);
+        ast.EXP.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitProcFuncs(ProcFuncs ast, Object o) {
+        ast.PF1.visit(this, null);
+        ast.PF2.visit(this, null);
+        return null;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc=" Loops ">
+    @Override
+    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
+        ast.COM.visit(this, null);
+        ast.DO.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
+        ast.DECL.visit(this, null);
+        ast.EXP2.visit(this, null);
+        ast.FOR.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
+        ast.EXP.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+        ast.EXP.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitForLoopDo(ForLoopDo ast, Object o) {
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
+        ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc=" Cases ">
+    @Override
+    public Object visitCases(Cases ast, Object o) {
+        if(ast.CASE2 == null){
+            ast.CASE1.visit(this, null);
+        }
+        else{
+            ast.CASE1.visit(this, null);
+            ast.CASE2.visit(this, null);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitElseCase(ElseCase ast, Object o) {
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitSequentialCase(SequentialCase ast, Object o) {
+        ast.C1.visit(this, null);
+        ast.C2.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitCaseWhen(CaseWhen ast, Object o) {
+        ast.CASELIT.visit(this, null);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
+        ast.CASERANGE.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
+        if(ast.CASELIT2 == null){
+            ast.CASELIT.visit(this, null);
+        }
+        else{
+            ast.CASELIT.visit(this, null);
+            ast.CASELIT2.visit(this, null);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
+        ast.C1.visit(this, null);
+        ast.C2.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
+        ast.CHARLIT.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
+        ast.INTLIT.visit(this, null);
+        return null;
+    }
+    // </editor-fold>
+
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
     // Expressions
-    public Object visitArrayExpression(ArrayExpression ast, Object o) { 
-        ast.AA.visit(this, null);
-
-        return(null);
-    }
 
     public Object visitBinaryExpression(BinaryExpression ast, Object o) { 
         ast.E1.visit(this, null);
-        ast.E2.visit(this, null);
         ast.O.visit(this, null);
+        ast.E2.visit(this, null);
 
         return(null);
     }
@@ -226,13 +388,14 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
+    public Object visitAssignExpression(AssignExpression ast, Object o) {
+        ast.V.visit(this, null);
+        return null;
+    }
+
     public Object visitCharacterExpression(CharacterExpression ast, Object o) { 
         ast.CL.visit(this, null);
 
-        return(null);
-    }
-
-    public Object visitEmptyExpression(EmptyExpression ast, Object o) {       
         return(null);
     }
 
@@ -244,7 +407,8 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitIntegerExpression(IntegerExpression ast, Object o) { 
+    public Object visitIntegerExpression(IntegerExpression ast, Object o) {
+        ast.IL.visit(this, null); //TODO esta linea no veina extrannamente, solo el return null 
         return(null);
     }
 
@@ -255,31 +419,60 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitRecordExpression(RecordExpression ast, Object o) {   
-        ast.RA.visit(this, null);
-
+    @Override
+    public Object visitSecExpression(SecExpression ast, Object o) {
+        ast.secExpression.visit(this, null);
         return(null);
     }
-
-    public Object visitUnaryExpression(UnaryExpression ast, Object o) {    
-        ast.E.visit(this, null);
+    
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
+    * Operator y Expression con el fin de seguir el recorrido del AST compelto.
+    */
+    @Override
+    public Object visitOperatorExpression(OperatorExpression ast, Object o) {
         ast.O.visit(this, null);
-
+        ast.E.visit(this, null);
+        return(null);
+    }
+    
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * Expression con el fin de seguir el recorrido del AST compelto.
+    */
+    @Override
+    public Object visitLParenExpression(LParenExpression ast, Object o) {
+        ast.E.visit(this, null);
         return(null);
     }
 
-    public Object visitVnameExpression(VnameExpression ast, Object o) { 
-        ast.V.visit(this, null);
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * RecordAggregate con el fin de seguir el recorrido del AST compelto.
+    */
+    @Override
+    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
+        ast.RA.visit(this, null);
+        return(null);
+    }
 
+    /*
+    * Entradas: el ast respectivo que se visita, y un Object
+    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
+    * ArrayAggregate con el fin de seguir el recorrido del AST compelto.
+    */
+    @Override
+    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
+        ast.AA.visit(this, null);
         return(null);
     }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" Declarations ">
     // Declarations
-    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {        
-        return(null);
-    }
 
     public Object visitConstDeclaration(ConstDeclaration ast, Object o) {   
         String name = ast.I.spelling;
@@ -302,8 +495,8 @@ public class TableVisitor implements Visitor {
             addIdentifier(name, type, size, level, displacement, value);
         } catch (NullPointerException e) { }
 
-        ast.E.visit(this, null);
         ast.I.visit(this, null);
+        ast.E.visit(this, null);
 
         return(null);
     }
@@ -316,9 +509,9 @@ public class TableVisitor implements Visitor {
                 ((KnownRoutine)ast.entity).address.level, 
                 ((KnownRoutine)ast.entity).address.displacement, 
                 -1);      
-        } catch (NullPointerException e) { }
-        ast.T.visit(this, null);            
+        } catch (NullPointerException e) { }            
         ast.FPS.visit(this, null);
+        ast.T.visit(this, null);
         ast.E.visit(this, null);
 
         return(null);
@@ -346,14 +539,65 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitTypeDeclaration(TypeDeclaration ast, Object o) { 
+    public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
+        ast.I.visit(this, null);
         ast.T.visit(this, null);
 
         return(null);
     }
 
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {        
-        return(null);
+    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
+        ast.ID.visit(this, null);
+        ast.DEC.visit(this, null);
+        return (null);
+    }
+
+    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
+        if(ast.D2 == null){
+            ast.D1.visit(this, null);
+        }
+        else{
+            ast.D1.visit(this, null);
+            ast.D2.visit(this, null);
+        }
+        return (null);
+    }
+
+    public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
+        if(ast.D2 == null){
+            ast.D1.visit(this, null);
+        }
+        else{
+            ast.D1.visit(this, null);
+            ast.D2.visit(this, null);
+        }
+        return (null);
+    }
+
+    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
+        ast.PF.visit(this, null);
+        return (null);
+    }
+
+    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        return (null);
+    }
+
+    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
+        ast.SD.visit(this, null);
+        return (null);
+    }
+
+    public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
+        ast.T.visit(this, null);
+        return (null);
+    }
+
+    public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
+        ast.T.visit(this, null);
+        return (null);
     }
 
     public Object visitVarDeclaration(VarDeclaration ast, Object o) {      
@@ -365,8 +609,7 @@ public class TableVisitor implements Visitor {
                 ((KnownAddress)ast.entity).address.displacement, 
                 -1);
         } catch (NullPointerException e) { }
-        //TODO ARRELARLO 
-        //ast.T.visit(this, null);
+        ast.V.visit(this, null);
         return(null);
     }
 
@@ -375,8 +618,8 @@ public class TableVisitor implements Visitor {
     // <editor-fold defaultstate="collapsed" desc=" Aggregates ">
     // Array Aggregates
     public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o) { 
-        ast.AA.visit(this, null);
         ast.E.visit(this, null);
+        ast.AA.visit(this, null);
 
         return(null);
     }
@@ -389,16 +632,16 @@ public class TableVisitor implements Visitor {
 
     // Record Aggregates
     public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object o) { 
-        ast.E.visit(this, null);
         ast.I.visit(this, null);
+        ast.E.visit(this, null);
         ast.RA.visit(this, null);
 
         return(null);
     }
 
     public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object o) { 
-        ast.E.visit(this, null);
         ast.I.visit(this, null);
+        ast.E.visit(this, null);
 
         return(null);
     }
@@ -527,9 +770,6 @@ public class TableVisitor implements Visitor {
 
     // <editor-fold defaultstate="collapsed" desc=" Type Denoters ">
     // Type Denoters
-    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {      
-        return(null);
-    }
 
     public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) { 
         ast.IL.visit(this, null);
@@ -538,58 +778,26 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {       
+    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+        ast.ID.visit(this, null);
+        ast.TD.visit(this, null);
+        ast.RTD.visit(this, null);
         return(null);
     }
 
-    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) { 
+    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        ast.ID.visit(this, null);
+        ast.TD.visit(this, null);
         return(null);
     }
 
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) { 
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
+        ast.longIdentifier.visit(this, null);
         return(null);
     }
 
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o) { 
-        ast.I.visit(this, null);
-
-        return(null);
-    }
-
-    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) { 
-        return(null);
-    }
-
-    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {   
-        ast.FT.visit(this, null);
-        return(null);
-    }
-
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o) { 
-        try {
-        addIdentifier(ast.I.spelling, 
-                "Field", 
-                (ast.entity!=null?ast.entity.size:0),
-                -1, ((Field)ast.entity).fieldOffset, -1);      
-      } catch (NullPointerException e) { }
-        ast.FT.visit(this, null);
-        ast.I.visit(this, null);
-        ast.T.visit(this, null);
-
-
-        return(null);
-    }
-
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o) { 
-        try {
-        addIdentifier(ast.I.spelling, 
-                "Field", 
-                (ast.entity!=null?ast.entity.size:0),
-                -1, ((Field)ast.entity).fieldOffset, -1);
-        } catch (NullPointerException e) { }
-        ast.I.visit(this, null);
-        ast.T.visit(this, null);
-
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+        ast.REC.visit(this, null);
         return(null);
     }
 
@@ -614,26 +822,49 @@ public class TableVisitor implements Visitor {
 
         return(null);
     }
+
+    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
+        if(ast.packageIdentifier == null){
+            ast.identifier.visit(this, null);
+        }
+        else{
+            ast.packageIdentifier.visit(this, null);
+            ast.identifier.visit(this, null);
+        }
+        return(null);
+    }
+
+    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
+        ast.identifier.visit(this, null);
+        ast.packageIdentifier.visit(this, null);
+        return(null);
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" Values or Variable Names ">
     // Value-or-variable names
-    public Object visitDotVname(DotVname ast, Object o) { 
-        ast.I.visit(this, null);
+    public Object visitDotVname(DotVname ast, Object o) {
         ast.V.visit(this, null);
+        ast.I.visit(this, null);
 
         return(null);
     }
 
     public Object visitSimpleVname(SimpleVname ast, Object o) { 
-        ast.I.visit(this, null);
+        if(ast.P == null){
+            ast.I.visit(this, null);
+        }
+        else{
+            ast.I.visit(this, null);
+            ast.P.visit(this, null);
+        }
 
         return(null);
     }
 
-    public Object visitSubscriptVname(SubscriptVname ast, Object o) { 
-        ast.E.visit(this, null);
+    public Object visitSubscriptVname(SubscriptVname ast, Object o) {
         ast.V.visit(this, null);
+        ast.E.visit(this, null);
 
         return(null);
     }
@@ -642,7 +873,13 @@ public class TableVisitor implements Visitor {
     // <editor-fold defaultstate="collapsed" desc=" Table Creation Methods ">
     // Programs
     public Object visitProgram(Program ast, Object o) { 
-        ast.C.visit(this, null);
+        if(ast.P == null){
+            ast.C.visit(this, null);
+        }
+        else{
+            ast.P.visit(this, null);
+            ast.C.visit(this, null);
+        }
 
         return(null);
     }
@@ -667,178 +904,6 @@ public class TableVisitor implements Visitor {
           }
       }
 
-    public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitProcFuncs(ProcFuncs aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitForLoopDo(ForLoopDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCases(Cases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitElseCase(ElseCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSequentialCase(SequentialCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCaseWhen(CaseWhen ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitAssignExpression(AssignExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSecExpression(SecExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitOperatorExpression(OperatorExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLParenExpression(LParenExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public Object visitBracketSelector(BracketSelector aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -856,6 +921,91 @@ public class TableVisitor implements Visitor {
     }
 
     public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitWhileCommand(WhileCommand aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitArrayExpression(ArrayExpression ast, Object o) { 
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {      
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Object visitVnameExpression(VnameExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public Object visitUnaryExpression(UnaryExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitEmptyExpression(EmptyExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRecordExpression(RecordExpression aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
