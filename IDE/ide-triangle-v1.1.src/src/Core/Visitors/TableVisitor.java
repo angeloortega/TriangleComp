@@ -796,7 +796,7 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
         ast.REC.visit(this, null);
         return(null);
     }
