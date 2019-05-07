@@ -796,7 +796,7 @@ public class TableVisitor implements Visitor {
         return(null);
     }
 
-    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
         ast.REC.visit(this, null);
         return(null);
     }
@@ -818,7 +818,7 @@ public class TableVisitor implements Visitor {
     }
 
     public Object visitOperator(Operator ast, Object o) { 
-        ast.decl.visit(this, null);
+        //ast.decl.visit(this, null); decl siempre va a ser null, basado en el AST de Operator
 
         return(null);
     }
