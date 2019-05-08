@@ -18,12 +18,11 @@ package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
-public abstract class VarSingleDeclaration extends AST {
+public abstract class VarSingleDeclaration extends SingleDeclaration {
 
   public VarSingleDeclaration (SourcePosition thePosition) {
     super (thePosition);
     duplicated = false;
   }
 
-  public boolean duplicated;
 }

@@ -18,20 +18,19 @@ package Triangle.tools.Triangle.AbstractSyntaxTrees;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
 
-public class CompoundIdentifier extends AST {
+public class CompoundIdentifier extends Identifier {
     public PackageIdentifier packageIdentifier;
     public Identifier identifier; // Either a Declaration or a FieldTypeDenoter
 
   public CompoundIdentifier ( Identifier idAST,PackageIdentifier piAST,SourcePosition thePosition) {
-    super (thePosition);
+    super (idAST.spelling,thePosition);
     packageIdentifier = piAST;
     identifier = idAST;
-    
   }
 
     @Override
     public Object visit(Visitor v, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return v.visitCompoundIdentifier(this,null);
     }
 
   

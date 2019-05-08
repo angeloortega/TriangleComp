@@ -105,4 +105,10 @@ public final class IdentificationTable {
     return attr;
   }
 
+    public IdEntry getLatest() {
+        return latest;
+    }
+  
+  
+
 }

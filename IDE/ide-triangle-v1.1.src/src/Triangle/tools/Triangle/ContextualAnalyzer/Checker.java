@@ -18,13 +18,456 @@ import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
+import Utilities.ChooseData;
+import java.util.HashMap;
 
 public final class Checker implements Visitor {
+    //Nuevas cosas Richie-Giulla
+ @Override
+public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+    ast.TD = (TypeDenoter) ast.TD.visit(this, null);
+    ast.RTD.visit(this, null);
+    return ast;
+}
 
-  // Commands
+@Override
+public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+    ast.TD = (TypeDenoter) ast.TD.visit(this, null);
+    return ast;
+}
 
-  // Always returns null. Does not use the given object.
+@Override
+public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+    ast.REC = (RecordTypeDenoter) ast.REC.visit(this, o);
+    return ast;
+}
 
+public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
+  	Declaration binding = (Declaration) ast.longIdentifier.visit(this, null);
+    if (binding == null) {
+      reportUndeclared (ast.longIdentifier);
+      return StdEnvironment.errorType;
+    } else if (! (binding instanceof TypeDeclaration)) {
+      reporter.reportError ("\"%\" is not a type longIdentifier",
+                            ast.longIdentifier.spelling, ast.longIdentifier.position);
+      return StdEnvironment.errorType;
+    }
+    return ((TypeDeclaration) binding).T;
+  }
+
+  public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
+    IdentificationTable idTableTemp = hashIdTables.get(ast.packageIdentifier.spelling);
+    Declaration binding = idTableTemp.retrieve(ast.identifier.spelling);
+    if (binding != null)
+      ast.identifier.decl = binding;
+    return binding;
+  }
+    // Packages
+    //region Giulla
+    @Override
+    public Object visitVarDeclaration(VarDeclaration ast, Object o) {
+    VarSingleDeclarationSingleDeclaration binding = (VarSingleDeclarationSingleDeclaration) ast.V.visit(this, null);
+    if (binding != null) {
+        Expression expression = binding.T;
+    	ast.I.type = (TypeDenoter) expression.visit(this, null);
+    }
+    idTable.enter (ast.I.spelling, ast);
+    if (ast.duplicated)
+      reporter.reportError ("identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+
+    return null;
+  }
+  
+    @Override
+  public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
+    ast.T = (TypeDenoter) ast.T.visit(this, null);
+    return ast.T;
+  }
+  
+    @Override
+  public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
+    ast.T.type = (TypeDenoter) ast.T.visit(this, null);
+      return ast.T.type;
+  }
+    @Override
+
+  public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
+    idTable.enter(ast.ID.spelling, ast);
+    if(hashIdTables.containsKey(ast.ID.spelling)){
+      reporter.reportError ("Package identifier \"%\" already declared",
+                            ast.ID.spelling, ast.position);
+    }
+    IdentificationTable packageTable = new IdentificationTable();
+    hashIdTables.put(ast.ID.spelling, packageTable);
+    ast.DEC.visit(this, ast.ID.spelling); // The package name is sent so the visitor knows which package to declare in
+    return null;
+  }
+    @Override
+
+  public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
+    ast.D1.visit(this, null);
+    ast.D2.visit(this, null);
+    return null;
+  }
+    @Override
+  public Object visitSimpleVname(SimpleVname ast, Object o) {
+    ast.variable = false;
+    ast.type = StdEnvironment.errorType;
+    Declaration binding = (Declaration) ast.I.visit(this, null);
+    if (binding == null)
+      reportUndeclared(ast.I);
+    else
+      if (binding instanceof ConstDeclaration) {
+        ast.type = ((ConstDeclaration) binding).E.type;
+        ast.variable = false;
+      } else if (binding instanceof VarDeclaration) {
+        if (binding.getClass() == VarSingleDeclarationSingleDeclaration.class){
+          ast.type = ((VarSingleDeclarationSingleDeclaration) binding).T.type;
+        }
+        else{
+          ast.type = ((VarSingleDeclarationColon) binding).T;
+        }
+        ast.variable = true;
+      } else if (binding instanceof ConstFormalParameter) {
+        ast.type = ((ConstFormalParameter) binding).T;
+        ast.variable = false;
+      } else if (binding instanceof VarFormalParameter) {
+        ast.type = ((VarFormalParameter) binding).T;
+        ast.variable = true;
+      } else
+        reporter.reportError ("\"%\" is not a const or var identifier",
+                              ast.I.spelling, ast.I.position);
+    return ast.type;
+  }
+    //endregion
+    // Commands
+
+    // Always returns null. Does not use the given object.
+    
+
+  //region Richie 
+  
+        @Override
+	public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
+	    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+	    idTable.enter(ast.I.spelling, ast);
+	    if (ast.duplicated)
+	      reporter.reportError ("identifier \"%\" already declared",
+	                            ast.I.spelling, ast.position);
+	    return eType;
+	 }
+
+	@Override
+    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
+        ast.PF.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitProcFuncs(ProcFuncs ast, Object o) {
+        for (int i = 0; i < 2; i++) {
+          ast.PF1.visit(this, i);
+          ast.PF2.visit(this, i);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
+        Integer iteration = (Integer) o;
+        if (iteration.equals(new Integer(0))) {
+          idTable.enter (ast.ID.spelling, ast); // permits recursion
+          if (ast.duplicated)
+            reporter.reportError ("identifier \"%\" already declared",
+                                  ast.ID.spelling, ast.position);
+        }
+        else {
+          idTable.openScope();
+          ast.FPS.visit(this, null);
+          ast.COM.visit(this, null);
+          idTable.closeScope();
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
+        Integer iteration = (Integer) o;
+        if (iteration.equals(0)) {
+          idTable.enter (ast.ID.spelling, ast); // permits recursion
+          if (ast.duplicated)
+            reporter.reportError ("identifier \"%\" already declared",
+                                  ast.ID.spelling, ast.position);
+        }
+        else {
+          idTable.openScope();
+          ast.FPS.visit(this, null);
+          ast.TD = (TypeDenoter) ast.TD.visit(this, null);
+          TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+          idTable.closeScope();
+          if (! ast.TD.equals(eType))
+            reporter.reportError ("body of function \"%\" has wrong type",
+                                  ast.ID.spelling, ast.EXP.position);
+        }
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError ("Boolean expression expected here", "",
+				ast.EXP.position);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError ("Boolean expression expected here", "",
+				ast.EXP.position);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
+        ast.COM.visit(this, null);
+				ast.DO.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
+		TypeDenoter eType1 = (TypeDenoter) ast.DECL.visit(this, null);
+      	if (! eType1.equals(StdEnvironment.integerType))
+          reporter.reportError ("Integer expression expected here", "",
+				ast.DECL.position); //TODO revisar si la posicion esta bien.
+        TypeDenoter eType2 = (TypeDenoter) ast.EXP2.visit(this, null);
+      	if (! eType2.equals(StdEnvironment.integerType))
+          reporter.reportError ("Integer expression expected here", "",
+				ast.EXP2.position);
+        idTable.openScope(); //TODO los exp no deben accesar el identifier
+        Object output = ast.FOR.visit(this, null);
+        if (output != null) {
+            TypeDenoter eType3 = (TypeDenoter) output;
+            if (! eType3.equals(StdEnvironment.booleanType))
+              reporter.reportError ("Boolean expression expected here", "",
+            ast.FOR.position); //TODO revisar si la posicion esta bien.
+        }
+      	idTable.closeScope();
+        return null;
+    }
+
+    @Override
+    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError ("Boolean expression expected here", "",
+				ast.EXP.position);
+      	return null;
+    }
+
+    @Override
+    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError ("Boolean expression expected here", "",
+				ast.EXP.position);
+      	return null;
+    }
+  
+  	@Override
+    public Object visitForLoopDo(ForLoopDo ast, Object o) {
+      	ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
+      	TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return eType;
+    }
+
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
+      	TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        ast.COM.visit(this, null);
+        return eType;
+    }
+    //endregion
+    
+    
+    //region Jose
+    @Override
+    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
+        return StdEnvironment.integerType;
+    }
+
+@Override
+    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
+        return StdEnvironment.charType;
+    }
+
+
+ @Override
+    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object typeExpression) {
+        ast.C1.visit(this, typeExpression);
+        ast.C2.visit(this, typeExpression);
+        return null;
+    }
+
+@Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object chooseData) {
+        ChooseData valuesData = (ChooseData) chooseData;
+        TypeDenoter typeExpression = ((ChooseData) chooseData).getType();
+        TypeDenoter typeCaseLit1  = (TypeDenoter) ast.CASELIT.visit(this, null);
+        TypeDenoter typeCaseLit2  = (TypeDenoter) ast.CASELIT2.visit(this, null);
+        if( typeExpression.equals(StdEnvironment.charType) ){
+            if( ! typeCaseLit1.equals(typeExpression) ){
+                 reporter.reportError ("Char expression expected here", "",
+				ast.CASELIT.position);
+            }
+            if( ! typeCaseLit2.equals(typeExpression) ){
+                 reporter.reportError ("Char expression expected here", "",
+				ast.CASELIT2.position);
+            }
+        }
+        else if( typeExpression.equals(StdEnvironment.integerType) ){
+            if( ! typeCaseLit1.equals(typeExpression) ){
+                 reporter.reportError ("Integer expression expected here", "",
+				ast.CASELIT.position);
+            }
+            if( ! typeCaseLit2.equals(typeExpression) ){
+                 reporter.reportError ("Integer expression expected here", "",
+				ast.CASELIT2.position);
+            }
+        }
+            if( ast.CASELIT instanceof CaseLiteralCHAR ){
+                if(!valuesData.exists( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling)){
+                    valuesData.addData( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling );
+                }
+                else{
+                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
+				ast.CASELIT2.position);
+                }
+            }
+            else if( ast.CASELIT instanceof CaseLiteralINT){
+                if(!valuesData.exists(((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling)){
+                     valuesData.addData( ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling );
+                }
+                 else{
+                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
+				ast.CASELIT2.position);
+                }
+            }
+            
+             if( ast.CASELIT2 instanceof CaseLiteralCHAR ){
+                if(!valuesData.exists( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT2).CHARLIT)).spelling)){
+                    valuesData.addData( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT2).CHARLIT)).spelling );
+                }
+                 else{
+                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
+				ast.CASELIT2.position);
+                }
+            }
+            else if( ast.CASELIT2 instanceof CaseLiteralINT){
+                if(!valuesData.exists(((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT2).INTLIT)).spelling)){
+                     valuesData.addData( ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT2).INTLIT)).spelling );
+                }
+                 else{
+                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
+				ast.CASELIT2.position);
+                }
+            }
+       
+        return null;
+    }
+
+@Override
+    public Object visitCaseLiterals(CaseLiterals ast, Object typeExpression) {
+        ast.CASERANGE.visit(this, typeExpression);
+        return null;
+    }
+
+
+
+@Override
+    public Object visitCaseWhen(CaseWhen ast, Object typeExpression) {
+        ast.CASELIT.visit(this, typeExpression);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+@Override
+    public Object visitSequentialCase(SequentialCase ast, Object typeExpression) {
+        ast.C1.visit(this, typeExpression);
+        ast.C2.visit(this, typeExpression);
+        return null;
+    }
+
+
+@Override
+    public Object visitElseCase(ElseCase ast, Object o) {
+        ast.COM.visit(this, o);
+        return null;
+    }
+
+
+ @Override
+    public Object visitCases(Cases ast, Object typeExpression) {
+        ast.CASE1.visit(this, typeExpression);
+        ast.CASE2.visit(this, typeExpression);
+        return null;
+    }
+
+
+
+    @Override
+    public Object visitChooseCommand(ChooseCommand ast, Object o) {
+        TypeDenoter expressionType = (TypeDenoter) ast.EXP.visit(this, o);
+        if( ! expressionType.equals( StdEnvironment.charType) || ! expressionType.equals( StdEnvironment.integerType) ){
+            reporter.reportError("Integer or Char expression expected here", "", ast.EXP.position);
+        }
+        ChooseData expressionData = new ChooseData(expressionType);
+        ast.COM.visit(this, expressionData);
+        return null;
+    }
+
+
+@Override
+    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
+        ast.SD.visit(this, o);
+        return null;
+    }
+
+
+
+    @Override
+    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
+        ast.D1.visit(this, o);
+        ast.D2.visit(this, o);
+        return null;
+    }
+
+
+    @Override
+    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
+        idTable.openScope();
+        IdEntry startPoint = idTable.getLatest();
+        ast.D1.visit(this, o);
+        IdEntry inStart = idTable.getLatest();
+        ast.D2.visit(this, o);
+        inStart.previous = startPoint;
+        idTable.closeScope();
+        return null;
+    }
+    //endregion
+    
   public Object visitAssignCommand(AssignCommand ast, Object o) {
     TypeDenoter vType = (TypeDenoter) ast.V.visit(this, null);
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
@@ -36,9 +479,16 @@ public final class Checker implements Visitor {
   }
 
 
+  @Override
   public Object visitCallCommand(CallCommand ast, Object o) {
-
-    Declaration binding = (Declaration) ast.I.visit(this, null);
+    String packageName = defaultPackage;
+    if (ast.I instanceof CompoundIdentifier){
+        CompoundIdentifier ci = (CompoundIdentifier)ast.I;
+        if(ci.packageIdentifier != null){
+            packageName = ci.packageIdentifier.spelling;  // If a compound identifier it's found, there's a possibility it's a package call.
+        }
+    }
+    Declaration binding = (Declaration) ast.I.visit(this, packageName);
     if (binding == null)
       reportUndeclared(ast.I);
     else if (binding instanceof ProcDeclaration) {
@@ -86,10 +536,67 @@ public final class Checker implements Visitor {
     return null;
   }
 
+    // Iterative commands
+
+    // Always returns null. Does not use the given object.
+  
+    /* Si lo de richie no sirve, descomente esta linea
+   @Override
+    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
+        ast.COM.visit(this, null);
+        return null;
+    }
+
+    @Override
+    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
+        ast.COM.visit(this, null);
+        ast.DO.visit(this, o);
+        return null;
+
+       }
+
+    @Override
+    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
+        return null;
+    }
+
+    @Override
+    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, null);
+        if (! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
+        return null;
+    }
+    */
+
+    @Override
+    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
+        ast.LOOP.visit(this, null);
+        return null;
+    }
+
+
+    
   // Expressions
 
   // Returns the TypeDenoter denoting the type of the expression. Does
   // not use the given object.
+  
 
   public Object visitArrayExpression(ArrayExpression ast, Object o) {
     TypeDenoter elemType = (TypeDenoter) ast.AA.visit(this, null);
@@ -211,20 +718,88 @@ public final class Checker implements Visitor {
     ast.type = (TypeDenoter) ast.V.visit(this, null);
     return ast.type;
   }
+  
+  @Override
+    public Object visitSecExpression(SecExpression ast, Object o) {
+        ast.type = (TypeDenoter) ast.secExpression.visit(this, null);
+        return ast.type;
+    }
+
+    @Override
+    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object o) {
+        ast.type = StdEnvironment.integerType;
+        return ast.type;
+    }
+
+    @Override
+    public Object visitOperatorExpression(OperatorExpression ast, Object o) { //Used to visit multiple expressions separated by an operator
+        ast.O.visit(this, null);
+        ast.type = (TypeDenoter) ast.E.visit(this, null);
+        return ast.type;
+    
+    }
+
+    @Override
+    public Object visitLParenExpression(LParenExpression ast, Object o) {
+        return ast.E.visit(this, null);
+    }
+
+    @Override
+    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
+        FieldTypeDenoter rType = (FieldTypeDenoter) ast.RA.visit(this, null);
+        ast.type = new RecordTypeDenoter(rType, ast.position);
+        return ast.type;
+    }
+
+    @Override
+    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
+        TypeDenoter elemType = (TypeDenoter) ast.AA.visit(this, null);
+        IntegerLiteral il = new IntegerLiteral(new Integer(ast.AA.elemCount).toString(),
+                                               ast.position);
+        ast.type = new ArrayTypeDenoter(il, elemType, ast.position);
+        return ast.type;
+    }
+    
+    @Override
+    public Object visitLongIdentifier(LongIdentifier ast, Object o) { 
+        String packageName = defaultPackage;
+        if(ast.packageIdentifier != null){
+            packageName = ast.packageIdentifier.spelling;
+        }
+        Declaration binding = hashIdTables.get(packageName).retrieve(ast.identifier.spelling);
+        if (binding != null)
+          ast.identifier.decl = binding;
+        return binding;
+    }
+    
+    @Override
+    public Object visitLIdentifierExpression(LIdentifierExpression ast, Object o) { //previous call expression 
+        Declaration binding = (Declaration) ast.LI.visit(this, null);
+        if (binding == null) {
+          reportUndeclared(ast.LI);
+          ast.type = StdEnvironment.errorType;
+        } else if (binding instanceof FuncDeclaration) {
+          ast.APS.visit(this, ((FuncDeclaration) binding).FPS);
+          ast.type = ((FuncDeclaration) binding).T;
+        } else if (binding instanceof FuncFormalParameter) {
+          ast.APS.visit(this, ((FuncFormalParameter) binding).FPS);
+          ast.type = ((FuncFormalParameter) binding).T;
+        } else
+          reporter.reportError("\"%\" is not a function identifier",
+                               ast.LI.spelling, ast.LI.position);
+        return ast.type;
+    }
+
+    @Override
+    public Object visitAssignExpression(AssignExpression ast, Object o) {
+        return ast.V.visit(this, null);
+    }
+
 
   // Declarations
 
   // Always returns null. Does not use the given object.
   public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {
-    return null;
-  }
-
-  public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    idTable.enter(ast.I.spelling, ast);
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
     return null;
   }
 
@@ -275,6 +850,8 @@ public final class Checker implements Visitor {
     return null;
   }
 
+  /*
+  TODO: Revisar visitVarDeclarationNuevo
   public Object visitVarDeclaration(VarDeclaration ast, Object o) {
      //TODO Visit type denoter or expression.
       idTable.enter (ast.I.spelling, ast);
@@ -284,7 +861,7 @@ public final class Checker implements Visitor {
 
     return null;
   }
-
+    */
   // Array Aggregates
 
   // Returns the TypeDenoter for the Array Aggregate. Does not use the
@@ -572,9 +1149,17 @@ public final class Checker implements Visitor {
   public Object visitCharacterLiteral(CharacterLiteral CL, Object o) {
     return StdEnvironment.charType;
   }
-
+  
+  //Change: a package is now received
   public Object visitIdentifier(Identifier I, Object o) {
-    Declaration binding = idTable.retrieve(I.spelling);
+    String packageName = defaultPackage;
+    if(o != null){
+        if(o instanceof String){
+            packageName = (String) o;
+        }
+    }
+    
+    Declaration binding = hashIdTables.get(packageName).retrieve(I.spelling);
     if (binding != null)
       I.decl = binding;
     return binding;
@@ -627,6 +1212,8 @@ public final class Checker implements Visitor {
     return ast.type;
   }
 
+  /*
+  TODO revisar visitSimpleVname nuevo
   public Object visitSimpleVname(SimpleVname ast, Object o) {
     ast.variable = false;
     ast.type = StdEnvironment.errorType;
@@ -652,7 +1239,7 @@ public final class Checker implements Visitor {
                               ast.I.spelling, ast.I.position);
     return ast.type;
   }
-
+    */
   public Object visitSubscriptVname(SubscriptVname ast, Object o) {
     TypeDenoter vType = (TypeDenoter) ast.V.visit(this, null);
     ast.variable = ast.V.variable;
@@ -692,15 +1279,20 @@ public final class Checker implements Visitor {
 
   /////////////////////////////////////////////////////////////////////////////
 
-  public Checker (ErrorReporter reporter) {
-    this.reporter = reporter;
-    this.idTable = new IdentificationTable ();
-    establishStdEnvironment();
-  }
+ // Checker Constructor
+    public Checker (ErrorReporter reporter) {
+      this.reporter = reporter;
+      this.idTable = new IdentificationTable ();
+      this.hashIdTables = new HashMap<String, IdentificationTable>();
+      this.hashIdTables.put(defaultPackage, idTable);
+      establishStdEnvironment();
+    }
 
-  private IdentificationTable idTable;
-  private static SourcePosition dummyPos = new SourcePosition();
-  private ErrorReporter reporter;
+    private IdentificationTable idTable;
+    private HashMap<String,IdentificationTable> hashIdTables;
+    private static SourcePosition dummyPos = new SourcePosition();
+    private ErrorReporter reporter;
+    private final String defaultPackage = "_global_";
 
   // Reports that the identifier or operator used at a leaf of the AST
   // has not been declared.
@@ -871,106 +1463,12 @@ public final class Checker implements Visitor {
     StdEnvironment.unequalDecl = declareStdBinaryOp("\\=", StdEnvironment.anyType, StdEnvironment.anyType, StdEnvironment.booleanType);
 
   }
-
-    @Override
-    public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+  
     @Override
     public Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCases(Cases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitElseCase(ElseCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialCase(SequentialCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseWhen(CaseWhen ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitBracketSelector(BracketSelector ast, Object o) {
@@ -979,136 +1477,6 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitDotSelector(DotSelector ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSecExpression(SecExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitOperatorExpression(OperatorExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLParenExpression(LParenExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLBracketExpression(LBracketExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLIdentifierExpression(LIdentifierExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopDo(ForLoopDo aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopUntil(ForLoopUntil aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopWhile(ForLoopWhile aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitAssignExpression(AssignExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLongIdentifier(LongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitProcFuncs(ProcFuncs aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

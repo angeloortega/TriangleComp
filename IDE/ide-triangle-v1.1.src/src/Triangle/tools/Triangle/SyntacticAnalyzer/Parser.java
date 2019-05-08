@@ -259,7 +259,7 @@ public class Parser {
           ActualParameterSequence apsAST = parseActualParameterSequence();
           accept(Token.RPAREN);
           finish(commandPos);
-          commandAST = new CallCommand(iAST.identifier, apsAST, commandPos);
+          commandAST = new CallCommand(iAST, apsAST, commandPos); //NEW, now it receives a compound identifier instead of an identifier
 
         } else { //Else, it is a variable assignment
           VName vAST = parseRestOfVname(iAST);

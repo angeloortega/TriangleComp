@@ -18,7 +18,7 @@ package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
-public abstract class ProcFunc extends AST {
+public abstract class ProcFunc extends Declaration {
 
   public ProcFunc (SourcePosition thePosition) {
     super (thePosition);

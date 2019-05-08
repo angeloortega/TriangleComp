@@ -31,8 +31,12 @@ public class RTypeDenoter extends TypeDenoter {
 
   public RecordTypeDenoter REC;
 
-    @Override
-    public boolean equals(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  public boolean equals (Object obj) {
+    if (obj != null && obj instanceof ErrorTypeDenoter)
+      return true;
+    else if (obj != null && obj instanceof RTypeDenoter)
+      return this.REC.equals(((RTypeDenoter) obj).REC);
+    else
+      return false;
+  }
 }
