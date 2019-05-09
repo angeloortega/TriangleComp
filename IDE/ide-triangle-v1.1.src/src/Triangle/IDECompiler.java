@@ -56,11 +56,11 @@ public class IDECompiler {
             checker.check(rootAST);
             if (report.numErrors == 0) {
                 System.out.println("Code Generation ...");
-                //Encoder encoder = new Encoder(report);
-                //encoder.encodeRun(rootAST, false);
+                Encoder encoder = new Encoder(report);
+                encoder.encodeRun(rootAST, false);
                 
                 if (report.numErrors == 0) {
-                    //encoder.saveObjectProgram(sourceName.replace(".tri", ".tam"));
+                    encoder.saveObjectProgram(sourceName.replace(".tri", ".tam"));
                     success = true;
                 }
             }

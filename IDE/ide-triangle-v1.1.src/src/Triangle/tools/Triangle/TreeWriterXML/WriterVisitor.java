@@ -1086,7 +1086,11 @@ public class WriterVisitor implements Visitor {
     * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
     * IntegerLiteral y TypeDenoter con el fin de seguir el recorrido del AST compelto.
     */
-    @Override
+  public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
+        writeLineXML("<AnyTypeDenoter/>");
+        return null;
+    }
+
     public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
         writeLineXML("<ArrayTypeDenoter>");
         ast.IL.visit(this, null);
@@ -1094,59 +1098,56 @@ public class WriterVisitor implements Visitor {
         writeLineXML("</ArrayTypeDenoter>");
         return null;
     }
-    
-    /*
-    * Entradas: el ast respectivo que se visita, y un Object
-    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
-    * Identifier, TypeDenoter y RecordTypeDenoter con el fin de seguir el recorrido del AST compelto.
-    */
-    @Override
-    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        writeLineXML("<MultipleRecordTypeDenoter>");
-        ast.ID.visit(this, null);
-        ast.TD.visit(this, null);
-        ast.RTD.visit(this, null);
-        writeLineXML("</MultipleRecordTypeDenoter>");
-        return null;
-    }
-    
-    /*
-    * Entradas: el ast respectivo que se visita, y un Object
-    * Proceso: se escribe el nombre del ast en el archivo xml, se visitan:
-    * Identifier y TypeDenoter con el fin de seguir el recorrido del AST compelto.
-    */
-    @Override
-    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        writeLineXML("<SingleRecordTypeDenoter>");
-        ast.ID.visit(this, null);
-        ast.TD.visit(this, null);
-        writeLineXML("</SingleRecordTypeDenoter>");
-        return null;
-    }
-    
-    /*
-    * Entradas: el ast respectivo que se visita, y un Object
-    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
-    * LongIdentifier con el fin de seguir el recorrido del AST compelto.
-    */
-    @Override
-    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
-        writeLineXML("<TypeDenoterLongIdentifier>");
-        ast.longIdentifier.visit(this, null);
-        writeLineXML("</TypeDenoterLongIdentifier>");
+
+    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
+        writeLineXML("<BoolTypeDenoter/>");
         return null;
     }
 
-    /*
-    * Entradas: el ast respectivo que se visita, y un Object
-    * Proceso: se escribe el nombre del ast en el archivo xml, se visita:
-    * RecordTypeDenoter con el fin de seguir el recorrido del AST compelto.
-    */
-    @Override
-    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
-        writeLineXML("<RTypeDenoter>");
-        ast.REC.visit(this, null);
-        writeLineXML("</RTypeDenoter>");
+    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
+        writeLineXML("<CharTypeDenoter/>");
+        return null;
+    }
+
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
+        writeLineXML("<ErrorTypeDenoter/>");
+        return null;
+    }
+
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
+        writeLineXML("<SimpleTypeDenoter>");
+        ast.I.visit(this, null);
+        writeLineXML("</SimpleTypeDenoter>");
+        return null;
+    }
+
+    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
+        writeLineXML("<IntTypeDenoter/>");
+        return null;
+    }
+
+    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
+        writeLineXML("<RecordTypeDenoter>");
+        ast.FT.visit(this, null);
+        writeLineXML("</RecordTypeDenoter>");
+        return null;
+    }
+
+
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
+        writeLineXML("<MultipleFieldTypeDenoter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        ast.FT.visit(this, null);
+        writeLineXML("</MultipleFieldTypeDenoter>");
+        return null;
+    }
+
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
+        writeLineXML("<SingleFieldTypeDenoter>");
+        ast.I.visit(this, null);
+        ast.T.visit(this, null);
+        writeLineXML("</SingleFieldTypeDenoter>");
         return null;
     }
     
@@ -1344,32 +1345,28 @@ public class WriterVisitor implements Visitor {
     }
     
     @Override
-    public Object visitAnyTypeDenoter(AnyTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Object visitArrayExpression(ArrayExpression ast, Object obj) {
+        writeLineXML("<ArrayExpression>");
+        ast.AA.visit(this, null);
+        writeLineXML("</ArrayExpression>");
+        return null;
     }
 
     @Override
-    public Object visitArrayExpression(ArrayExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
+        writeLineXML("<BinaryOperatorDeclaration>");
+        ast.O.visit(this, null);
+        ast.ARG1.visit(this, null);
+        ast.ARG2.visit(this, null);
+        ast.RES.visit(this, null);
+        writeLineXML("</BinaryOperatorDeclaration>");
+        return null;
     }
 
-    @Override
-    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitBracketSelector(BracketSelector aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -1379,77 +1376,113 @@ public class WriterVisitor implements Visitor {
     }
 
     @Override
-    public Object visitEmptyExpression(EmptyExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     public Object visitEmptyExpression(EmptyExpression ast, Object obj) {
+        writeLineXML("<EmptyExpression/>");
+        return null;
+    }
+
+
+    @Override
+    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object obj) {
+        writeLineXML("<IntegerExpression>");
+        ast.SECEXP.visit(this, null);
+        writeLineXML("</IntegerExpression>");
+        return null;
     }
 
     @Override
-    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Object visitLIdentifierExpression(LIdentifierExpression ast, Object obj) {
+        writeLineXML("<Identifier value=\"" + ast.LI.spelling + "\"/>");
+        return null;
     }
 
     @Override
-    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitRecordExpression(RecordExpression ast, Object obj) {
+        writeLineXML("<RecordExpression>");
+        ast.RA.visit(this, null);
+        writeLineXML("</RecordExpression>");
+        return null;
     }
 
     @Override
-    public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+       public Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object obj) {
+        writeLineXML("<SingleDeclarationCommand>");
+        ast.VN.visit(this, null);
+        ast.EXP.visit(this, null);
+        writeLineXML("</SingleDeclarationCommand>");
+        return null;
     }
 
     @Override
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
+        writeLineXML("<UnaryExpression>");
+        ast.O.visit(this, null);
+        ast.E.visit(this, null);
+        writeLineXML("</UnaryExpression>");
+        return null;
     }
 
     @Override
-    public Object visitRecordExpression(RecordExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
+        writeLineXML("<UnaryOperatorDeclaration>");
+        ast.O.visit(this, null);
+        ast.ARG.visit(this, null);
+        ast.RES.visit(this, null);
+        writeLineXML("</UnaryOperatorDeclaration>");
+        return null;
+    }
+
+
+    @Override
+    public Object visitVnameExpression(VnameExpression ast, Object obj) {
+        writeLineXML("<VnameExpression>");
+        ast.V.visit(this, null);
+        writeLineXML("</VnameExpression>");
+        return null;
+    }
+    
+    @Override
+    public Object visitWhileCommand(WhileCommand ast, Object obj) {
+        writeLineXML("<WhileCommand>");
+        ast.E.visit(this, null);
+        ast.C.visit(this, null);
+        writeLineXML("</WhileCommand>");
+        return null;
     }
 
     @Override
-    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
+        writeLineXML("<LongIdentifierTypeDenoter>");
+        ast.longIdentifier.visit(this, null);
+        writeLineXML("</LongIdentifierTypeDenoter>");
+        return null;
     }
 
     @Override
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+        writeLineXML("<recordTypeDenoter>");
+        ast.REC.visit(this,null);
+        writeLineXML("</recordTypeDenoter>");
+        return null;    }
 
     @Override
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+        writeLineXML("<multipleRecordTypeDenoter>");
+        ast.ID.visit(this,null);
+        ast.TD.visit(this,null);
+        ast.RTD.visit(this,null);
+        writeLineXML("</multipleRecordTypeDenoter>");
+        return null;    
     }
+    
 
     @Override
-    public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitUnaryExpression(UnaryExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVnameExpression(VnameExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitWhileCommand(WhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        writeLineXML("<singleRecordTypeDenoter>");
+        ast.ID.visit(this,null);
+        ast.TD.visit(this,null);
+        writeLineXML("</singleleRecordTypeDenoter>");
+        return null;        
     }
 }

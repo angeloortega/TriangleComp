@@ -771,12 +771,71 @@ public class TableVisitor implements Visitor {
     // <editor-fold defaultstate="collapsed" desc=" Type Denoters ">
     // Type Denoters
 
-    public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) { 
-        ast.IL.visit(this, null);
-        ast.T.visit(this, null);
+      public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {      
+      return(null);
+  }
+  
+  public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object o) { 
+      ast.IL.visit(this, null);
+      ast.T.visit(this, null);
+      
+      return(null);
+  }
+  
+  public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object o) {       
+      return(null);
+  }
+  
+  public Object visitCharTypeDenoter(CharTypeDenoter ast, Object o) { 
+      return(null);
+  }
+  
+  public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object o) { 
+      return(null);
+  }
+  
+  public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object o) { 
+      ast.I.visit(this, null);
+      
+      return(null);
+  }
+  
+  public Object visitIntTypeDenoter(IntTypeDenoter ast, Object o) { 
+      return(null);
+  }
+  
+  public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object o) {   
+      ast.FT.visit(this, null);
+      return(null);
+  }
 
-        return(null);
-    }
+  public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object o) { 
+      try {
+      addIdentifier(ast.I.spelling, 
+              "Field", 
+              (ast.entity!=null?ast.entity.size:0),
+              -1, ((Field)ast.entity).fieldOffset, -1);      
+    } catch (NullPointerException e) { }
+      ast.FT.visit(this, null);
+      ast.I.visit(this, null);
+      ast.T.visit(this, null);
+
+
+      return(null);
+  }
+  
+  public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object o) { 
+      try {
+      addIdentifier(ast.I.spelling, 
+              "Field", 
+              (ast.entity!=null?ast.entity.size:0),
+              -1, ((Field)ast.entity).fieldOffset, -1);
+      } catch (NullPointerException e) { }
+      ast.I.visit(this, null);
+      ast.T.visit(this, null);
+  
+      return(null);
+  }
 
     public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
         ast.ID.visit(this, null);
@@ -912,100 +971,72 @@ public class TableVisitor implements Visitor {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object o) { 
+      return(null);
+     }
 
     public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return(null);
     }
 
     public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     aThis.VN.visit(this, null);
+      aThis.EXP.visit(this, null);
+      
+      return(null);    
     }
 
     @Override
     public Object visitWhileCommand(WhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      aThis.E.visit(this, null);
+      aThis.C.visit(this, null);
+      
+      return(null);    }
 
     @Override
     public Object visitArrayExpression(ArrayExpression ast, Object o) { 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+      ast.AA.visit(this, null);
+      
+      return(null);
+  }
     @Override
     public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+      return(null);
+  }
 
     @Override
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {          
+    return null;    
     }
 
-    @Override
-    public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object o) {      
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     @Override
-    public Object visitVnameExpression(VnameExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Object visitVnameExpression(VnameExpression ast, Object o) { 
+      ast.V.visit(this, null);
+      
+      return(null);
+  }
     
     @Override
-    public Object visitUnaryExpression(UnaryExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryExpression(UnaryExpression ast, Object o) {    
+      ast.E.visit(this, null);
+      ast.O.visit(this, null);
+      
+      return(null);
     }
 
-    @Override
-    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitEmptyExpression(EmptyExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return(null);
     }
 
-    @Override
-    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Object visitRecordExpression(RecordExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      aThis.RA.visit(this, null);
+      
+      return(null);
     }
 
-    @Override
-    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

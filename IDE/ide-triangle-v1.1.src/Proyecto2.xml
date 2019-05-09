@@ -1,0 +1,44 @@
+<Program>
+<LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="angelo"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="jose"/>
+<VarSingleDeclarationColon>
+<IntTypeDenoter/>
+</VarSingleDeclarationColon>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="jose"/>
+</SimpleVname>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="angelo"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="+"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</AssignCommand>
+</LetCommand>
+</Program>

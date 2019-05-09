@@ -681,29 +681,44 @@ public class TreeVisitor implements Visitor {
         
     // <editor-fold defaultstate="collapsed" desc=" Type Denoters ">
     // Type Denoters
-    @Override
+ public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
+        return(createNullary("any"));
+    }
+    
     public Object visitArrayTypeDenoter(ArrayTypeDenoter ast, Object obj) {
         return(createBinary("Array Type Denoter", ast.IL, ast.T));
     }
     
-    @Override
-    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        return(createTernary("Multiple Record Type Denoter", ast.ID, ast.TD, ast.RTD));
-    }
-
-    @Override
-    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        return(createBinary("Single Record Type Denoter", ast.ID, ast.TD));
+    public Object visitBoolTypeDenoter(BoolTypeDenoter ast, Object obj) {
+        return(createNullary("bool"));
     }
     
-    @Override
-    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o){
-        return(createUnary("Type Denoter Long Identifier", ast.longIdentifier));
+    public Object visitCharTypeDenoter(CharTypeDenoter ast, Object obj) {
+        return(createNullary("char"));
     }
     
-    @Override
-    public Object visitRTypeDenoter(RTypeDenoter ast, Object o){
-        return(createUnary("RType Denoter", ast.REC));
+    public Object visitErrorTypeDenoter(ErrorTypeDenoter ast, Object obj) {
+        return(createNullary("error"));
+    }
+    
+    public Object visitSimpleTypeDenoter(SimpleTypeDenoter ast, Object obj) {
+        return(createUnary("Simple Type Denoter", ast.I));
+    }
+    
+    public Object visitIntTypeDenoter(IntTypeDenoter ast, Object obj) {
+        return(createNullary("int"));
+    }
+    
+    public Object visitRecordTypeDenoter(RecordTypeDenoter ast, Object obj) {
+        return(createUnary("Record Type Denoter", ast.FT));
+    }
+    
+    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
+        return(createTernary("Multiple Field Type Denoter", ast.I, ast.T, ast.FT));
+    }
+    
+    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter ast, Object obj) {
+        return(createBinary("Single Field Type Denoter", ast.I, ast.T));
     }
     // </editor-fold>
     
@@ -846,112 +861,92 @@ public class TreeVisitor implements Visitor {
     // </editor-fold>
 
     @Override
-    public Object visitAnyTypeDenoter(AnyTypeDenoter aThis, Object o) {
+    public Object visitArrayExpression(ArrayExpression ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitArrayExpression(ArrayExpression aThis, Object o) {
+    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    @Override
+    public Object visitBracketSelector(BracketSelector ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
+    @Override
+    public Object visitDotSelector(DotSelector ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration aThis, Object o) {
+    public Object visitEmptyExpression(EmptyExpression ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitBoolTypeDenoter(BoolTypeDenoter aThis, Object o) {
+    public Object visitIntLiteralExpression(IntLiteralExpression ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitBracketSelector(BracketSelector aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitLIdentifierExpression(LIdentifierExpression ast, Object o) {
+        return(createNullary(ast.LI.spelling));
+    }
+
+
+    @Override
+    public Object visitRecordExpression(RecordExpression ast, Object obj) {
+        return(createUnary("Record Expression", ast.RA));
     }
 
     @Override
-    public Object visitCharTypeDenoter(CharTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object o) {
+        return(createBinary("Assign Command", ast.VN, ast.EXP));
+    }
+
+
+    @Override
+    public Object visitUnaryExpression(UnaryExpression ast, Object obj) {
+        return(createBinary("Unary Expression", ast.O, ast.E));
     }
 
     @Override
-    public Object visitDotSelector(DotSelector aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object obj) {
+        return(createTernary("Unary Operator Declaration", ast.O, ast.ARG, ast.RES));
     }
 
     @Override
-    public Object visitEmptyExpression(EmptyExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitVnameExpression(VnameExpression ast, Object obj) {
+        return(createUnary("Vname Expression", ast.V));
     }
 
     @Override
-    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitWhileCommand(WhileCommand ast, Object obj) {
+        return(createBinary("While Command", ast.E, ast.C));
     }
 
     @Override
-    public Object visitIntTypeDenoter(IntTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
+        return(createNullary(ast.longIdentifier.spelling));    
     }
 
     @Override
-    public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+        return(createUnary("Record Type Denoter", ast.REC));    
     }
 
     @Override
-    public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+        return(createTernary("Multiple Record Type Denoter", ast.ID,ast.TD,ast.RTD));    
     }
 
     @Override
-    public Object visitRecordExpression(RecordExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        return(createBinary("Single Record Type Denoter",ast.ID,ast.TD));    
     }
-
-    @Override
-    public Object visitRecordTypeDenoter(RecordTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitErrorTypeDenoter(ErrorTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSimpleTypeDenoter(SimpleTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleFieldTypeDenoter(SingleFieldTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitUnaryExpression(UnaryExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitVnameExpression(VnameExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitWhileCommand(WhileCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

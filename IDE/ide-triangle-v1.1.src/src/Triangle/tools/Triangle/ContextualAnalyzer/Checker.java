@@ -66,12 +66,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     //region Giulla
     @Override
     public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-    VarSingleDeclarationSingleDeclaration binding = (VarSingleDeclarationSingleDeclaration) ast.V.visit(this, null);
+    TypeDenoter binding = (TypeDenoter) ast.V.visit(this, null);
     if (binding != null) {
-        Expression expression = binding.T;
-    	ast.I.type = (TypeDenoter) expression.visit(this, null);
+    	ast.I.type = binding;
     }
-    idTable.enter (ast.I.spelling, ast);
+    idTable.enter(ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
@@ -122,11 +121,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         ast.type = ((ConstDeclaration) binding).E.type;
         ast.variable = false;
       } else if (binding instanceof VarDeclaration) {
-        if (binding.getClass() == VarSingleDeclarationSingleDeclaration.class){
-          ast.type = ((VarSingleDeclarationSingleDeclaration) binding).T.type;
+        if (((VarDeclaration)binding).V.getClass() == VarSingleDeclarationSingleDeclaration.class){
+          ast.type = ((VarSingleDeclarationSingleDeclaration) ((VarDeclaration)binding).V).T.type;
         }
         else{
-          ast.type = ((VarSingleDeclarationColon) binding).T;
+          ast.type = ((VarSingleDeclarationColon) ((VarDeclaration)binding).V).T;
         }
         ast.variable = true;
       } else if (binding instanceof ConstFormalParameter) {
