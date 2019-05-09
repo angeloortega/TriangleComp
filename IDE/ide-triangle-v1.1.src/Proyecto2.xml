@@ -1,13 +1,15 @@
 <Program>
 <LetCommand>
 <SequentialDeclaration>
+<CompoundDeclarationPrivate>
+<SequentialDeclaration>
 <CompoundDeclarationSingleDeclaration>
 <VarDeclaration>
-<Identifier value="angelo"/>
+<Identifier value="a"/>
 <VarSingleDeclarationSingleDeclaration>
 <SecExpression>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="5"/>
 </IntegerExpression>
 </SecExpression>
 </VarSingleDeclarationSingleDeclaration>
@@ -15,30 +17,66 @@
 </CompoundDeclarationSingleDeclaration>
 <CompoundDeclarationSingleDeclaration>
 <VarDeclaration>
-<Identifier value="jose"/>
-<VarSingleDeclarationColon>
-<IntTypeDenoter/>
-</VarSingleDeclarationColon>
+<Identifier value="d"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="3"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
 </VarDeclaration>
 </CompoundDeclarationSingleDeclaration>
 </SequentialDeclaration>
-<AssignCommand>
-<SimpleVname>
-<Identifier value="jose"/>
-</SimpleVname>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="c"/>
+<VarSingleDeclarationSingleDeclaration>
 <SecExpression>
 <BinaryExpression>
 <AssignExpression>
 <SimpleVname>
-<Identifier value="angelo"/>
+<Identifier value="a"/>
 </SimpleVname>
 </AssignExpression>
-<Operator value="+"/>
+<Operator value="*"/>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="2"/>
 </IntegerExpression>
 </BinaryExpression>
 </SecExpression>
-</AssignCommand>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</CompoundDeclarationPrivate>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="d"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="5"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="c"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
 </LetCommand>
 </Program>

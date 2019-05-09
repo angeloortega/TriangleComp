@@ -30,5 +30,6 @@ public class CompoundDeclarationRecursive extends CompoundDeclaration {
     return v.visitCompoundDeclarationRecursive(this, o);
   }
 
+
   public ProcFunc PF;
 }

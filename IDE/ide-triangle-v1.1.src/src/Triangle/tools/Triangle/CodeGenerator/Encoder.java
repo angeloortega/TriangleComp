@@ -24,6 +24,7 @@ import TAM.Machine;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
+import Triangle.tools.Triangle.ContextualAnalyzer.IdentificationTable;
 
 
 public final class Encoder implements Visitor {
@@ -553,6 +554,7 @@ public final class Encoder implements Visitor {
 
   public Object visitIdentifier(Identifier ast, Object o) {
     Frame frame = (Frame) o;
+    if(ast.decl != null){
     if (ast.decl.entity instanceof KnownRoutine) {
       ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
       emit(Machine.CALLop, displayRegister(frame.level, address.level),
@@ -570,6 +572,7 @@ public final class Encoder implements Visitor {
       int displacement = ((EqualityRoutine) ast.decl.entity).displacement;
       emit(Machine.LOADLop, 0, 0, frame.size / 2);
       emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+    }
     }
     return null;
   }
@@ -651,6 +654,8 @@ public final class Encoder implements Visitor {
 
   // Programs
   public Object visitProgram(Program ast, Object o) {
+      if(ast.P != null)
+          ast.P.visit(this, o);
     return ast.C.visit(this, o);
   }
 
@@ -934,12 +939,12 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.COM.visit(this, o);
     }
 
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.LOOP.visit(this, o);
     }
 
     @Override
@@ -974,7 +979,7 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.DECL.visit(this, o);
     }
 
     @Override
@@ -1004,47 +1009,47 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitCases(Cases ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.CASE1.visit(this, o);
     }
 
     @Override
     public Object visitElseCase(ElseCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.COM.visit(this, o);
     }
 
     @Override
     public Object visitSequentialCase(SequentialCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.C1.visit(this, o);
     }
 
     @Override
     public Object visitCaseWhen(CaseWhen ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.CASELIT.visit(this, o);
     }
 
     @Override
     public Object visitCaseLiterals(CaseLiterals ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.CASERANGE.visit(this, o);
     }
 
     @Override
     public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.CASELIT.visit(this, o);    
     }
 
     @Override
     public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.C1.visit(this, o);
     }
 
     @Override
     public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.CHARLIT.visit(this, o);
     }
 
     @Override
     public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.INTLIT.visit(this, o);
     }
 
     @Override
@@ -1130,12 +1135,15 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.DEC.visit(this, o);
+        return ast.ID.visit(this, o); 
     }
 
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(ast.D2 != null)
+            ast.D2.visit(this, o);
+        return ast.D1;
     }
 
     @Override
@@ -1165,7 +1173,7 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.identifier.visit(this, o);
     }
 
     @Override

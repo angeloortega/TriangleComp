@@ -508,7 +508,7 @@ public class TableVisitor implements Visitor {
                 (ast.entity!=null?ast.entity.size:0), 
                 ((KnownRoutine)ast.entity).address.level, 
                 ((KnownRoutine)ast.entity).address.displacement, 
-                -1);      
+                -1);       
         } catch (NullPointerException e) { }            
         ast.FPS.visit(this, null);
         ast.T.visit(this, null);
@@ -549,6 +549,14 @@ public class TableVisitor implements Visitor {
     public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
         ast.ID.visit(this, null);
         ast.DEC.visit(this, null);
+        try {
+        addIdentifier(ast.ID.spelling, 
+                "PackageAddress", 
+                (ast.entity!=null?ast.entity.size:0), 
+                 0, 
+                 0, 
+                -1);
+        } catch (NullPointerException e) { }
         return (null);
     }
 
@@ -895,7 +903,8 @@ public class TableVisitor implements Visitor {
 
     public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
         ast.identifier.visit(this, null);
-        ast.packageIdentifier.visit(this, null);
+        if(ast.packageIdentifier != null)
+            ast.packageIdentifier.visit(this, null);
         return(null);
     }
     // </editor-fold>

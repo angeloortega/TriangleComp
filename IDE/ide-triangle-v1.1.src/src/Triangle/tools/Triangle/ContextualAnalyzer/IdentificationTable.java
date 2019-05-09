@@ -70,12 +70,15 @@ public final class IdentificationTable {
         searching = false;
        } else
        entry = entry.previous;
+      
     }
 
     attr.duplicated = present;
     // Add new entry ...
     entry = new IdEntry(id, attr, this.level, this.latest);
     this.latest = entry;
+    if(entry.previous != null)
+        entry.previous.next = entry;
   }
 
   // Finds an entry for the given identifier in the identification table,

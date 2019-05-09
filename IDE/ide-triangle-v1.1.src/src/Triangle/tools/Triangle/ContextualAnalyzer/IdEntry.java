@@ -22,6 +22,7 @@ public class IdEntry {
   protected Declaration attr;
   protected int level;
   protected IdEntry previous;
+  protected IdEntry next;
 
   IdEntry (String id, Declaration attr, int level, IdEntry previous) {
     this.id = id;
@@ -30,4 +31,8 @@ public class IdEntry {
     this.previous = previous;
   }
 
+    public void setNext(IdEntry next) {
+        this.next = next;
+    }
+    
 }

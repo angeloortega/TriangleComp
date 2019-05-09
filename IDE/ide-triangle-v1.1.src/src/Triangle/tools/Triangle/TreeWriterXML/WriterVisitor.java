@@ -1228,7 +1228,8 @@ public class WriterVisitor implements Visitor {
     public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
         writeLineXML("<CompoundIdentifier>");
         ast.identifier.visit(this, null);
-        ast.packageIdentifier.visit(this, null);
+        if(ast.packageIdentifier != null)
+            ast.packageIdentifier.visit(this, null);
         writeLineXML("</CompoundIdentifier>");
         return null;
     }

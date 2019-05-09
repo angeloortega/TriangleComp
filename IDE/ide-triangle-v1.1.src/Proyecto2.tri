@@ -1,1 +1,14 @@
-let var angelo ::= 1; var jose : Integer in jose := angelo + 1 end
+let
+	private
+		var a::=5;
+		var b::=4;
+		var d::=3
+	in
+		pass
+	end;
+	var c::= 5
+in
+	putint(c)
+end
+
+! Ok

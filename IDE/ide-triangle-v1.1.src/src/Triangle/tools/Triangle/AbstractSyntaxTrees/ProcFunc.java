@@ -16,6 +16,7 @@
 
 package Triangle.tools.Triangle.AbstractSyntaxTrees;
 
+import Triangle.tools.Triangle.ContextualAnalyzer.Checker;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
 public abstract class ProcFunc extends Declaration {
