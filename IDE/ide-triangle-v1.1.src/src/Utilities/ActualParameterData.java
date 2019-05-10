@@ -12,11 +12,13 @@ package Utilities;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.FormalParameter;
 public class ActualParameterData {
     private String packageName;
+    private String callerPackage;
     private FormalParameter FPS;
     
-    public ActualParameterData(FormalParameter fps, String packageName){
+    public ActualParameterData(FormalParameter fps, String packageName ,String callerPackage){
         this.packageName = packageName;
         this.FPS = fps;
+        this.callerPackage = callerPackage;
     }
 
     public String getPackageName() {
@@ -25,6 +27,14 @@ public class ActualParameterData {
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
+    }
+    
+    public String getCallerPackage() {
+        return callerPackage;
+    }
+
+    public void setCallerPackage(String packageName) {
+        this.callerPackage = packageName;
     }
 
     public FormalParameter getFP() {

@@ -1,14 +1,7 @@
 <Program>
-<LetCommand>
-<SequentialDeclaration>
-<CompoundDeclarationSingleDeclaration>
-<VarDeclaration>
-<Identifier value="z"/>
-<VarSingleDeclarationColon>
-<IntTypeDenoter/>
-</VarSingleDeclarationColon>
-</VarDeclaration>
-</CompoundDeclarationSingleDeclaration>
+<SequentialPackageDeclaration>
+<PackageDeclaration>
+<Identifier value="myP"/>
 <CompoundDeclarationRecursive>
 <ProcFuncs>
 <ProcFuncs>
@@ -134,7 +127,17 @@
 </FuncProcFunc>
 </ProcFuncs>
 </CompoundDeclarationRecursive>
-</SequentialDeclaration>
+</PackageDeclaration>
+</SequentialPackageDeclaration>
+<LetCommand>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="z"/>
+<VarSingleDeclarationColon>
+<IntTypeDenoter/>
+</VarSingleDeclarationColon>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
 <SequentialCommand>
 <AssignCommand>
 <SimpleVname>
@@ -143,6 +146,7 @@
 <SecExpression>
 <CallExpression>
 <LongIdentifier>
+<Identifier value="myP"/>
 <Identifier value="triplicar"/>
 </LongIdentifier>
 <SingleActualParameterSequence>
@@ -160,6 +164,7 @@
 <CallCommand>
 <CompoundIdentifier>
 <Identifier value="cuadriplicar"/>
+<Identifier value="myP"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <VarActualParameter>
