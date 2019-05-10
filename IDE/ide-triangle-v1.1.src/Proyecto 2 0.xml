@@ -1,0 +1,44 @@
+<Program>
+<LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="z"/>
+<VarSingleDeclarationColon>
+<IntTypeDenoter/>
+</VarSingleDeclarationColon>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="j"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="z"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="z"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</LetCommand>
+</Program>

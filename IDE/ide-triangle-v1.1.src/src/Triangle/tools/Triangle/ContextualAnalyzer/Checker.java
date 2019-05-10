@@ -530,13 +530,17 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
-       hashIdTables.get(defaultPackage).openScope();
+        String packageName = defaultPackage;
+        if(o instanceof String){
+            packageName = (String) o;
+        }
+       hashIdTables.get(packageName).openScope();
         ast.D1.visit(this, o);
-        hashIdTables.get(defaultPackage).closeScope();
+        hashIdTables.get(packageName).closeScope();
         
-        hashIdTables.get(defaultPackage).openScope();
+        hashIdTables.get(packageName).openScope();
         ast.D2.visit(this, o);
-        hashIdTables.get(defaultPackage).closeScope();
+        hashIdTables.get(packageName).closeScope();
         
         ast.D1.visit(this, o);
         ast.D2.visit(this, o);

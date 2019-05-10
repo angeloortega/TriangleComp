@@ -1,0 +1,9 @@
+let
+	 var z : Integer ;
+	 var j ::= z
+
+in
+	putint(z)
+end
+
+! OK
