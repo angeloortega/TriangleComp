@@ -25,6 +25,21 @@ public final class IdentificationTable {
     level = 0;
     latest = null;
   }
+  
+  public static IdentificationTable copyTable(IdentificationTable id){
+      IdentificationTable idTable = new IdentificationTable();
+      boolean searching = true;
+      IdEntry entry = id.getLatest();
+      while (searching) {
+      if (entry == null)
+        searching = false;
+      else{
+       idTable.enter(entry.id, entry.attr); 
+       entry = entry.previous;
+      }
+    }
+    return idTable;
+  }
 
   // Opens a new level in the identification table, 1 higher than the
   // current topmost level.

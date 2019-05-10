@@ -20,6 +20,8 @@ import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 import Utilities.ChooseData;
 import Utilities.RecursiveProcFuncData;
+import Utilities.FormalParameterData;
+import Utilities.ActualParameterData;
 import java.util.HashMap;
 
 public final class Checker implements Visitor {
@@ -198,13 +200,13 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     if(o instanceof String){
         packageName = (String) o;
     }
-    hashIdTables.get(packageName).enter(ast.ID.spelling, ast);
+    hashIdTables.get(defaultPackage).enter(ast.ID.spelling, ast);
     if(hashIdTables.containsKey(ast.ID.spelling)){
       reporter.reportError ("Package identifier \"%\" already declared",
                             ast.ID.spelling, ast.position);
     }
     else{
-        IdentificationTable packageTable = new IdentificationTable();
+        IdentificationTable packageTable =  IdentificationTable.copyTable(dummyTable);
         hashIdTables.put(ast.ID.spelling, packageTable);
         ast.DEC.visit(this, ast.ID.spelling); // The package name is sent so the visitor knows which package to declare in
     }
@@ -220,14 +222,17 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
     @Override
   public Object visitSimpleVname(SimpleVname ast, Object o) {
+    String packageName = defaultPackage;
     ast.variable = false;
     ast.type = StdEnvironment.errorType;
      Declaration binding;
     if(ast.P != null)
-        binding = (Declaration) ast.I.visit(this, ast.P.spelling);
-    else
-        binding = (Declaration) ast.I.visit(this, null);
-    
+        packageName = ast.P.spelling;
+    else if (o instanceof String)
+        packageName = (String) o;
+        
+    binding = (Declaration) ast.I.visit(this, packageName);
+
     if (binding == null)
       reportUndeclared(ast.I);
     else
@@ -308,15 +313,13 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         
         if (iteration.equals(new Integer(0))) {
           hashIdTables.get(packageName).enter(ast.ID.spelling, ast); // permits recursion
-          ast.FPS.visit(this, o);
+          ast.FPS.visit(this, packageName);
           if (ast.duplicated)
             reporter.reportError ("identifier \"%\" already declared",
                                   ast.ID.spelling, ast.position);
         }
         else {
-          hashIdTables.get(packageName).openScope();
-          ast.COM.visit(this, o);
-          hashIdTables.get(packageName).closeScope();
+          ast.COM.visit(this, packageName);
         }
         return null;
     }
@@ -341,12 +344,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
           if (ast.duplicated)
             reporter.reportError ("identifier \"%\" already declared",
                                   ast.ID.spelling, ast.position);
+          ast.TD = (TypeDenoter) ast.TD.visit(this, packageName);
+
         }
         else {
-          hashIdTables.get(packageName).openScope();
-          ast.TD = (TypeDenoter) ast.TD.visit(this, packageName);
-          TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-          hashIdTables.get(packageName).closeScope();
+          TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, packageName);
           if (! ast.TD.equals(eType))
             reporter.reportError ("body of function \"%\" has wrong type",
                                   ast.ID.spelling, ast.EXP.position);
@@ -528,11 +530,19 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
+       hashIdTables.get(defaultPackage).openScope();
+        ast.D1.visit(this, o);
+        hashIdTables.get(defaultPackage).closeScope();
+        
+        hashIdTables.get(defaultPackage).openScope();
+        ast.D2.visit(this, o);
+        hashIdTables.get(defaultPackage).closeScope();
+        
         ast.D1.visit(this, o);
         ast.D2.visit(this, o);
+        
         return null;
     }
-
 
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
@@ -570,13 +580,18 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
             packageName = ci.packageIdentifier.spelling;  // If a compound identifier it's found, there's a possibility it's a package call.
         }
     }
+    if(o instanceof String){
+        packageName = (String) o;
+    }
     Declaration binding = (Declaration) ast.I.visit(this, packageName);
     if (binding == null)
       reportUndeclared(ast.I);
     else if (binding instanceof ProcDeclaration) {
-      ast.APS.visit(this, ((ProcDeclaration) binding).FPS);
+      ast.APS.visit(this, new FormalParameterData((((ProcDeclaration) binding).FPS), packageName));
+    }else if (binding instanceof ProcProcFunc) {
+      ast.APS.visit(this, new FormalParameterData((((ProcProcFunc) binding).FPS), packageName));
     } else if (binding instanceof ProcFormalParameter) {
-      ast.APS.visit(this, ((ProcFormalParameter) binding).FPS);
+      ast.APS.visit(this, new FormalParameterData((((ProcFormalParameter) binding).FPS), packageName));
     } else
       reporter.reportError("\"%\" is not a procedure identifier",
                            ast.I.spelling, ast.I.position);
@@ -674,18 +689,25 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitCallExpression(CallExpression ast, Object o) {
+    String packageName = defaultPackage;
+    if(ast.I.packageIdentifier != null){
+        packageName = ast.I.packageIdentifier.spelling;
+    }
+    if(o instanceof String){
+        packageName = (String) o;
+    }
     Declaration binding = (Declaration) ast.I.visit(this, o);
     if (binding == null) {
       reportUndeclared(ast.I);
       ast.type = StdEnvironment.errorType;
     } else if (binding instanceof FuncDeclaration) {
-      ast.APS.visit(this, ((FuncDeclaration) binding).FPS);
+      ast.APS.visit(this, new FormalParameterData((((FuncDeclaration) binding).FPS), packageName));
       ast.type = ((FuncDeclaration) binding).T;
     } else if (binding instanceof FuncProcFunc) {
-      ast.APS.visit(this, ((FuncProcFunc) binding).FPS);
+      ast.APS.visit(this, new FormalParameterData((((FuncProcFunc) binding).FPS), packageName));
       ast.type = ((FuncProcFunc) binding).TD;
     }else if (binding instanceof FuncFormalParameter) {
-      ast.APS.visit(this, ((FuncFormalParameter) binding).FPS);
+      ast.APS.visit(this, new FormalParameterData((((FuncFormalParameter) binding).FPS), packageName));
       ast.type = ((FuncFormalParameter) binding).T;
     } else
       reporter.reportError("\"%\" is not a function identifier",
@@ -811,6 +833,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         if(ast.packageIdentifier != null){
             packageName = ast.packageIdentifier.spelling;
         }
+        if(o instanceof String){
+        packageName = (String) o;
+        }
         Declaration binding = hashIdTables.get(packageName).retrieve(ast.identifier.spelling);
         if (binding != null)
           ast.identifier.decl = binding;
@@ -899,7 +924,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         packageName = (String) o;
     }
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    hashIdTables.get(packageName).enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
@@ -1033,8 +1057,17 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   // Always returns null. Uses the given FormalParameter.
 
   public Object visitConstActualParameter(ConstActualParameter ast, Object o) {
-    FormalParameter fp = (FormalParameter) o;
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
+    FormalParameter fp = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameter){
+        fp = (FormalParameter) o;
+    }
+    else if(o instanceof ActualParameterData){
+        fp = ((ActualParameterData) o).getFP();
+        if(((ActualParameterData) o).getPackageName() != null)
+            packageName = ((ActualParameterData) o).getPackageName();
+    }
+    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, packageName);
 
     if (! (fp instanceof ConstFormalParameter))
       reporter.reportError ("const actual parameter not expected here", "",
@@ -1046,9 +1079,18 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
-    FormalParameter fp = (FormalParameter) o;
+    FormalParameter fp = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameter){
+        fp = (FormalParameter) o;
+    }
+    else if(o instanceof ActualParameterData){
+        fp = ((ActualParameterData) o).getFP();
+        if(((ActualParameterData) o).getPackageName() != null)
+            packageName = ((ActualParameterData) o).getPackageName();
+    }
 
-    Declaration binding = (Declaration) ast.I.visit(this, o);
+    Declaration binding = (Declaration) ast.I.visit(this, packageName);
     if (binding == null)
       reportUndeclared (ast.I);
     else if (! (binding instanceof FuncDeclaration ||
@@ -1079,9 +1121,18 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitProcActualParameter(ProcActualParameter ast, Object o) {
-    FormalParameter fp = (FormalParameter) o;
+    FormalParameter fp = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameter){
+        fp = (FormalParameter) o;
+    }
+    else if(o instanceof ActualParameterData){
+        fp = ((ActualParameterData) o).getFP();
+        if(((ActualParameterData) o).getPackageName() != null)
+            packageName = ((ActualParameterData) o).getPackageName();
+    }
 
-    Declaration binding = (Declaration) ast.I.visit(this, o);
+    Declaration binding = (Declaration) ast.I.visit(this, packageName);
     if (binding == null)
       reportUndeclared (ast.I);
     else if (! (binding instanceof ProcDeclaration ||
@@ -1105,9 +1156,18 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitVarActualParameter(VarActualParameter ast, Object o) {
-    FormalParameter fp = (FormalParameter) o;
+    FormalParameter fp = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameter){
+        fp = (FormalParameter) o;
+    }
+    else if(o instanceof ActualParameterData){
+        fp = ((ActualParameterData) o).getFP();
+        if(((ActualParameterData) o).getPackageName() != null)
+            packageName = ((ActualParameterData) o).getPackageName();
+    }
 
-    TypeDenoter vType = (TypeDenoter) ast.V.visit(this, o);
+    TypeDenoter vType = (TypeDenoter) ast.V.visit(this, packageName);
     if (! ast.V.variable)
       reporter.reportError ("actual parameter is not a variable", "",
                             ast.V.position);
@@ -1121,29 +1181,58 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object o) {
-    FormalParameterSequence fps = (FormalParameterSequence) o;
+  
+    FormalParameterSequence fps = null;
+    if(o instanceof FormalParameterSequence){
+        fps = (FormalParameterSequence) o;
+    }
+    else if(o instanceof FormalParameterData){
+        fps = ((FormalParameterData) o).getFPS();
+    }
+    
     if (! (fps instanceof EmptyFormalParameterSequence))
       reporter.reportError ("too few actual parameters", "", ast.position);
     return null;
   }
 
   public Object visitMultipleActualParameterSequence(MultipleActualParameterSequence ast, Object o) {
-    FormalParameterSequence fps = (FormalParameterSequence) o;
+    FormalParameterSequence fps = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameterSequence){
+        fps = (FormalParameterSequence) o;
+    }
+    else if(o instanceof FormalParameterData){
+        fps = ((FormalParameterData) o).getFPS();
+        if(((FormalParameterData) o).getPackageName() != null)
+            packageName = ((FormalParameterData) o).getPackageName();
+    }
+    
+    
     if (! (fps instanceof MultipleFormalParameterSequence))
       reporter.reportError ("too many actual parameters", "", ast.position);
     else {
-      ast.AP.visit(this, ((MultipleFormalParameterSequence) fps).FP);
-      ast.APS.visit(this, ((MultipleFormalParameterSequence) fps).FPS);
+      ast.AP.visit(this, new ActualParameterData((((MultipleFormalParameterSequence) fps).FP),packageName));
+      ast.APS.visit(this,new ActualParameterData((((MultipleFormalParameterSequence) fps).FP),packageName));
     }
     return null;
   }
 
   public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object o) {
-    FormalParameterSequence fps = (FormalParameterSequence) o;
+    FormalParameterSequence fps = null;
+    String packageName = defaultPackage;
+    if(o instanceof FormalParameterSequence){
+        fps = (FormalParameterSequence) o;
+    }
+    else if(o instanceof FormalParameterData){
+        fps = ((FormalParameterData) o).getFPS();
+        if(((FormalParameterData) o).getPackageName() != null)
+            packageName = ((FormalParameterData) o).getPackageName();
+    }
+    
     if (! (fps instanceof SingleFormalParameterSequence))
       reporter.reportError ("incorrect number of actual parameters", "", ast.position);
     else {
-      ast.AP.visit(this, ((SingleFormalParameterSequence) fps).FP);
+      ast.AP.visit(this,new ActualParameterData((((SingleFormalParameterSequence) fps).FP),packageName));
     }
     return null;
   }
@@ -1333,12 +1422,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
       this.hashIdTables = new HashMap<String, IdentificationTable>();
       this.hashIdTables.put(defaultPackage, idTable);
       establishStdEnvironment();
+      dummyTable = IdentificationTable.copyTable(idTable);
     }
 
     private HashMap<String,IdentificationTable> hashIdTables;
     private static SourcePosition dummyPos = new SourcePosition();
     private ErrorReporter reporter;
     private final String defaultPackage = "_global_";
+    private final IdentificationTable dummyTable;
 
   // Reports that the identifier or operator used at a leaf of the AST
   // has not been declared.

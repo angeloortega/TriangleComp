@@ -1,25 +1,26 @@
 <Program>
 <LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="z"/>
+<VarSingleDeclarationColon>
+<IntTypeDenoter/>
+</VarSingleDeclarationColon>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
 <CompoundDeclarationRecursive>
 <ProcFuncs>
 <ProcFuncs>
 <FuncProcFunc>
 <Identifier value="doble"/>
 <SingleFormalParameterSequence>
-<VarFormalParameter>
+<ConstFormalParameter>
 <Identifier value="i"/>
-<LongIdentifierTypeDenoter>
-<LongIdentifier>
-<Identifier value="Integer"/>
-</LongIdentifier>
-</LongIdentifierTypeDenoter>
-</VarFormalParameter>
+<IntTypeDenoter/>
+</ConstFormalParameter>
 </SingleFormalParameterSequence>
-<LongIdentifierTypeDenoter>
-<LongIdentifier>
-<Identifier value="Integer"/>
-</LongIdentifier>
-</LongIdentifierTypeDenoter>
+<IntTypeDenoter/>
 <SecExpression>
 <BinaryExpression>
 <BinaryExpression>
@@ -52,39 +53,76 @@
 </SecExpression>
 </FuncProcFunc>
 <ProcProcFunc>
-<Identifier value="triplicar"/>
+<Identifier value="cuadriplicar"/>
 <SingleFormalParameterSequence>
 <VarFormalParameter>
-<Identifier value="i"/>
-<LongIdentifierTypeDenoter>
-<LongIdentifier>
-<Identifier value="Integer"/>
-</LongIdentifier>
-</LongIdentifierTypeDenoter>
+<Identifier value="b"/>
+<IntTypeDenoter/>
 </VarFormalParameter>
 </SingleFormalParameterSequence>
 <AssignCommand>
 <SimpleVname>
-<Identifier value="i"/>
+<Identifier value="b"/>
 </SimpleVname>
 <SecExpression>
-<BinaryExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="i"/>
-</SimpleVname>
-</AssignExpression>
-<Operator value="+"/>
 <CallExpression>
 <LongIdentifier>
-<Identifier value="doble"/>
+<Identifier value="triplicar"/>
+</LongIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="triplicar"/>
 </LongIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
 <AssignExpression>
 <SimpleVname>
-<Identifier value="i"/>
+<Identifier value="b"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallExpression>
+</SecExpression>
+</AssignCommand>
+</ProcProcFunc>
+</ProcFuncs>
+<FuncProcFunc>
+<Identifier value="triplicar"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="a"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IntTypeDenoter/>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="+"/>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="triplicar"/>
+</LongIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
 </SimpleVname>
 </AssignExpression>
 </SecExpression>
@@ -93,47 +131,44 @@
 </CallExpression>
 </BinaryExpression>
 </SecExpression>
-</AssignCommand>
-</ProcProcFunc>
+</FuncProcFunc>
 </ProcFuncs>
-<ProcProcFunc>
-<Identifier value="duplicar"/>
-<SingleFormalParameterSequence>
-<VarFormalParameter>
-<Identifier value="i"/>
-<LongIdentifierTypeDenoter>
-<LongIdentifier>
-<Identifier value="Integer"/>
-</LongIdentifier>
-</LongIdentifierTypeDenoter>
-</VarFormalParameter>
-</SingleFormalParameterSequence>
+</CompoundDeclarationRecursive>
+</SequentialDeclaration>
+<SequentialCommand>
 <AssignCommand>
 <SimpleVname>
-<Identifier value="i"/>
+<Identifier value="z"/>
 </SimpleVname>
 <SecExpression>
 <CallExpression>
 <LongIdentifier>
-<Identifier value="doble"/>
+<Identifier value="triplicar"/>
 </LongIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="i"/>
-</SimpleVname>
-</AssignExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallExpression>
 </SecExpression>
 </AssignCommand>
-</ProcProcFunc>
-</ProcFuncs>
-</CompoundDeclarationRecursive>
-<EmptyCommand/>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="cuadriplicar"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<VarActualParameter>
+<SimpleVname>
+<Identifier value="z"/>
+</SimpleVname>
+</VarActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</SequentialCommand>
 </LetCommand>
 </Program>
