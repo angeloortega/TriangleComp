@@ -19,9 +19,103 @@ import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 import Utilities.ChooseData;
+import Utilities.RecursiveProcFuncData;
 import java.util.HashMap;
 
 public final class Checker implements Visitor {
+    //nuevos jose
+    @Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object chooseData) {
+        ChooseData valuesData = (ChooseData) chooseData;
+        TypeDenoter typeExpression = ((ChooseData) chooseData).getType();
+        TypeDenoter typeCaseLit1  = (TypeDenoter) ast.CASELIT.visit(this, null);
+        TypeDenoter typeCaseLit2 = null;
+        if( ast.CASELIT2 != null )
+              typeCaseLit2 = (TypeDenoter) ast.CASELIT2.visit(this, null);
+        if( typeExpression.equals(StdEnvironment.charType) ){
+            if( ! typeCaseLit1.equals(typeExpression) ){
+                 reporter.reportError ("Char expression expected here", "",
+				ast.CASELIT.position);
+            }
+            if( typeCaseLit2 != null && ! typeCaseLit2.equals(typeExpression) ){
+                 reporter.reportError ("Char expression expected here", "",
+				ast.CASELIT2.position);
+            }
+        }
+        else if( typeExpression.equals(StdEnvironment.integerType) ){
+            if( ! typeCaseLit1.equals(typeExpression) ){
+                 reporter.reportError ("Integer expression expected here", "",
+				ast.CASELIT.position);
+            }
+            if(typeCaseLit2 != null && ! typeCaseLit2.equals(typeExpression) ){
+                 reporter.reportError ("Integer expression expected here", "",
+				ast.CASELIT2.position);
+            }
+        }
+            if( ast.CASELIT instanceof CaseLiteralCHAR && ast.CASELIT2 == null ){
+                if(!valuesData.exists( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling)){
+                    valuesData.addData( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling );
+                }
+                else{
+                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
+				ast.CASELIT.position);
+                }
+            }
+            else if( ast.CASELIT instanceof CaseLiteralINT && ast.CASELIT2 == null){
+                if(!valuesData.exists(((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling)){
+                     valuesData.addData( ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling );
+                }
+                 else{
+                 reporter.reportError ("Repeated Integer Literal in Choose Command", "",
+				ast.CASELIT.position);
+                }
+            }
+             
+            if(ast.CASELIT2 !=  null && typeExpression.equals(typeCaseLit2) ){
+                if( ast.CASELIT instanceof CaseLiteralCHAR){
+                    addCharactersValues(valuesData,
+                            ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling,
+                            ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT2).CHARLIT)).spelling,
+                            ast.CASELIT.position);
+                }
+                else if(ast.CASELIT instanceof CaseLiteralINT){
+                    addIntegerValues(valuesData,
+                            ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling,
+                            ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT2).INTLIT)).spelling,
+                            ast.CASELIT.position);
+                }
+            }
+        return null;
+    }
+
+    private void addIntegerValues(ChooseData actualValues,String value1,String value2,SourcePosition position ){
+        int value1Int = Integer.parseInt(value1);
+        int value2Int = Integer.parseInt(value2);
+        
+        for (int i = value1Int; i < value2Int; i++) {
+            if( actualValues.exists( Integer.toString(i) ) ){
+                 reporter.reportError ("Repeated Integer Literal in Choose Command", "", position);
+            }
+            else{
+                actualValues.addData( Integer.toString(i ) );
+            }
+        }
+    }
+    
+    private void addCharactersValues(ChooseData actualValues,String value1,String value2,SourcePosition position ){
+        char value1Char = value1.charAt(1);
+        char value2Char = value2.charAt(1);
+        char counter;
+        for (int i = value1Char ; i < value2Char; i++) {
+            counter = (char)i;
+            if(!actualValues.exists( "'" + Character.toString(counter) + "'" ) ){
+                actualValues.addData( "'" + Character.toString(counter) + "'" );
+            }
+            else{
+                reporter.reportError ("Repeated Character Literal in Choose Command", "", position);
+            }
+        }
+    }
     //Nuevas cosas Richie-Giulla
  @Override
 public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
@@ -169,13 +263,12 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
         @Override
         public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-            TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
-            String packageName = defaultPackage;
+                        String packageName = defaultPackage;
             if(o instanceof String){
                 packageName = (String) o;
             }
+            TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
             hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-            idTable.enter(ast.I.spelling, ast);
             if (ast.duplicated)
               reporter.reportError ("identifier \"%\" already declared",
                                     ast.I.spelling, ast.position);
@@ -184,67 +277,76 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 	@Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-        ast.PF.visit(this, o);
+        String packageName = defaultPackage;
+        if(o instanceof String){
+            packageName = (String) o;
+        }
+        for (int i = 0; i < 2; i++) {
+          ast.PF.visit(this, new RecursiveProcFuncData(i,packageName));
+        }
         return null;
     }
 
     @Override 
     public Object visitProcFuncs(ProcFuncs ast, Object o) {
-        for (int i = 0; i < 2; i++) {
-          ast.PF1.visit(this, i);
-          ast.PF2.visit(this, i);
-        }
+          ast.PF1.visit(this,o);
+          ast.PF2.visit(this, o);
         return null;
     }
 
     @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        Integer iteration = (Integer) o;
+        String packageName = defaultPackage;
+        Integer iteration = 0;
+        if(o instanceof RecursiveProcFuncData){
+            RecursiveProcFuncData data = (RecursiveProcFuncData) o;
+            if(data.getPackageName() != null)
+                packageName = data.getPackageName();
+            if(data.getIteration() != null)
+                iteration = data.getIteration();
+        }
+        
         if (iteration.equals(new Integer(0))) {
-            String packageName = defaultPackage;
-        if(o instanceof String){
-            packageName = (String) o;
-        }
-        hashIdTables.get(packageName).enter(ast.ID.spelling, ast);
-
-        if(o instanceof String){
-            packageName = (String) o;
-        }
-        hashIdTables.get(packageName).enter(ast.ID.spelling, ast);
-          idTable.enter (ast.ID.spelling, ast); // permits recursion
+          hashIdTables.get(packageName).enter(ast.ID.spelling, ast); // permits recursion
+          ast.FPS.visit(this, o);
           if (ast.duplicated)
             reporter.reportError ("identifier \"%\" already declared",
                                   ast.ID.spelling, ast.position);
         }
         else {
-          idTable.openScope();
-          ast.FPS.visit(this, o);
+          hashIdTables.get(packageName).openScope();
           ast.COM.visit(this, o);
-          idTable.closeScope();
+          hashIdTables.get(packageName).closeScope();
         }
         return null;
     }
 
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        Integer iteration = (Integer) o;
-        if (iteration.equals(0)) {
-            String packageName = defaultPackage;
-        if(o instanceof String){
-            packageName = (String) o;
+        String packageName = defaultPackage;
+        Integer iteration = 0;
+        if(o instanceof RecursiveProcFuncData){
+            RecursiveProcFuncData data = (RecursiveProcFuncData) o;
+            if(data.getPackageName() != null)
+                packageName = data.getPackageName();
+            if(data.getIteration() != null)
+                iteration = data.getIteration();
         }
+        
+        if (iteration.equals(0)) {
+
         hashIdTables.get(packageName).enter(ast.ID.spelling, ast);
-          idTable.enter (ast.ID.spelling, ast); // permits recursion
+        ast.FPS.visit(this, packageName);
+
           if (ast.duplicated)
             reporter.reportError ("identifier \"%\" already declared",
                                   ast.ID.spelling, ast.position);
         }
         else {
-          idTable.openScope();
-          ast.FPS.visit(this, o);
-          ast.TD = (TypeDenoter) ast.TD.visit(this, o);
+          hashIdTables.get(packageName).openScope();
+          ast.TD = (TypeDenoter) ast.TD.visit(this, packageName);
           TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-          idTable.closeScope();
+          hashIdTables.get(packageName).closeScope();
           if (! ast.TD.equals(eType))
             reporter.reportError ("body of function \"%\" has wrong type",
                                   ast.ID.spelling, ast.EXP.position);
@@ -281,7 +383,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-		TypeDenoter eType1 = (TypeDenoter) ast.DECL.visit(this, o);
+         String packageName = defaultPackage;
+         if(o instanceof String){
+            packageName = (String) o;
+        }
+        TypeDenoter eType1 = (TypeDenoter) ast.DECL.visit(this, o);
       	if (! eType1.equals(StdEnvironment.integerType))
           reporter.reportError ("Integer expression expected here", "",
 				ast.DECL.position); //TODO revisar si la posicion esta bien.
@@ -289,7 +395,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
       	if (! eType2.equals(StdEnvironment.integerType))
           reporter.reportError ("Integer expression expected here", "",
 				ast.EXP2.position);
-        idTable.openScope(); //TODO los exp no deben accesar el identifier
+        hashIdTables.get(packageName).openScope(); //TODO los exp no deben accesar el identifier
         Object output = ast.FOR.visit(this, o);
         if (output != null) {
             TypeDenoter eType3 = (TypeDenoter) output;
@@ -297,7 +403,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
               reporter.reportError ("Boolean expression expected here", "",
             ast.FOR.position); //TODO revisar si la posicion esta bien.
         }
-      	idTable.closeScope();
+      	hashIdTables.get(packageName).closeScope();
         return null;
     }
 
@@ -360,74 +466,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
-@Override
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object chooseData) {
-        ChooseData valuesData = (ChooseData) chooseData;
-        TypeDenoter typeExpression = ((ChooseData) chooseData).getType();
-        TypeDenoter typeCaseLit1  = (TypeDenoter) ast.CASELIT.visit(this, null);
-        TypeDenoter typeCaseLit2 = null;
-        if( ast.CASELIT2 != null )
-              typeCaseLit2 = (TypeDenoter) ast.CASELIT2.visit(this, null);
-        if( typeExpression.equals(StdEnvironment.charType) ){
-            if( ! typeCaseLit1.equals(typeExpression) ){
-                 reporter.reportError ("Char expression expected here", "",
-				ast.CASELIT.position);
-            }
-            if( typeCaseLit2 != null && ! typeCaseLit2.equals(typeExpression) ){
-                 reporter.reportError ("Char expression expected here", "",
-				ast.CASELIT2.position);
-            }
-        }
-        else if( typeExpression.equals(StdEnvironment.integerType) ){
-            if( ! typeCaseLit1.equals(typeExpression) ){
-                 reporter.reportError ("Integer expression expected here", "",
-				ast.CASELIT.position);
-            }
-            if(typeCaseLit2 != null && ! typeCaseLit2.equals(typeExpression) ){
-                 reporter.reportError ("Integer expression expected here", "",
-				ast.CASELIT2.position);
-            }
-        }
-            if( ast.CASELIT instanceof CaseLiteralCHAR ){
-                if(!valuesData.exists( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling)){
-                    valuesData.addData( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT).CHARLIT)).spelling );
-                }
-                else{
-                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
-				ast.CASELIT.position);
-                }
-            }
-            else if( ast.CASELIT instanceof CaseLiteralINT){
-                if(!valuesData.exists(((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling)){
-                     valuesData.addData( ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT).INTLIT)).spelling );
-                }
-                 else{
-                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
-				ast.CASELIT.position);
-                }
-            }
-
-             if(ast.CASELIT2 !=  null  &&  ast.CASELIT2 instanceof CaseLiteralCHAR ){
-                if(!valuesData.exists( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT2).CHARLIT)).spelling)){
-                    valuesData.addData( ((CharacterLiteral) ( ( (CaseLiteralCHAR) ast.CASELIT2).CHARLIT)).spelling );
-                }
-                 else{
-                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
-				ast.CASELIT2.position);
-                }
-            }
-            else if(ast.CASELIT2 !=  null &&   ast.CASELIT2 instanceof CaseLiteralINT){
-                if(!valuesData.exists(((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT2).INTLIT)).spelling)){
-                     valuesData.addData( ((IntegerLiteral) ( ( (CaseLiteralINT) ast.CASELIT2).INTLIT)).spelling );
-                }
-                 else{
-                 reporter.reportError ("Repeated Character Literal in Choose Command", "",
-				ast.CASELIT2.position);
-                }
-            }
-
-        return null;
-    }
 
 @Override
     public Object visitCaseLiterals(CaseLiterals ast, Object typeExpression) {
@@ -498,9 +536,13 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        IdEntry startPoint = idTable.getLatest();
+        String packageName = defaultPackage;
+        if(o instanceof String){
+            packageName = (String) o;
+        }
+        IdEntry startPoint = hashIdTables.get(packageName).getLatest();
         ast.D1.visit(this, o);
-        IdEntry inStart = idTable.getLatest();
+        IdEntry inStart = hashIdTables.get(packageName).getLatest();
         ast.D2.visit(this, o);
         inStart.next.previous = startPoint;
         return null;
@@ -555,10 +597,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitLetCommand(LetCommand ast, Object o) {
-    idTable.openScope();
+    String packageName = defaultPackage;
+    if(o instanceof String){
+        packageName = (String) o;
+    }
+    hashIdTables.get(packageName).openScope();
     ast.D.visit(this, o);
     ast.C.visit(this, o);
-    idTable.closeScope();
+    hashIdTables.get(packageName).closeScope();
     return null;
   }
 
@@ -578,59 +624,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     // Iterative commands
 
-    // Always returns null. Does not use the given object.
-
-    /* Si lo de richie no sirve, descomente esta linea
-   @Override
-    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-        if (! eType.equals(StdEnvironment.booleanType))
-          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
-        ast.COM.visit(this, o);
-        return null;
-    }
-
-    @Override
-    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
-        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-        if (! eType.equals(StdEnvironment.booleanType))
-          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
-        ast.COM.visit(this, o);
-        return null;
-    }
-
-    @Override
-    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
-        ast.COM.visit(this, o);
-        ast.DO.visit(this, o);
-        return null;
-
-       }
-
-    @Override
-    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
-        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-        if (! eType.equals(StdEnvironment.booleanType))
-          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
-        return null;
-    }
-
-    @Override
-    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
-        TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
-        if (! eType.equals(StdEnvironment.booleanType))
-          reporter.reportError("Boolean expression expected here", "", ast.EXP.position);
-        return null;
-    }
-    */
-
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object o) {
         ast.LOOP.visit(this, o);
         return null;
     }
-
-
 
   // Expressions
 
@@ -683,7 +681,10 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     } else if (binding instanceof FuncDeclaration) {
       ast.APS.visit(this, ((FuncDeclaration) binding).FPS);
       ast.type = ((FuncDeclaration) binding).T;
-    } else if (binding instanceof FuncFormalParameter) {
+    } else if (binding instanceof FuncProcFunc) {
+      ast.APS.visit(this, ((FuncProcFunc) binding).FPS);
+      ast.type = ((FuncProcFunc) binding).TD;
+    }else if (binding instanceof FuncFormalParameter) {
       ast.APS.visit(this, ((FuncFormalParameter) binding).FPS);
       ast.type = ((FuncFormalParameter) binding).T;
     } else
@@ -721,10 +722,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitLetExpression(LetExpression ast, Object o) {
-    idTable.openScope();
+    String packageName = defaultPackage;
+    if(o instanceof String){
+        packageName = (String) o;
+    }
+    hashIdTables.get(packageName).openScope();
     ast.D.visit(this, o);
     ast.type = (TypeDenoter) ast.E.visit(this, o);
-    idTable.closeScope();
+    hashIdTables.get(packageName).closeScope();
     return ast.type;
   }
 
@@ -850,14 +855,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         packageName = (String) o;
     }
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast); // permits recursion
+    hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
-    idTable.openScope();
+    hashIdTables.get(packageName).openScope();
     ast.FPS.visit(this, o);
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
-    idTable.closeScope();
+    hashIdTables.get(packageName).closeScope();
     if (! ast.T.equals(eType))
       reporter.reportError ("body of function \"%\" has wrong type",
                             ast.I.spelling, ast.E.position);
@@ -870,14 +875,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         packageName = (String) o;
     }
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast); // permits recursion
+    hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
-    idTable.openScope();
+    hashIdTables.get(packageName).openScope();
     ast.FPS.visit(this, o);
     ast.C.visit(this, o);
-    idTable.closeScope();
+    hashIdTables.get(packageName).closeScope();
     return null;
   }
 
@@ -894,7 +899,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         packageName = (String) o;
     }
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast);
+    hashIdTables.get(packageName).enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
@@ -904,23 +909,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   public Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o) {
     return null;
   }
-
-  /*
-  TODO: Revisar visitVarDeclarationNuevo
-  public Object visitVarDeclaration(VarDeclaration ast, Object o) {
-     //TODO Visit type denoter or expression.
-      idTable.enter (ast.I.spelling, ast);
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
-
-    return null;
-  }
-    */
-  // Array Aggregates
-
-  // Returns the TypeDenoter for the Array Aggregate. Does not use the
-  // given object.
 
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
@@ -964,13 +952,12 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   // Always returns null. Does not use the given object.
 
   public Object visitConstFormalParameter(ConstFormalParameter ast, Object o) {
-    ast.T = (TypeDenoter) ast.T.visit(this, o);
     String packageName = defaultPackage;
     if(o instanceof String){
         packageName = (String) o;
     }
+    ast.T = (TypeDenoter) ast.T.visit(this, packageName);
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter(ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("duplicated formal parameter \"%\"",
                             ast.I.spelling, ast.position);
@@ -978,16 +965,16 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitFuncFormalParameter(FuncFormalParameter ast, Object o) {
-    idTable.openScope();
-    ast.FPS.visit(this, o);
-    idTable.closeScope();
-    ast.T = (TypeDenoter) ast.T.visit(this, o);
     String packageName = defaultPackage;
     if(o instanceof String){
         packageName = (String) o;
     }
+    hashIdTables.get(packageName).openScope();
+    ast.FPS.visit(this, o);
+    hashIdTables.get(packageName).closeScope();
+    ast.T = (TypeDenoter) ast.T.visit(this, o);
+
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("duplicated formal parameter \"%\"",
                             ast.I.spelling, ast.position);
@@ -995,15 +982,17 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitProcFormalParameter(ProcFormalParameter ast, Object o) {
-    idTable.openScope();
-    ast.FPS.visit(this, o);
-    idTable.closeScope();
     String packageName = defaultPackage;
     if(o instanceof String){
         packageName = (String) o;
     }
+    hashIdTables.get(packageName).openScope();
+    ast.FPS.visit(this, o);
+    hashIdTables.get(packageName).closeScope();
+    if(o instanceof String){
+        packageName = (String) o;
+    }
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("duplicated formal parameter \"%\"",
                             ast.I.spelling, ast.position);
@@ -1011,13 +1000,13 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitVarFormalParameter(VarFormalParameter ast, Object o) {
-    ast.T = (TypeDenoter) ast.T.visit(this, o);
     String packageName = defaultPackage;
     if(o instanceof String){
         packageName = (String) o;
     }
+    ast.T = (TypeDenoter) ast.T.visit(this, o);
+
     hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-    idTable.enter (ast.I.spelling, ast);
     if (ast.duplicated)
       reporter.reportError ("duplicated formal parameter \"%\"",
                             ast.I.spelling, ast.position);
@@ -1249,7 +1238,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   }
 
   public Object visitOperator(Operator O, Object o) {
-    Declaration binding = idTable.retrieve(O.spelling);
+    String packageName = defaultPackage;
+    if(o instanceof String){
+        packageName = (String) o;
+    }
+    Declaration binding = hashIdTables.get(packageName).retrieve(O.spelling);
     if (binding != null)
       O.decl = binding;
     return binding;
@@ -1291,34 +1284,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     return ast.type;
   }
 
-  /*
-  TODO revisar visitSimpleVname nuevo
-  public Object visitSimpleVname(SimpleVname ast, Object o) {
-    ast.variable = false;
-    ast.type = StdEnvironment.errorType;
-    Declaration binding = (Declaration) ast.I.visit(this, o);
-    if (binding == null)
-      reportUndeclared(ast.I);
-    else
-      if (binding instanceof ConstDeclaration) {
-        ast.type = ((ConstDeclaration) binding).E.type;
-        ast.variable = false;
-      } else if (binding instanceof VarDeclaration) {
-        //TODO binding for TypeDenoter or Expression
-        //ast.type = ((VarDeclaration) binding).T;
-        ast.variable = true;
-      } else if (binding instanceof ConstFormalParameter) {
-        ast.type = ((ConstFormalParameter) binding).T;
-        ast.variable = false;
-      } else if (binding instanceof VarFormalParameter) {
-        ast.type = ((VarFormalParameter) binding).T;
-        ast.variable = true;
-      } else
-        reporter.reportError ("\"%\" is not a const or var identifier",
-                              ast.I.spelling, ast.I.position);
-    return ast.type;
-  }
-    */
+
   public Object visitSubscriptVname(SubscriptVname ast, Object o) {
     TypeDenoter vType = (TypeDenoter) ast.V.visit(this, o);
     ast.variable = ast.V.variable;
@@ -1363,13 +1329,12 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
  // Checker Constructor
     public Checker (ErrorReporter reporter) {
       this.reporter = reporter;
-      this.idTable = new IdentificationTable ();
+      IdentificationTable idTable = new IdentificationTable ();
       this.hashIdTables = new HashMap<String, IdentificationTable>();
       this.hashIdTables.put(defaultPackage, idTable);
       establishStdEnvironment();
     }
 
-    private IdentificationTable idTable;
     private HashMap<String,IdentificationTable> hashIdTables;
     private static SourcePosition dummyPos = new SourcePosition();
     private ErrorReporter reporter;
@@ -1407,11 +1372,11 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
   // type, and enters it in the identification table.
 
   private TypeDeclaration declareStdType (String id, TypeDenoter typedenoter) {
-
+    String packageName = defaultPackage;
     TypeDeclaration binding;
 
     binding = new TypeDeclaration(new Identifier(id, dummyPos), typedenoter, dummyPos);
-    idTable.enter(id, binding);
+    hashIdTables.get(packageName).enter(id, binding);
     return binding;
   }
 
@@ -1427,7 +1392,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     constExpr = new IntegerExpression(null, dummyPos);
     constExpr.type = constType;
     binding = new ConstDeclaration(new Identifier(id, dummyPos), constExpr, dummyPos);
-    idTable.enter(id, binding);
+    hashIdTables.get(defaultPackage).enter(id, binding);
     return binding;
   }
 
@@ -1440,7 +1405,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     binding = new ProcDeclaration(new Identifier(id, dummyPos), fps,
                                   new EmptyCommand(dummyPos), dummyPos);
-    idTable.enter(id, binding);
+    hashIdTables.get(defaultPackage).enter(id, binding);
     return binding;
   }
 
@@ -1454,7 +1419,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     binding = new FuncDeclaration(new Identifier(id, dummyPos), fps, resultType,
                                   new EmptyExpression(dummyPos), dummyPos);
-    idTable.enter(id, binding);
+    hashIdTables.get(defaultPackage).enter(id, binding);
     return binding;
   }
 
@@ -1469,7 +1434,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     binding = new UnaryOperatorDeclaration (new Operator(op, dummyPos),
                                             argType, resultType, dummyPos);
-    idTable.enter(op, binding);
+    hashIdTables.get(defaultPackage).enter(op, binding);
     return binding;
   }
 
@@ -1484,7 +1449,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     binding = new BinaryOperatorDeclaration (new Operator(op, dummyPos),
                                              arg1Type, arg2type, resultType, dummyPos);
-    idTable.enter(op, binding);
+    hashIdTables.get(defaultPackage).enter(op, binding);
     return binding;
   }
 
@@ -1497,7 +1462,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
   private void establishStdEnvironment () {
 
-    // idTable.startIdentification();
+    // hashIdTables.get(packageName).startIdentification();
     StdEnvironment.booleanType = new BoolTypeDenoter(dummyPos);
     StdEnvironment.integerType = new IntTypeDenoter(dummyPos);
     StdEnvironment.charType = new CharTypeDenoter(dummyPos);

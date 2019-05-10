@@ -1,14 +1,13 @@
 let
-	private
-		var a::=5;
-		var b::=4;
-		var d::=3
-	in
-		pass
-	end;
-	var c::= 5
+	recursive
+		func doble(var i : Integer) : Integer ~
+			triplicar(i)/3*2
+		|
+		func triplicar(var a : Integer) : Integer ~
+			a + doble(a)		
+	end
 in
-	putint(c)
+	pass
 end
 
-! Ok
+! OK
