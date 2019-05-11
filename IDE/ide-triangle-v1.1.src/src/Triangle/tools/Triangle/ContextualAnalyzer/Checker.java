@@ -30,7 +30,7 @@ public final class Checker implements Visitor {
    The method has two parameters which are ast, where, either one or two caselit are. 
     First, it determines the type denoter of both of them and if they match with the 
     typedenoter of the first expression determined in the main part of the choose, 
-    they are added to the array in choosedata, but if they don't match, an error is reported, 
+    they are added to the hash  in choosedata, but if they don't match, an error is reported, 
     if there are two values, that means is a range, therefore, addCharactersValues or  
     addIntegerValues are called, so they analyze the range and add the values of the range.
     */
