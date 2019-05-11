@@ -26,6 +26,14 @@ import java.util.HashMap;
 
 public final class Checker implements Visitor {
     //nuevos jose
+    /*
+   The method has two parameters which are ast, where, either one or two caselit are. 
+    First, it determines the type denoter of both of them and if they match with the 
+    typedenoter of the first expression determined in the main part of the choose, 
+    they are added to the array in choosedata, but if they don't match, an error is reported, 
+    if there are two values, that means is a range, therefore, addCharactersValues or  
+    addIntegerValues are called, so they analyze the range and add the values of the range.
+    */
     @Override
     public Object visitCaseRangeCase(CaseRangeCase ast, Object chooseData) {
         ChooseData valuesData = (ChooseData) chooseData;
@@ -90,6 +98,12 @@ public final class Checker implements Visitor {
         return null;
     }
 
+    /*
+    It has the parameter, actual values, which is the reference to the ChooseData where the values are stored, 
+    value1 which is the string of the values where the array starts and value2 where it finishes, and source position 
+    which is used to indicate where the error is found if there is one. It adds the Integer values to the choosedata
+    array.
+    */
     private void addIntegerValues(ChooseData actualValues,String value1,String value2,SourcePosition position ){
         int value1Int = Integer.parseInt(value1);
         int value2Int = Integer.parseInt(value2);
@@ -104,6 +118,12 @@ public final class Checker implements Visitor {
         }
     }
     
+    /*
+    It has the parameter, actual values, which is the reference to the ChooseData where the values are stored, 
+    value1 which is the string of the values where the array starts and value2 where it finishes, and source position 
+    which is used to indicate where the error is found if there is one. It adds the character values to the choosedata
+    array.
+    */
     private void addCharactersValues(ChooseData actualValues,String value1,String value2,SourcePosition position ){
         char value1Char = value1.charAt(1);
         char value2Char = value2.charAt(1);
@@ -194,7 +214,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
       return ast.T.type;
   }
     @Override
-
   public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
     String packageName = defaultPackage;
     if(o instanceof String){
@@ -450,11 +469,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
     //region Jose
+
+    /*It returns the integer type of the std enviroment, to determine if it the expression visited, is a integer*/
     @Override
     public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
         return StdEnvironment.integerType;
     }
-
+    
+    /*It returns the integer type of the std enviroment, to determine if it the expression visited, is a integer*/
 @Override
     public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
         return StdEnvironment.charType;
@@ -462,6 +484,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
  @Override
+    /*It visits the ast where there are two or more CaseRange nested*/
     public Object visitSequentialCaseRange(SequentialCaseRange ast, Object typeExpression) {
         ast.C1.visit(this, typeExpression);
         ast.C2.visit(this, typeExpression);
@@ -470,6 +493,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
 @Override
+    /*It visitis the expression to determine the value of the expression*/
     public Object visitCaseLiterals(CaseLiterals ast, Object typeExpression) {
         ast.CASERANGE.visit(this, typeExpression);
         return null;
@@ -477,6 +501,8 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     
 @Override
+    /*It uses the object to get the type of the main expression and determine if 
+its expression matches it, also, visits its command. */
     public Object visitCaseWhen(CaseWhen ast, Object typeExpression) {
         ast.CASELIT.visit(this, typeExpression);
         ast.COM.visit(this, null);
@@ -484,6 +510,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     }
 
 @Override
+    /*
+        It visits the cases, it is used when a choose has two or more cases. 
+    */
     public Object visitSequentialCase(SequentialCase ast, Object typeExpression) {
         ast.C1.visit(this, typeExpression);
         ast.C2.visit(this, typeExpression);
@@ -492,6 +521,10 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
 @Override
+    /*
+    It visits the else case of the choose, and since it doesn't have an expression, 
+    there's no need to check the type of the main expression
+    */
     public Object visitElseCase(ElseCase ast, Object o) {
         ast.COM.visit(this, o);
         return null;
@@ -499,6 +532,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
  @Override
+    /*It visits the cases of the choose and the optional else case*/
     public Object visitCases(Cases ast, Object typeExpression) {
         ast.CASE1.visit(this, typeExpression);
         if(ast.CASE2 != null)
@@ -509,6 +543,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
     @Override
+    /*It determine if the expression of the choose is a integer or a char, and if it isnt it reportes an error, 
+    and visits the command of the choose command, and verifies that its is correct, 
+    */
     public Object visitChooseCommand(ChooseCommand ast, Object o) {
         TypeDenoter expressionType = (TypeDenoter) ast.EXP.visit(this, o);
         if( ! expressionType.equals( StdEnvironment.charType) && ! expressionType.equals( StdEnvironment.integerType) ){
@@ -521,6 +558,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
 @Override
+    /* it visits the declaration, it is for the case where theres only one of them*/
     public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
         ast.SD.visit(this, o);
         return null;
@@ -529,6 +567,10 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
     @Override
+    /*It is for the case in the par declarations where there are two or more Single declarations it 
+    first declares the declarations in its private scope to verify that none of them are using each other, 
+    then it declares them in the actual scope to maintain the declarations
+    */
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
         String packageName = defaultPackage;
         if(o instanceof String){
@@ -549,6 +591,12 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     }
 
     @Override
+    /*
+    The id table is now treated as a  doubled linked list, where each node has access to its previous and its next, 
+    and at the beginning of the private declaration, aka before D1 the node where it starts is saved in startPoint 
+    and then where D2 starts is saved in inStart, at the end of the visits, D1 is left behind and D2 starts where D1 
+    used to start.
+    */
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
         String packageName = defaultPackage;
         if(o instanceof String){
