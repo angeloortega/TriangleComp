@@ -106,9 +106,9 @@ public final class Checker implements Visitor {
     */
     private void addIntegerValues(ChooseData actualValues,String value1,String value2,SourcePosition position ){
         int value1Int = Integer.parseInt(value1);
-        int value2Int = Integer.parseInt(value2);
+        int value2Int = Integer.parseInt(value2) + 1;
         
-        for (int i = value1Int; i < value2Int; i++) {
+        for (int i = value1Int; i < value2Int; i++) { 
             if( actualValues.exists( Integer.toString(i) ) ){
                  reporter.reportError ("Repeated Integer Literal in Choose Command", "", position);
             }
@@ -128,7 +128,7 @@ public final class Checker implements Visitor {
         char value1Char = value1.charAt(1);
         char value2Char = value2.charAt(1);
         char counter;
-        for (int i = value1Char ; i < value2Char; i++) {
+        for (int i = value1Char ; i < value2Char + 1; i++) {
             counter = (char)i;
             if(!actualValues.exists( "'" + Character.toString(counter) + "'" ) ){
                 actualValues.addData( "'" + Character.toString(counter) + "'" );
