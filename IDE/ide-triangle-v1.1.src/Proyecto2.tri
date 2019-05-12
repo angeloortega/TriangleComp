@@ -3,13 +3,12 @@ package myP ~
 		func doble(i : Integer) : Integer ~
 			triplicar(i)/3*2
 		|
+		func triplicar(a : Integer) : Integer ~
+			a + triplicar(a)
+		|
 		proc cuadriplicar(var b : Integer)~
 			b := triplicar(triplicar(b))
 		end
-		|
-		func triplicar(a : Integer) : Integer ~
-			a + triplicar(a)
-	
 	end
 end;
 let

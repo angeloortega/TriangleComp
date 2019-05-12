@@ -946,7 +946,6 @@ its expression matches it, also, visits its command. */
     if(o instanceof String){
         packageName = (String) o;
     }
-    hashIdTables.get(packageName).enter(ast.I.spelling, ast);
     hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
@@ -966,7 +965,6 @@ its expression matches it, also, visits its command. */
     if(o instanceof String){
         packageName = (String) o;
     }
-    hashIdTables.get(packageName).enter(ast.I.spelling, ast);
     hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
