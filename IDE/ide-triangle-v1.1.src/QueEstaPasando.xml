@@ -1,0 +1,17 @@
+<Program>
+<LetCommand>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="i"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<EmptyCommand/>
+</LetCommand>
+</Program>

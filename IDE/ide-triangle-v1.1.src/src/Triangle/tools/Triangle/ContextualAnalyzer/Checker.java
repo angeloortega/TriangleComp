@@ -898,7 +898,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     if(o instanceof String){
         packageName = (String) o;
     }
-    hashIdTables.get(packageName).enter(ast.I.spelling, ast);
     hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
@@ -918,7 +917,6 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     if(o instanceof String){
         packageName = (String) o;
     }
-    hashIdTables.get(packageName).enter(ast.I.spelling, ast);
     hashIdTables.get(packageName).enter (ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
