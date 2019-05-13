@@ -139,8 +139,8 @@ public final class Checker implements Visitor {
             }
         }
     }
-    //Nuevas cosas Richie-Giulla
- @Override
+
+    @Override
 public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
     ast.TD = (TypeDenoter) ast.TD.visit(this, o);
     ast.RTD.visit(this, o);
@@ -184,7 +184,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     return binding;
   }
     // Packages
-    //region Giulla
+    //Uses the VarDeclaration ast to determine the type of the identifier attached.
+    //Retrieves the identification table for the package the ast belongs.
+    //Returns null
     @Override
     public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     TypeDenoter binding = (TypeDenoter) ast.V.visit(this, o);
@@ -202,18 +204,24 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     return null;
   }
-
+    //Visits the Type Denoter and returns the type
     @Override
   public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, o);
     return ast.T;
   }
-
+  //Visits the Expression in the ast and retrieves the type for that expression
+  //and returns the type
     @Override
   public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
     ast.T.type = (TypeDenoter) ast.T.visit(this, o);
       return ast.T.type;
   }
+  //Enters the identifier and the ast into the general identification table
+  //then checks if there is an package with the same name, if the package does not exist
+  //then it creates a new identification table and adds it to the hash. At last it visits the declaration
+  //of the package and sends the package name as an object so the visitor know which package it belongs to.
+  //Return null
     @Override
   public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
     String packageName = defaultPackage;
@@ -232,6 +240,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     }
     return null;
   }
+  //Visits two package declarations and returns null.
     @Override
 
   public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
@@ -240,6 +249,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         ast.D2.visit(this, o);
     return null;
   }
+  //Checks the packageIdentifier of the ast for the package to which the vName belongs.
+  //It visits the identifier and retrieves the declaration and returns the type of
+  //declaration.
     @Override
   public Object visitSimpleVname(SimpleVname ast, Object o) {
     String packageName = defaultPackage;
