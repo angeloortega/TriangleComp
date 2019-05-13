@@ -1,0 +1,10 @@
+let
+  var a ::= 0
+in
+  let
+    var   a ::= 'a'
+  in
+    put(a)
+  end;
+  putint(a)
+end

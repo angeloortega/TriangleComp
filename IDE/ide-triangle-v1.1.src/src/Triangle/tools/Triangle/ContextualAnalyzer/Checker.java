@@ -22,6 +22,7 @@ import Utilities.ChooseData;
 import Utilities.RecursiveProcFuncData;
 import Utilities.FormalParameterData;
 import Utilities.ActualParameterData;
+import Utilities.LoopCasesFORData;
 import java.util.HashMap;
 
 public final class Checker implements Visitor {
@@ -287,11 +288,15 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
         @Override
         public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-                        String packageName = defaultPackage;
+            String packageName = defaultPackage;
             if(o instanceof String){
                 packageName = (String) o;
             }
             TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
+            if(o instanceof LoopCasesFORData){
+                packageName = ((LoopCasesFORData) o).getPackageName();
+                hashIdTables.get(packageName).openScope();
+            }
             hashIdTables.get(packageName).enter(ast.I.spelling, ast);
             if (ast.duplicated)
               reporter.reportError ("identifier \"%\" already declared",
@@ -408,15 +413,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
          if(o instanceof String){
             packageName = (String) o;
         }
-        TypeDenoter eType1 = (TypeDenoter) ast.DECL.visit(this, o);
-      	if (! eType1.equals(StdEnvironment.integerType))
-          reporter.reportError ("Integer expression expected here", "",
-				ast.DECL.position); //TODO revisar si la posicion esta bien.
         TypeDenoter eType2 = (TypeDenoter) ast.EXP2.visit(this, o);
       	if (! eType2.equals(StdEnvironment.integerType))
           reporter.reportError ("Integer expression expected here", "",
 				ast.EXP2.position);
-        hashIdTables.get(packageName).openScope(); //TODO los exp no deben accesar el identifier
+        TypeDenoter eType1 = (TypeDenoter) ast.DECL.visit(this, new LoopCasesFORData(packageName));
+      	if (! eType1.equals(StdEnvironment.integerType))
+          reporter.reportError ("Integer expression expected here", "",
+				ast.DECL.position); //TODO revisar si la posicion esta bien.
         Object output = ast.FOR.visit(this, o);
         if (output != null) {
             TypeDenoter eType3 = (TypeDenoter) output;
@@ -1142,15 +1146,14 @@ its expression matches it, also, visits its command. */
     if (! (fp instanceof ConstFormalParameter))
       reporter.reportError ("const actual parameter not expected here", "",
                             ast.position);
-    else if (! eType.equals(((ConstFormalParameter) fp).T))
+    else if (  eType != null  && !eType.equals(((ConstFormalParameter) fp).T)  )
       reporter.reportError ("wrong type for const actual parameter", "",
                             ast.E.position);
     return null;
   }
 
   public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
-    FormalParameter fp = null;
-    String packageName = defaultPackage;
+    FormalParameter fp = null;   String packageName = defaultPackage;
     String callerPackage = defaultPackage;
     if(o instanceof FormalParameter){
         fp = (FormalParameter) o;
