@@ -1142,15 +1142,14 @@ its expression matches it, also, visits its command. */
     if (! (fp instanceof ConstFormalParameter))
       reporter.reportError ("const actual parameter not expected here", "",
                             ast.position);
-    else if (! eType.equals(((ConstFormalParameter) fp).T))
+    else if (  eType != null  && !eType.equals(((ConstFormalParameter) fp).T)  )
       reporter.reportError ("wrong type for const actual parameter", "",
                             ast.E.position);
     return null;
   }
 
   public Object visitFuncActualParameter(FuncActualParameter ast, Object o) {
-    FormalParameter fp = null;
-    String packageName = defaultPackage;
+    FormalParameter fp = null;   String packageName = defaultPackage;
     String callerPackage = defaultPackage;
     if(o instanceof FormalParameter){
         fp = (FormalParameter) o;
