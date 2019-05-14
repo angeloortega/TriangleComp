@@ -139,8 +139,11 @@ public final class Checker implements Visitor {
             }
         }
     }
+<<<<<<< HEAD
     //Nuevas cosas Richie-Giulla
- @Override
+=======
+
+    @Override
 public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
     ast.TD = (TypeDenoter) ast.TD.visit(this, o);
     ast.RTD.visit(this, o);
@@ -171,20 +174,103 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     }
     return ((TypeDeclaration) binding).T;
   }
+>>>>>>> 35ce62ef2f8e25787d8d0fa5466c38d07e2c68a4
 
-  public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {  
+    /**
+     * This method helps to visit the TypeDenoter of the MultipleRecordTypeDenoter,
+     * as well as the RecordTypeDenoter, which permits to have multiple RecordTypeDenoters.
+     * When the TypeDenoter is visited, the returned type is assigned to the TypeDenoter
+     * of the ast, and the ast is returned so the Type can be accessed from where the method
+     * is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
+        ast.TD = (TypeDenoter) ast.TD.visit(this, o);
+        ast.RTD.visit(this, o);
+        return ast;
+    }
+
+    /**
+     * The method helps to visit the TypeDenoter contained in the ast, and to assign
+     * the returned type to the type of the ast. So, the method returns the ast, to be
+     * used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
+        ast.TD = (TypeDenoter) ast.TD.visit(this, o);
+        return ast;
+    }
+
+    /**
+     * This method visits the RecordTypeDenoter contained in the ast, which can be
+     * a SingleRecordTypeDenoter or a MultipleRecordTypeDenoter. The returned type denoter
+     * is assigned to the RecordTypeDenoter of the ast, and then the ast is returned
+     * to be use from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+        ast.REC = (RecordTypeDenoter) ast.REC.visit(this, o);
+        return ast;
+    }
+
+    /**
+     * The method starts by visiting the LongIdentifier contained in the ast, which then returns
+     * the declaration of this identifier. If the declaration is null it means the longIdentifier hasn't
+     * been declared, so it reports an error. Then if it has, it must be checked if the Declaration is
+     * a TypeDeclaration, if not, the respective error is displayed. Finally, the type of the Declaration
+     * is returned so it can be used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
+            Declaration binding = (Declaration) ast.longIdentifier.visit(this, o);
+        if (binding == null) {
+          reportUndeclared (ast.longIdentifier);
+          return StdEnvironment.errorType;
+        } else if (! (binding instanceof TypeDeclaration)) {
+          reporter.reportError ("\"%\" is not a type longIdentifier",
+                                ast.longIdentifier.spelling, ast.longIdentifier.position);
+          return StdEnvironment.errorType;
+        }
+        return ((TypeDeclaration) binding).T;
+    }
+
+    /**
+     * The method gets the name of the actual package in process from the variable defaultPackage,
+     * or from the packageIdentifier contained in the ast if it isn't null. Then, the declaration
+     * of the Identifier contained in the ast is retrieved from the respective IdentificatioTable
+     * of the package name. If this declaration isn't null, then it is assigned to the declaration
+     * contained in the identifier of the ast. Finally, the declaration is returned to be used
+     * from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {  
       
-    String packageName = defaultPackage;
+        String packageName = defaultPackage;
         if(ast.packageIdentifier != null){
             packageName = ast.packageIdentifier.spelling;
         }
-    Declaration binding = hashIdTables.get(packageName).retrieve(ast.identifier.spelling);
-    if (binding != null)
-      ast.identifier.decl = binding;
-    return binding;
-  }
+        Declaration binding = hashIdTables.get(packageName).retrieve(ast.identifier.spelling);
+        if (binding != null)
+            ast.identifier.decl = binding;
+        return binding;
+    }
     // Packages
-    //region Giulla
+    //Uses the VarDeclaration ast to determine the type of the identifier attached.
+    //Retrieves the identification table for the package the ast belongs.
+    //Returns null
     @Override
     public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     TypeDenoter binding = (TypeDenoter) ast.V.visit(this, o);
@@ -202,18 +288,24 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
     return null;
   }
-
+    //Visits the Type Denoter and returns the type
     @Override
   public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, o);
     return ast.T;
   }
-
+  //Visits the Expression in the ast and retrieves the type for that expression
+  //and returns the type
     @Override
   public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
     ast.T.type = (TypeDenoter) ast.T.visit(this, o);
       return ast.T.type;
   }
+  //Enters the identifier and the ast into the general identification table
+  //then checks if there is an package with the same name, if the package does not exist
+  //then it creates a new identification table and adds it to the hash. At last it visits the declaration
+  //of the package and sends the package name as an object so the visitor know which package it belongs to.
+  //Return null
     @Override
   public Object visitPackageDeclaration(PackageDeclaration ast, Object o) {
     String packageName = defaultPackage;
@@ -232,6 +324,7 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
     }
     return null;
   }
+  //Visits two package declarations and returns null.
     @Override
 
   public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
@@ -240,6 +333,9 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         ast.D2.visit(this, o);
     return null;
   }
+  //Checks the packageIdentifier of the ast for the package to which the vName belongs.
+  //It visits the identifier and retrieves the declaration and returns the type of
+  //declaration.
     @Override
   public Object visitSimpleVname(SimpleVname ast, Object o) {
     String packageName = defaultPackage;
@@ -285,26 +381,52 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
 
 
   //region Richie
+    /**
+     * The method gets the packageName from the defaultPackage or from the
+     * parameter. If the parameter is a string then it only is the package name,
+     * but if it is a LoopCasesFORData, the package has to be get from the parameter.
+     * The method visits the Expression of the ast before asking if the parameter
+     * is a LoopCasesFORData. Then, if it does, the packageName is assigned
+     * to the packageName contained in the parameter object, and the scope of the
+     * respective IdentificationTable is opened. This because, the LoopCasesFOR needs to
+     * open the scope before adding the Identifier of the ast. So, the Identifier of
+     * the ast is entered to the respective IdentificationTable, and the Type of the visited
+     * Expression at the beginning is returned, so it can be used from where the
+     * visitConstDeclaration is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
+        String packageName = defaultPackage;
+        if(o instanceof String){
+            packageName = (String) o;
+        }
+        TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
+        if(o instanceof LoopCasesFORData){
+            packageName = ((LoopCasesFORData) o).getPackageName();
+            hashIdTables.get(packageName).openScope();
+        }
+        hashIdTables.get(packageName).enter(ast.I.spelling, ast);
+        if (ast.duplicated)
+          reporter.reportError ("identifier \"%\" already declared",
+                                ast.I.spelling, ast.position);
+        return eType;
+     }
 
-        @Override
-        public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
-            String packageName = defaultPackage;
-            if(o instanceof String){
-                packageName = (String) o;
-            }
-            TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
-            if(o instanceof LoopCasesFORData){
-                packageName = ((LoopCasesFORData) o).getPackageName();
-                hashIdTables.get(packageName).openScope();
-            }
-            hashIdTables.get(packageName).enter(ast.I.spelling, ast);
-            if (ast.duplicated)
-              reporter.reportError ("identifier \"%\" already declared",
-                                    ast.I.spelling, ast.position);
-            return eType;
-         }
-
-	@Override
+    /**
+     * The method gets the actual processed package from the defaultPackage
+     * variable, or from the Object parameter. Then the ProcFunc contained in
+     * the ast is visited twice, first for adding the different Identifiers
+     * of the Procedures and Functions of the declaration, and second for
+     * processing their content. Notice that a RecursiveProcFuncData is passed
+     * as parameter with the iteration and the packageName.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
         String packageName = defaultPackage;
         if(o instanceof String){
@@ -316,6 +438,13 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * This method visits the multiple Procedures or Functions that are declared. These
+     * are represented by the ast ProcFunc, which then can be a ProcProcFunc or a FuncProcFunc.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override 
     public Object visitProcFuncs(ProcFuncs ast, Object o) {
           ast.PF1.visit(this,o);
@@ -323,6 +452,16 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The method starts by obtaining the packageName from the parameter, or the defaultPackage.
+     * Then the actual iteration is also obtained from the parameter. So, if its the first
+     * iteration, the ID of the ast is entered to the IdentificationTable of the packageName,
+     * and the FormalParameterSequence and TypeDenoter of the ast are visited. Then, if its
+     * the second iteration the Command of the ast is visited. 
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
         String packageName = defaultPackage;
@@ -348,6 +487,17 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The method starts by obtaining the packageName from the parameter, or the defaultPackage.
+     * Then the actual iteration is also obtained from the parameter. So, if its the first
+     * iteration, the ID of the ast is entered to the IdentificationTable of the packageName,
+     * and the FormalParameterSequence and TypeDenoter of the ast are visited. Then, if its
+     * the second iteration, the Expression of the ast is visited, and the type returned is
+     * compared with the TypeDenoter of the ast to see if they are equal.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
         String packageName = defaultPackage;
@@ -379,7 +529,15 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         }
         return null;
     }
-
+    
+    /**
+     * The method visits the Expression contained in the ast, and checks
+     * if the type returned by the visit of the Expression is a boolean.
+     * Then, the Command of the ast is visited.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
@@ -390,6 +548,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The method visits the Expression contained in the ast, and checks
+     * if the type returned by the visit of the Expression is a boolean.
+     * Then, the Command of the ast is visited.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
@@ -400,6 +566,12 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The Command and DoLoop of the ast are visited.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
         ast.COM.visit(this, o);
@@ -407,6 +579,18 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The method first gets the packageName from the defaultPackage or from the parameter.
+     * Then it visits the Expression contained in the ast, and check if the returned type
+     * is an integer. After that, the ConstDeclaration of the ast is visited, and it
+     * returns the type of the Expression contained in the declaration. This type is
+     * checked to see if its an integer. So, the ForLoop of the ast is visited, and
+     * if it returns a type, it is checked to see if its a boolean. Finally, the scope
+     * ; that was opened in the visitConstDeclaration, is closed.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
          String packageName = defaultPackage;
@@ -432,6 +616,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return null;
     }
 
+    /**
+     * The method visits the Expression contained in the ast, and
+     * checks if the returned type from the visit of the Expression
+     * is a boolean.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
@@ -441,6 +633,14 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
       	return null;
     }
 
+    /**
+     * The method visits the Expression contained in the ast, and
+     * checks if the returned type from the visit of the Expression
+     * is a boolean.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
         TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
@@ -450,12 +650,27 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
       	return null;
     }
 
-  	@Override
+    /**
+     * The method visits the Command contained in the ast.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
     public Object visitForLoopDo(ForLoopDo ast, Object o) {
       	ast.COM.visit(this, o);
         return null;
     }
 
+    /**
+     * The method visits the Expression contained in the ast, and
+     * the returned type of this visit is assigned to the variable eType.
+     * Then the Command of the ast is visited, and the variable eType is
+     * returned, so it can be used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
       	TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
@@ -463,6 +678,15 @@ public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Obje
         return eType;
     }
 
+    /**
+     * The method visits the Expression contained in the ast, and
+     * the returned type of this visit is assigned to the variable eType.
+     * Then the Command of the ast is visited, and the variable eType is
+     * returned, so it can be used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
     @Override
     public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
       	TypeDenoter eType = (TypeDenoter) ast.EXP.visit(this, o);
