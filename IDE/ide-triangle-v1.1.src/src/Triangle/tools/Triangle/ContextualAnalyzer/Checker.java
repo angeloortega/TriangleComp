@@ -26,7 +26,7 @@ import Utilities.LoopCasesFORData;
 import java.util.HashMap;
 
 public final class Checker implements Visitor {
-    //nuevos jose
+    
     /*
    The method has two parameters which are ast, where, either one or two caselit are. 
     First, it determines the type denoter of both of them and if they match with the 
@@ -140,8 +140,6 @@ public final class Checker implements Visitor {
         }
     }
 
-    //Nuevas cosas Richie-Giulla
-
     /**
      * This method helps to visit the TypeDenoter of the MultipleRecordTypeDenoter,
      * as well as the RecordTypeDenoter, which permits to have multiple RecordTypeDenoters.
@@ -233,6 +231,7 @@ public final class Checker implements Visitor {
             ast.identifier.decl = binding;
         return binding;
     }
+    
     // Packages
     //Uses the VarDeclaration ast to determine the type of the identifier attached.
     //Retrieves the identification table for the package the ast belongs.
@@ -254,12 +253,13 @@ public final class Checker implements Visitor {
 
     return null;
   }
-    //Visits the Type Denoter and returns the type
+    //Visits the Type Denoter and returns the type, passes the Object in case a Package String is needed
     @Override
   public Object visitVarSingleDeclarationColon(VarSingleDeclarationColon ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, o);
     return ast.T;
   }
+  
   //Visits the Expression in the ast and retrieves the type for that expression
   //and returns the type
     @Override
@@ -267,6 +267,7 @@ public final class Checker implements Visitor {
     ast.T.type = (TypeDenoter) ast.T.visit(this, o);
       return ast.T.type;
   }
+  
   //Enters the identifier and the ast into the general identification table
   //then checks if there is an package with the same name, if the package does not exist
   //then it creates a new identification table and adds it to the hash. At last it visits the declaration
@@ -290,6 +291,7 @@ public final class Checker implements Visitor {
     }
     return null;
   }
+  
   //Visits two package declarations and returns null.
     @Override
 
@@ -299,6 +301,7 @@ public final class Checker implements Visitor {
         ast.D2.visit(this, o);
     return null;
   }
+  
   //Checks the packageIdentifier of the ast for the package to which the vName belongs.
   //It visits the identifier and retrieves the declaration and returns the type of
   //declaration.
@@ -340,11 +343,6 @@ public final class Checker implements Visitor {
                               ast.I.spelling, ast.I.position);
     return ast.type;
   }
-    //endregion
-    // Commands
-
-    // Always returns null. Does not use the given object.
-
 
   //region Richie
     /**
@@ -363,6 +361,7 @@ public final class Checker implements Visitor {
      * @param o
      * @return 
      */
+  
     @Override
     public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
         String packageName = defaultPackage;
@@ -392,6 +391,7 @@ public final class Checker implements Visitor {
      * @param o
      * @return 
      */
+    
     @Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
         String packageName = defaultPackage;
@@ -659,10 +659,8 @@ public final class Checker implements Visitor {
         ast.COM.visit(this, o);
         return eType;
     }
-    //endregion
 
 
-    //region Jose
 
     /*It returns the integer type of the std enviroment, to determine if it the expression visited, is a integer*/
     @Override
@@ -803,9 +801,11 @@ its expression matches it, also, visits its command. */
         inStart.next.previous = startPoint;
         return null;
     }
-    //endregion 
     
-
+    /*
+     *Receives an assignment AST, visits both the expression and the variable in order to check compatibility. Returns null.
+    The parameter received is an optional String which delimits the package used by the assignment expression
+     */
   public Object visitAssignCommand(AssignCommand ast, Object o) {
     TypeDenoter vType = (TypeDenoter) ast.V.visit(this, o);
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
@@ -816,7 +816,13 @@ its expression matches it, also, visits its command. */
     return null;
   }
 
-
+    /*
+    Receives an optional String as an Object parameter.
+    A procedure is searched and, if found, the actual parameter sequence is visited
+    With it's respective Formal Parameter Sequence and packages as a new data type
+    called Formal Parameter Data, which helps search in the identification tables for
+    the variables.
+    */
   @Override
   public Object visitCallCommand(CallCommand ast, Object o) {
     String packageName = defaultPackage;
@@ -844,11 +850,14 @@ its expression matches it, also, visits its command. */
                            ast.I.spelling, ast.I.position);
     return null;
   }
-
+ 
+  //Empty command, does nothing. Returns null.
   public Object visitEmptyCommand(EmptyCommand ast, Object o) {
     return null;
   }
-
+  
+  //Receives an optional Object that can become a package identifier String. This is sent to the commands.
+  //Returns null
   public Object visitIfCommand(IfCommand ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, o);
     if (! eType.equals(StdEnvironment.booleanType))
@@ -857,7 +866,9 @@ its expression matches it, also, visits its command. */
     ast.C2.visit(this, o);
     return null;
   }
-
+  
+  //Receives an optional parameter o which can become a String to identify a package.
+  //Visits both the declaration and the commands. Returns null.
   public Object visitLetCommand(LetCommand ast, Object o) {
     String packageName = defaultPackage;
     if(o instanceof String){
@@ -870,6 +881,7 @@ its expression matches it, also, visits its command. */
     return null;
   }
 
+  //Receives an optional parameter which is passed forward, returns null.
   public Object visitSequentialCommand(SequentialCommand ast, Object o) {
     ast.C1.visit(this, o);
     ast.C2.visit(this, o);
@@ -885,7 +897,7 @@ its expression matches it, also, visits its command. */
   }
 
     // Iterative commands
-
+    //Visits a loop case, returns null, passes the received parameter forward.
     @Override
     public Object visitCallLoopCases(CallLoopCases ast, Object o) {
         ast.LOOP.visit(this, o);
@@ -1706,11 +1718,11 @@ its expression matches it, also, visits its command. */
  // Checker Constructor
     public Checker (ErrorReporter reporter) {
       this.reporter = reporter;
-      IdentificationTable idTable = new IdentificationTable ();
-      this.hashIdTables = new HashMap<String, IdentificationTable>();
+      IdentificationTable idTable = new IdentificationTable (); //Default identification table.
+      this.hashIdTables = new HashMap<String, IdentificationTable>(); //Added in order to have identification tables for packages.
       this.hashIdTables.put(defaultPackage, idTable);
       establishStdEnvironment();
-      dummyTable = IdentificationTable.copyTable(idTable);
+      dummyTable = IdentificationTable.copyTable(idTable); //A copy of the original identification table is saved in order to establish the std environment for package tables.
     }
 
     private HashMap<String,IdentificationTable> hashIdTables;
