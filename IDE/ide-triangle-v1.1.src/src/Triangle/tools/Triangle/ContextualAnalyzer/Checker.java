@@ -139,42 +139,8 @@ public final class Checker implements Visitor {
             }
         }
     }
-<<<<<<< HEAD
+
     //Nuevas cosas Richie-Giulla
-=======
-
-    @Override
-public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-    ast.TD = (TypeDenoter) ast.TD.visit(this, o);
-    ast.RTD.visit(this, o);
-    return ast;
-}
-
-@Override
-public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-    ast.TD = (TypeDenoter) ast.TD.visit(this, o);
-    return ast;
-}
-
-@Override
-public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
-    ast.REC = (RecordTypeDenoter) ast.REC.visit(this, o);
-    return ast;
-}
-
-public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
-  	Declaration binding = (Declaration) ast.longIdentifier.visit(this, o);
-    if (binding == null) {
-      reportUndeclared (ast.longIdentifier);
-      return StdEnvironment.errorType;
-    } else if (! (binding instanceof TypeDeclaration)) {
-      reporter.reportError ("\"%\" is not a type longIdentifier",
-                            ast.longIdentifier.spelling, ast.longIdentifier.position);
-      return StdEnvironment.errorType;
-    }
-    return ((TypeDeclaration) binding).T;
-  }
->>>>>>> 35ce62ef2f8e25787d8d0fa5466c38d07e2c68a4
 
     /**
      * This method helps to visit the TypeDenoter of the MultipleRecordTypeDenoter,
