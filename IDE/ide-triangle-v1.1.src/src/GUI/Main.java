@@ -46,7 +46,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * The Main class. Contains the main form.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Pï¿½rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class Main extends javax.swing.JFrame {
 
@@ -620,7 +620,7 @@ public class Main extends javax.swing.JFrame {
             output.setDelegate(delegateConsole);            
             if (compiler.compileProgram(desktopPane.getSelectedFrame().getTitle())) {           
                 output.setDelegate(delegateTAMCode);
-                //disassembler.Disassemble(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".tam"));
+                disassembler.Disassemble(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".tam"));
                ((FileFrame)desktopPane.getSelectedFrame()).setTree((DefaultMutableTreeNode)treeVisitor.visitProgram(compiler.getAST(), null));
                 try {
                     writerVisitor.setFileWriter(new FileWriter(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".xml")));
@@ -631,8 +631,8 @@ public class Main extends javax.swing.JFrame {
               
                 ((FileFrame)desktopPane.getSelectedFrame()).setTable(tableVisitor.getTable(compiler.getAST()));
                 
-                runMenuItem.setEnabled(false);
-                buttonRun.setEnabled(false);
+                runMenuItem.setEnabled(true);
+                buttonRun.setEnabled(true);
             } else {
                 ((FileFrame)desktopPane.getSelectedFrame()).highlightError(compiler.getErrorPosition());
                 runMenuItem.setEnabled(false);

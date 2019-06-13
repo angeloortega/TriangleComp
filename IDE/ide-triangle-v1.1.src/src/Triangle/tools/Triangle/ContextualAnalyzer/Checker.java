@@ -265,7 +265,7 @@ public final class Checker implements Visitor {
     @Override
   public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
     ast.T.type = (TypeDenoter) ast.T.visit(this, o);
-      return ast.T.type;
+     return ast.T.type;
   }
   
   //Enters the identifier and the ast into the general identification table
@@ -1135,7 +1135,8 @@ its expression matches it, also, visits its command. */
 
     @Override
     public Object visitAssignExpression(AssignExpression ast, Object o) {
-        return ast.V.visit(this, o);
+        ast.type = (TypeDenoter) ast.V.visit(this, o);
+        return ast.type;
     }
 
 

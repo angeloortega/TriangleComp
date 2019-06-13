@@ -12,7 +12,7 @@
  * of the authors.
  */
 
-package TAM;
+package Triangle.tools.TAM;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -44,7 +44,7 @@ public class Interpreter {
   final static int
     running = 0, halted = 1, failedDataStoreFull = 2, failedInvalidCodeAddress = 3,
     failedInvalidInstruction = 4, failedOverflow = 5, failedZeroDivide = 6,
-    failedIOError = 7;
+    failedIOError = 7, caseError = 8;
 
   static long
     accumulator;
@@ -569,6 +569,14 @@ public class Interpreter {
           break;
         case Machine.HALTop:
           status = halted;
+          break;
+        case Machine.CASEop:
+          ST = ST - 1;
+          if (data[ST] == n)
+            CP = d + content(r);
+          break;
+         case Machine.CASEERRORop:
+          status = caseError;
           break;
       }
       if ((CP < CB) || (CP >= CT))

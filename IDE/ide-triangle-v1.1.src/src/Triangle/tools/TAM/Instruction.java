@@ -12,7 +12,7 @@
  * of the authors.
  */
 
-package TAM;
+package Triangle.tools.TAM;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

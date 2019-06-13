@@ -19,12 +19,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import TAM.Instruction;
-import TAM.Machine;
+import Triangle.tools.TAM.Instruction;
+import Triangle.tools.TAM.Machine;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.ContextualAnalyzer.IdentificationTable;
+import Utilities.LoopCasesFORData;
 
 
 public final class Encoder implements Visitor {
@@ -32,7 +33,7 @@ public final class Encoder implements Visitor {
 
   // Commands
   public Object visitAssignCommand(AssignCommand ast, Object o) {
-    Frame frame = (Frame) o;
+        Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.E.visit(this, frame);
     encodeStore(ast.V, new Frame (frame, valSize.intValue()),
 		valSize.intValue());
@@ -53,7 +54,6 @@ public final class Encoder implements Visitor {
   public Object visitIfCommand(IfCommand ast, Object o) {
     Frame frame = (Frame) o;
     int jumpifAddr, jumpAddr;
-
     Integer valSize = (Integer) ast.E.visit(this, frame);
     jumpifAddr = nextInstrAddr;
     emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
@@ -68,7 +68,7 @@ public final class Encoder implements Visitor {
 
   public Object visitLetCommand(LetCommand ast, Object o) {
     Frame frame = (Frame) o;
-    int extraSize = ((Integer) ast.D.visit(this, frame)).intValue();
+    int extraSize = (Integer) ast.D.visit(this, frame);
     ast.C.visit(this, new Frame(frame, extraSize));
     if (extraSize > 0)
       emit(Machine.POPop, 0, 0, extraSize);
@@ -80,6 +80,189 @@ public final class Encoder implements Visitor {
     ast.C2.visit(this, o);
     return null;
   }
+
+  //loop cases
+
+  //Visits a loop case, returns null, passes the received parameter forward.
+    @Override
+    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
+        ast.LOOP.visit(this, o);
+        return null;
+    }
+     @Override
+    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
+         Frame frame = (Frame) o;
+         int jumpAddr, loopAddr;
+         jumpAddr = nextInstrAddr;
+         emit(Machine.JUMPop, 0, Machine.CBr, 0);
+         loopAddr = nextInstrAddr;
+         ast.COM.visit(this, frame);
+         patch(jumpAddr, nextInstrAddr);
+         ast.EXP.visit(this, frame);
+         emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+         return null;
+    }
+
+    /**
+     * The method visits the Expression contained in the ast, and checks
+     * if the type returned by the visit of the Expression is a boolean.
+     * Then, the Command of the ast is visited.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
+        Frame frame = (Frame) o;
+         int jumpAddr, loopAddr;
+         jumpAddr = nextInstrAddr;
+         emit(Machine.JUMPop, 0, Machine.CBr, 0);
+         loopAddr = nextInstrAddr;
+         ast.COM.visit(this, frame);
+         patch(jumpAddr, nextInstrAddr);
+         ast.EXP.visit(this, frame);
+         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+         return null;
+    }
+
+    /**
+     * The Command and DoLoop of the ast are visited.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
+        Frame frame = (Frame) o;
+         int  loopAddr;
+         loopAddr = nextInstrAddr;
+         ast.COM.visit(this, frame);
+         ast.DO.visit(this, frame);
+        if(ast.DO instanceof DoLoopWhile)
+            emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr); 
+        else
+            emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+        return null;
+    }
+       /**
+     * The method visits the Expression contained in the ast, and
+     * checks if the returned type from the visit of the Expression
+     * is a boolean.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
+         Frame frame = (Frame) o;
+         ast.EXP.visit(this, frame);
+         return null;
+    }
+
+    /**
+     * The method visits the Expression contained in the ast, and
+     * checks if the returned type from the visit of the Expression
+     * is a boolean.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
+         Frame frame = (Frame) o;
+         ast.EXP.visit(this, frame);
+         return null;
+    }
+    
+    /**
+     * The method first gets the packageName from the defaultPackage or from the parameter.
+     * Then it visits the Expression contained in the ast, and check if the returned type
+     * is an integer. After that, the ConstDeclaration of the ast is visited, and it
+     * returns the type of the Expression contained in the declaration. This type is
+     * checked to see if its an integer. So, the ForLoop of the ast is visited, and
+     * if it returns a type, it is checked to see if its a boolean. Finally, the scope
+     * ; that was opened in the visitConstDeclaration, is closed.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) { //TODO
+         Frame frame = (Frame) o;
+         int repeat, evalCond,exit;
+         ast.EXP2.visit(this, frame);
+         ast.DECL.visit(this, o);
+         evalCond = nextInstrAddr;
+         emit(Machine.JUMPop, 0, Machine.CBr, 0);
+         repeat = nextInstrAddr;
+         ast.FOR.visit(this, frame);
+         patch(evalCond, nextInstrAddr);
+         emit(Machine.LOADop,2, Machine.STr,-2);
+         emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
+         emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repeat);
+         emit(Machine.POPop, 0, 0, 2);
+         return null;
+    }
+
+    
+    /**
+     * The method visits the Command contained in the ast.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitForLoopDo(ForLoopDo ast, Object o) {//Todo
+        ast.COM.visit(this, o);
+        return null;
+    }
+
+    /**
+     * The method visits the Expression contained in the ast, and
+     * the returned type of this visit is assigned to the variable eType.
+     * Then the Command of the ast is visited, and the variable eType is
+     * returned, so it can be used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {//Todo
+         Frame frame = (Frame) o;
+         int jumpAddr, loopAddr;
+         jumpAddr = nextInstrAddr;
+         emit(Machine.JUMPop, 0, Machine.CBr, 0);
+         loopAddr = nextInstrAddr;
+         ast.COM.visit(this, frame);
+         patch(jumpAddr, nextInstrAddr);
+         ast.EXP.visit(this, frame);
+         emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+         return null;
+    }
+
+    /**
+     * The method visits the Expression contained in the ast, and
+     * the returned type of this visit is assigned to the variable eType.
+     * Then the Command of the ast is visited, and the variable eType is
+     * returned, so it can be used from where the method is called.
+     * @param ast
+     * @param o
+     * @return 
+     */
+    @Override
+    public Object visitForLoopWhile(ForLoopWhile ast, Object o) { //Todo
+         Frame frame = (Frame) o;
+         int jumpAddr, loopAddr;
+         jumpAddr = nextInstrAddr;
+         emit(Machine.JUMPop, 0, Machine.CBr, 0);
+         loopAddr = nextInstrAddr;
+         ast.COM.visit(this, frame);
+         patch(jumpAddr, nextInstrAddr);
+         ast.EXP.visit(this, frame);
+         emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+         return null;
+    }
+
 
   public Object visitWhileCommand(WhileCommand ast, Object o) {
     Frame frame = (Frame) o;
@@ -264,7 +447,7 @@ public final class Encoder implements Visitor {
     Frame frame = (Frame) o;
     int extraSize1, extraSize2;
 
-    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    extraSize1 = (Integer)ast.D1.visit(this, frame);
     Frame frame1 = new Frame (frame, extraSize1);
     extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
     return new Integer(extraSize1 + extraSize2);
@@ -284,9 +467,8 @@ public final class Encoder implements Visitor {
   public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize;
-
-    extraSize = ((Integer) ast.V.visit(this, o)).intValue();
-    emit(Machine.PUSHop, 0, 0, extraSize);
+    extraSize = (Integer) ast.V.visit(this, o);
+    //emit(Machine.PUSHop, 0, 0, extraSize);
     ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
     return extraSize;
@@ -545,6 +727,62 @@ public final class Encoder implements Visitor {
 
     return new Integer(fieldSize);
   }
+  
+  //Cases
+  
+    @Override
+    public Object visitChooseCommand(ChooseCommand ast, Object o) {
+        
+        ast.COM.visit(this,o);
+        return null;
+    }
+
+  @Override
+    public Object visitCases(Cases ast, Object o) {
+        ast.CASE1.visit(this, o);
+        ast.CASE2.visit(this, o);
+        return null;
+    }
+
+    @Override
+    public Object visitElseCase(ElseCase ast, Object o) {
+        return ast.COM.visit(this, o);
+    }
+
+    @Override
+    public Object visitSequentialCase(SequentialCase ast, Object o) {
+        return ast.C1.visit(this, o);
+    }
+
+    @Override
+    public Object visitCaseWhen(CaseWhen ast, Object o) {
+        return ast.CASELIT.visit(this, o);
+    }
+
+    @Override
+    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
+        return ast.CASERANGE.visit(this, o);
+    }
+
+    @Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
+        return ast.CASELIT.visit(this, o);    
+    }
+
+    @Override
+    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
+        return ast.C1.visit(this, o);
+    }
+
+    @Override
+    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
+        return ast.CHARLIT.visit(this, o);
+    }
+
+    @Override
+    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
+        return ast.INTLIT.visit(this, o);
+    }
 
 
   // Literals, Identifiers and Operators
@@ -938,123 +1176,64 @@ public final class Encoder implements Visitor {
   }
 
     @Override
-    public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        return ast.COM.visit(this, o);
-    }
-
-    @Override
-    public Object visitCallLoopCases(CallLoopCases ast, Object o) {
-        return ast.LOOP.visit(this, o);
-    }
-
-    @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Frame frame = (Frame) o;
+        int jumpAddr = nextInstrAddr;
+        int argsSize = 0;
+
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.entity = new KnownRoutine (Machine.closureSize, frame.level,
+                                    nextInstrAddr);
+        writeTableDetails(ast);
+        if (frame.level == Machine.maxRoutineLevel)
+          reporter.reportRestriction("can't nest routines so deeply");
+        else {
+          Frame frame1 = new Frame(frame.level + 1, 0);
+          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
+          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+          ast.COM.visit(this, frame2);
+        }
+        emit(Machine.RETURNop, 0, 0, argsSize);
+        patch(jumpAddr, nextInstrAddr);
+        return new Integer(0);
     }
 
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         Frame frame = (Frame) o;
+        int jumpAddr = nextInstrAddr;
+        int argsSize = 0, valSize = 0;
+
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+        writeTableDetails(ast);
+        if (frame.level == Machine.maxRoutineLevel)
+          reporter.reportRestriction("can't nest routines more than 7 deep");
+        else {
+          Frame frame1 = new Frame(frame.level + 1, 0);
+          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
+          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+          valSize = ((Integer) ast.EXP.visit(this, frame2)).intValue();
+        }
+        emit(Machine.RETURNop, valSize, 0, argsSize);
+        patch(jumpAddr, nextInstrAddr);
+        return new Integer(0);
     }
 
     @Override
-    public Object visitProcFuncs(ProcFuncs aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesWhile(LoopCasesWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesUntil(LoopCasesUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesDo(LoopCasesDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) {
-        return ast.DECL.visit(this, o);
-    }
-
-    @Override
-    public Object visitDoLoopUntil(DoLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitDoLoopWhile(DoLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopDo(ForLoopDo ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitForLoopWhile(ForLoopWhile ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitCases(Cases ast, Object o) {
-        return ast.CASE1.visit(this, o);
-    }
-
-    @Override
-    public Object visitElseCase(ElseCase ast, Object o) {
-        return ast.COM.visit(this, o);
-    }
-
-    @Override
-    public Object visitSequentialCase(SequentialCase ast, Object o) {
-        return ast.C1.visit(this, o);
-    }
-
-    @Override
-    public Object visitCaseWhen(CaseWhen ast, Object o) {
-        return ast.CASELIT.visit(this, o);
-    }
-
-    @Override
-    public Object visitCaseLiterals(CaseLiterals ast, Object o) {
-        return ast.CASERANGE.visit(this, o);
-    }
-
-    @Override
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        return ast.CASELIT.visit(this, o);    
-    }
-
-    @Override
-    public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
-        return ast.C1.visit(this, o);
-    }
-
-    @Override
-    public Object visitCaseLiteralCHAR(CaseLiteralCHAR ast, Object o) {
-        return ast.CHARLIT.visit(this, o);
-    }
-
-    @Override
-    public Object visitCaseLiteralINT(CaseLiteralINT ast, Object o) {
-        return ast.INTLIT.visit(this, o);
+    public Object visitProcFuncs(ProcFuncs ast, Object o) {
+        ast.PF1.visit(this,o);
+        if(ast.PF2 != null)
+            ast.PF2.visit(this, o);
+        return new Integer(0);
     }
 
     @Override
     public Object visitAssignExpression(AssignExpression ast, Object o) {
-        return ast.V.type.visit(this, o);
+        Frame frame = (Frame) o;
+        Integer valSize = (Integer) ast.type.visit(this, null);
+        encodeFetch(ast.V, frame, valSize.intValue());
+        return valSize;
     }
 
     @Override
@@ -1064,46 +1243,62 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitOperatorExpression(OperatorExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Frame frame = (Frame) o;
+        Integer valSize = (Integer) ast.type.visit(this, null);
+        int valSize1 = ((Integer) ast.E.visit(this, frame)).intValue();
+        Frame frame1 = new Frame(frame.level, valSize1);
+        ast.O.visit(this, frame1);
+        return valSize;
     }
 
     @Override
     public Object visitLParenExpression(LParenExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ast.E;
     }
 
     @Override
     public Object visitLCurlyExpression(LCurlyExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.type.visit(this, o);
+        return ast.RA;
     }
 
     @Override
     public Object visitLBracketExpression(LBracketExpression ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.type.visit(this, o);
+        return ast.AA;
     }
 
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer val = 0;
+        val = (Integer) ast.D1.visit(this,o);
+        if(ast.D2 != null)
+            val += (Integer) ast.D2.visit(this,o);
+        return val;
     }
 
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer val = 0;
+        val = (Integer) ast.D1.visit(this,o);
+        if(ast.D2 != null)
+            val += (Integer) ast.D2.visit(this,o);
+        return val;
     }
 
     @Override
     public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         ast.PF.visit(this,o);
+        return null;
+         
     }
 
     @Override
     public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {
         Frame frame = (Frame) o;
         int extraSize;
-
-        extraSize = ((Integer) ast.SD.visit(this, o)).intValue();
-        emit(Machine.PUSHop, 0, 0, extraSize);
+        extraSize = (Integer) ast.SD.visit(this, o);
+       // emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;    
@@ -1141,63 +1336,88 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitSequentialPackageDeclaration(SequentialPackageDeclaration ast, Object o) {
+        ast.D1.visit(this, o);
         if(ast.D2 != null)
             ast.D2.visit(this, o);
-        return ast.D1;
+        return null;
     }
 
     @Override
     public Object visitTypeDenoterLongIdentifier(TypeDenoterLongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Integer(0);
     }
 
     @Override
-    public Object visitRTypeDenoter(RTypeDenoter aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitRTypeDenoter(RTypeDenoter ast, Object o) {
+        return ast.REC.visit(this, o);
     }
 
     @Override
     public Object visitMultipleRecordTypeDenoter(MultipleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int typeSize;
+        if (ast.entity == null) {
+          typeSize = ((Integer) ast.FT.visit(this, new Integer(0))).intValue();
+          ast.entity = new TypeRepresentation(typeSize);
+          writeTableDetails(ast);
+        } else
+          typeSize = ast.entity.size;
+        return new Integer(typeSize + ((Integer)ast.RTD.visit(this,o)));
     }
 
     @Override
     public Object visitSingleRecordTypeDenoter(SingleRecordTypeDenoter ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         int typeSize;
+        if (ast.entity == null) {
+          typeSize = ((Integer) ast.FT.visit(this, new Integer(0))).intValue();
+          ast.entity = new TypeRepresentation(typeSize);
+          writeTableDetails(ast);
+        } else
+          typeSize = ast.entity.size;
+        return new Integer(typeSize);
     }
 
     @Override
     public Object visitLongIdentifier(LongIdentifier ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ast.identifier.visit(this,o);
+        return null;
     }
 
     @Override
     public Object visitCompoundIdentifier(CompoundIdentifier ast, Object o) {
-        return ast.identifier.visit(this, o);
+        ast.identifier.visit(this, o);
+        return null;
     }
 
+    @Override
+    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object visitLIdentifierExpression(LIdentifierExpression ast, Object o) {
+           Frame frame = (Frame) o;
+            Integer valSize = (Integer) ast.type.visit(this, null);
+            Integer argsSize = (Integer) ast.APS.visit(this, frame);
+            ast.LI.visit(this, new Frame(frame.level, argsSize));
+            return valSize;
+    }
+
+    @Override
+    public Object visitSingleDeclarationCommand(SingleDeclarationCommand ast, Object o) {
+         Frame frame = (Frame) o;
+        Integer valSize = (Integer) ast.EXP.visit(this, frame);
+        encodeStore(ast.VN, new Frame (frame, valSize.intValue()),
+                    valSize.intValue());
+        return null;
+        }
+    
     @Override
     public Object visitBracketSelector(BracketSelector aThis, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object visitDotSelector(DotSelector aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitIntLiteralExpression(IntLiteralExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitLIdentifierExpression(LIdentifierExpression aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object visitSingleDeclarationCommand(SingleDeclarationCommand aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object visitDotSelector(DotSelector ast, Object o) {
+          throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

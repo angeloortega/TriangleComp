@@ -942,7 +942,7 @@ public class Parser {
       acceptIt();
       Declaration cd1AST =(Declaration) parseCompoundDeclaration();
       finish(declarationPos);
-      declarationAST = new SequentialDeclaration(cdAST, cd1AST,
+      declarationAST = new SequentialDeclaration(declarationAST, cd1AST,
         declarationPos);
     }
     return declarationAST;

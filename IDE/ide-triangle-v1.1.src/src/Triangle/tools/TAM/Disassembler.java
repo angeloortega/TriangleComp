@@ -12,7 +12,7 @@
  * of the authors.
  */
 
-package TAM;
+package Triangle.tools.TAM;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -324,6 +324,16 @@ public class Disassembler {
 
       case Machine.HALTop:
         System.out.print ("HALT  ");
+         break;
+       case Machine.CASEop:
+        System.out.print ("CASE");
+        writeN(instr.n);
+        writeD(instr.d);
+        writeR('[', instr.r, ']');
+        break;
+        case Machine.CASEERRORop:
+        System.out.print ("CASEER  ");
+         break;
     }
   }
 
