@@ -1,0 +1,3 @@
+  loop for i from 1 to 8 do
+    putint (i) ! debe imprimir 10 unos
+  end

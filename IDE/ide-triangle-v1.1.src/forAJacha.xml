@@ -1,0 +1,97 @@
+<Program>
+<LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ConstDeclaration>
+<Identifier value="final"/>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="10"/>
+</IntegerExpression>
+</SecExpression>
+</ConstDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="Id"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CallLoopCases>
+<LoopCasesWhile>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="Id"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="&lt;="/>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="final"/>
+</SimpleVname>
+</AssignExpression>
+</BinaryExpression>
+</SecExpression>
+<SequentialCommand>
+<LetCommand>
+<CompoundDeclarationSingleDeclaration>
+<ConstDeclaration>
+<Identifier value="Id"/>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="Id"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="Id"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</LetCommand>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="Id"/>
+</SimpleVname>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="Id"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="+"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</AssignCommand>
+</SequentialCommand>
+</LoopCasesWhile>
+</CallLoopCases>
+</LetCommand>
+</Program>

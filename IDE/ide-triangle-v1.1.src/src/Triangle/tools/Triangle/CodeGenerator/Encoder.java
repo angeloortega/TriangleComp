@@ -187,18 +187,19 @@ public final class Encoder implements Visitor {
      * @return 
      */
     @Override
-    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) { //TODO
+    public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) { 
          Frame frame = (Frame) o;
-         int repeat, evalCond,exit;
-         ast.EXP2.visit(this, frame);
-         ast.DECL.visit(this, o);
+         int repeat, evalCond,exit, expSize;
+         expSize = (Integer)ast.EXP2.visit(this, frame);
+         ast.DECL.visit(this, new Frame(frame.level, frame.size + expSize));
          evalCond = nextInstrAddr;
          emit(Machine.JUMPop, 0, Machine.CBr, 0);
          repeat = nextInstrAddr;
          ast.FOR.visit(this, frame);
+         emit(Machine.CALLop, frame.level, Machine.PBr, Machine.succDisplacement);
          patch(evalCond, nextInstrAddr);
          emit(Machine.LOADop,2, Machine.STr,-2);
-         emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
+         emit(Machine.CALLop, frame.level, Machine.PBr, Machine.geDisplacement);
          emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repeat);
          emit(Machine.POPop, 0, 0, 2);
          return null;
@@ -382,8 +383,24 @@ public final class Encoder implements Visitor {
   public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize = 0;
-
-    if (ast.E instanceof CharacterExpression) {
+    /*
+    if(ast.E instanceof SecExpression){
+        SecExpression E = (SecExpression) ast.E;
+         if (E.secExpression instanceof CharacterExpression) {
+        CharacterLiteral CL = ((CharacterExpression) E.secExpression).CL;
+        ast.entity = new KnownValue(Machine.characterSize,
+                                 characterValuation(CL.spelling));
+    } else if (E.secExpression instanceof IntegerExpression) {
+        IntegerLiteral IL = ((IntegerExpression) E.secExpression).IL;
+        ast.entity = new KnownValue(Machine.integerSize,
+				 Integer.parseInt(IL.spelling));
+    } else {
+      int valSize = ((Integer) E.secExpression.visit(this, frame)).intValue();
+      ast.entity = new UnknownValue(valSize, frame.level, frame.size);
+      extraSize = valSize;
+    }
+    }
+    else*/ if (ast.E instanceof CharacterExpression) {
         CharacterLiteral CL = ((CharacterExpression) ast.E).CL;
         ast.entity = new KnownValue(Machine.characterSize,
                                  characterValuation(CL.spelling));
@@ -1310,7 +1327,7 @@ public final class Encoder implements Visitor {
         int extraSize;
         Integer temporal = ((Integer) ast.T.visit(this, o));
         extraSize = temporal.intValue();
-        emit(Machine.PUSHop, 0, 0, extraSize);
+        //emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;
@@ -1322,7 +1339,7 @@ public final class Encoder implements Visitor {
         int extraSize;
         Integer temporal = ((Integer) ast.T.visit(this, o));
         extraSize = temporal.intValue();
-        emit(Machine.PUSHop, 0, 0, extraSize);
+        //emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;

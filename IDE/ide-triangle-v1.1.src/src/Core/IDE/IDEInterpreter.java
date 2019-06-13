@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 /**
  * Just another small class to call the Triangle interpreter.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Pï¿½rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class IDEInterpreter {
     
@@ -30,7 +30,7 @@ public class IDEInterpreter {
     public synchronized void Run(final String fileName) {
         new Thread(new Runnable() {
             public void run() {
-                TAM.Interpreter.main(new String[] {fileName});
+                Triangle.tools.TAM.Interpreter.main(new String[] {fileName});
                 delegate.actionPerformed(null);
             }
         }).start();

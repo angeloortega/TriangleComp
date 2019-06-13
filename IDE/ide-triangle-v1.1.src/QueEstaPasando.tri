@@ -1,13 +1,5 @@
-! Error: proc P llamado con argumento que es llamada a un proc F. P espera parametro Integer
-
-let
-  proc F () ~
-    putint(1)
-  end ! Los comandos no entregan valores.  Solamente completan su ejecucion sin retornar valores.
-  ;
-  proc P (x : Integer) ~ ! P espera paso por constante
-    putint (x * 2)
-  end
-in
-  P (F()) ! Error: los procedimientos no retornan valores.
+
+loop for i from 1 to 5 
+do 
+ putint(i)
 end

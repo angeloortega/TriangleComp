@@ -1,0 +1,11 @@
+let const final ~ 10 ; !el valor final se evalúa solo una vez
+ var Id ::= 1 !Id obtiene como primer valor el que tiene Exp1
+in loop while Id <= final do !mientras no se haya excedido el límite superior
+ let
+ const Id ~ Id !se re-declara Id como constante para usarlo en Com
+ !esto protege a Id dentro de Com, dada la estructura de bloques de 
+ in putint(Id)
+ end ; !el let interno comprende únicamente Com, que llega hasta aquí
+ Id := Id + 1
+ end
+end

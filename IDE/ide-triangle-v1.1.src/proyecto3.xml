@@ -11,7 +11,7 @@
 </ConstDeclaration>
 <SecExpression>
 <IntegerExpression>
-<IntegerLiteral value="5"/>
+<IntegerLiteral value="8"/>
 </IntegerExpression>
 </SecExpression>
 <ForLoopDo>
