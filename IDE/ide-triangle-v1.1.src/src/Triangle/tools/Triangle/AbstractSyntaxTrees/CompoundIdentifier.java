@@ -30,7 +30,7 @@ public class CompoundIdentifier extends Identifier {
 
     @Override
     public Object visit(Visitor v, Object o) {
-        return v.visitCompoundIdentifier(this,null);
+        return v.visitCompoundIdentifier(this,o);
     }
 
   

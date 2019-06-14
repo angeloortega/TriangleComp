@@ -1,3 +1,6 @@
-  loop for i from 1 to 8 do
-    putint (i) ! debe imprimir 10 unos
-  end
+let
+var a::= 1;
+var c::= 'v'
+in
+putint(3)
+end

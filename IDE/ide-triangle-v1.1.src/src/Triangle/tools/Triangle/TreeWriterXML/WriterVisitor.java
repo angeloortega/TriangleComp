@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 * La clase WriterVisitor permite recorrer los diferentes ASTs generados por el Parser,
 * de modo que recorran en orden y se escriba el respectivo texto XML de los ASTs que
 * se visitan. Como resultado se va a lograr observar en el archivo XML el AST completo
-* que generó el Parser. El constructor recibe por parámetro el FileWriter que permite
+* que gener el Parser. El constructor recibe por parmetro el FileWriter que permite
 * escribir en el archivo. Note que la clase implementa la interface Visitor, de modo
-* que se garantice la implementación de todos los visitors necesarios que permiten
+* que se garantice la implementacin de todos los visitors necesarios que permiten
 * visitar cada uno de los ASTs generados por el Parser.
 */
 public class WriterVisitor implements Visitor {

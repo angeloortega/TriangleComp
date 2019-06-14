@@ -15,7 +15,7 @@
 
 package Triangle.tools.Triangle.SyntacticAnalyzer;
 
-import Triangle.ErrorReporter;
+import Triangle.tools.Triangle.ErrorReporter;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 
 public class Parser {

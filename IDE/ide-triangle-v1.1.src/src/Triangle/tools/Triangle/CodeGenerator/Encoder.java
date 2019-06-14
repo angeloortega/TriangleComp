@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import Triangle.tools.TAM.Instruction;
 import Triangle.tools.TAM.Machine;
-import Triangle.ErrorReporter;
+import Triangle.tools.Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.ContextualAnalyzer.IdentificationTable;
@@ -383,24 +383,7 @@ public final class Encoder implements Visitor {
   public Object visitConstDeclaration(ConstDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize = 0;
-    /*
-    if(ast.E instanceof SecExpression){
-        SecExpression E = (SecExpression) ast.E;
-         if (E.secExpression instanceof CharacterExpression) {
-        CharacterLiteral CL = ((CharacterExpression) E.secExpression).CL;
-        ast.entity = new KnownValue(Machine.characterSize,
-                                 characterValuation(CL.spelling));
-    } else if (E.secExpression instanceof IntegerExpression) {
-        IntegerLiteral IL = ((IntegerExpression) E.secExpression).IL;
-        ast.entity = new KnownValue(Machine.integerSize,
-				 Integer.parseInt(IL.spelling));
-    } else {
-      int valSize = ((Integer) E.secExpression.visit(this, frame)).intValue();
-      ast.entity = new UnknownValue(valSize, frame.level, frame.size);
-      extraSize = valSize;
-    }
-    }
-    else*/ if (ast.E instanceof CharacterExpression) {
+ if (ast.E instanceof CharacterExpression) {
         CharacterLiteral CL = ((CharacterExpression) ast.E).CL;
         ast.entity = new KnownValue(Machine.characterSize,
                                  characterValuation(CL.spelling));
@@ -416,6 +399,100 @@ public final class Encoder implements Visitor {
     writeTableDetails(ast);
     return new Integer(extraSize);
   }
+  
+  //Recursive procedures and functions
+  
+  
+    @Override
+    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
+        return  ast.PF.visit(this,o);
+    }
+  
+    @Override
+    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
+         Frame frame = (Frame) o;
+        int jumpAddr = nextInstrAddr;
+        int argsSize = 0;
+        /*
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.entity = new KnownRoutine (Machine.closureSize, frame.level,
+                                 nextInstrAddr);
+        writeTableDetails(ast);
+        */
+        if (frame.level == Machine.maxRoutineLevel)
+          reporter.reportRestriction("can't nest routines so deeply");
+        else {
+          Frame frame1 = new Frame(frame.level + 1, 0);
+          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
+          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+          ast.COM.visit(this, frame2);
+        }
+        emit(Machine.RETURNop, 0, 0, argsSize);
+        //patch(jumpAddr, nextInstrAddr);
+        return new Integer(0);
+    }
+
+    @Override
+    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
+         Frame frame = (Frame) o;
+        int jumpAddr = nextInstrAddr;
+        int argsSize = 0, valSize = 0;
+        /*
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+        writeTableDetails(ast);
+                */
+        if (frame.level == Machine.maxRoutineLevel)
+          reporter.reportRestriction("can't nest routines more than 7 deep");
+        else {
+          Frame frame1 = new Frame(frame.level + 1, 0);
+          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
+          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
+          valSize = ((Integer) ast.EXP.visit(this, frame2)).intValue();
+        }
+        emit(Machine.RETURNop, valSize, 0, argsSize);
+       // patch(jumpAddr, nextInstrAddr);
+        return new Integer(0);
+    }
+
+    @Override
+    public Object visitProcFuncs(ProcFuncs ast, Object o) {
+        Frame frame = (Frame) o;
+        int jumpAddress1,jumpAddress2;
+        int temp = 0;
+        jumpAddress2 = nextInstrAddr;
+        if(ast.PF2 != null){
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.PF2.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+        writeTableDetails(ast.PF2);
+        }
+        else{
+        emit(Machine.JUMPop, 0, Machine.CBr, 0);
+        ast.PF1.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+        writeTableDetails(ast.PF1);
+        }
+        int val = (Integer)ast.PF1.visit(this,o);
+        Frame frame1 = new Frame (frame.level, frame.size + val);
+        if(ast.PF2 != null){
+            jumpAddress1 = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            ast.PF1.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
+            writeTableDetails(ast.PF1);
+              val += (Integer)ast.PF2.visit(this, frame1);
+              patch(jumpAddress1, nextInstrAddr);
+              patch(jumpAddress2,jumpAddress1);
+              KnownRoutine routine = (KnownRoutine)ast.PF1.entity;
+              ast.PF1.entity = ast.PF2.entity;
+              ast.PF2.entity = routine;
+              patchRecursive(nextInstrAddr,jumpAddress1+1, jumpAddress2 + 1);
+            }
+        else{
+            ast.PF1.entity = ast.PF2.entity;
+        }
+        return val;
+    }
+  
+  //Procedures and functions
 
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     Frame frame = (Frame) o;
@@ -911,7 +988,7 @@ public final class Encoder implements Visitor {
   public Object visitProgram(Program ast, Object o) {
       if(ast.P != null)
           ast.P.visit(this, o);
-    return ast.C.visit(this, o);
+    return ast.C.visit(this, new Frame(0,0));
   }
 
   public Encoder (ErrorReporter reporter) {
@@ -1053,7 +1130,20 @@ public final class Encoder implements Visitor {
   private void patch (int addr, int d) {
     Machine.code[addr].d = d;
   }
-
+  
+  private void patchRecursive(int addr,int d1, int d2){
+  int i = 0;
+    while(i < addr){
+        if(Machine.code[i].d == d1 && Machine.code[i].op == Machine.CALLop){
+            Machine.code[i].d = d2;
+        }
+        else if(Machine.code[i].d == d2 && Machine.code[i].op == Machine.CALLop){
+            Machine.code[i].d = d1;
+        }
+        i++;
+    }
+    }
+  
   // DATA REPRESENTATION
 
   public int characterValuation (String spelling) {
@@ -1192,58 +1282,6 @@ public final class Encoder implements Visitor {
     }
   }
 
-    @Override
-    public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-         Frame frame = (Frame) o;
-        int jumpAddr = nextInstrAddr;
-        int argsSize = 0;
-
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        ast.entity = new KnownRoutine (Machine.closureSize, frame.level,
-                                    nextInstrAddr);
-        writeTableDetails(ast);
-        if (frame.level == Machine.maxRoutineLevel)
-          reporter.reportRestriction("can't nest routines so deeply");
-        else {
-          Frame frame1 = new Frame(frame.level + 1, 0);
-          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
-          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
-          ast.COM.visit(this, frame2);
-        }
-        emit(Machine.RETURNop, 0, 0, argsSize);
-        patch(jumpAddr, nextInstrAddr);
-        return new Integer(0);
-    }
-
-    @Override
-    public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-         Frame frame = (Frame) o;
-        int jumpAddr = nextInstrAddr;
-        int argsSize = 0, valSize = 0;
-
-        emit(Machine.JUMPop, 0, Machine.CBr, 0);
-        ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
-        writeTableDetails(ast);
-        if (frame.level == Machine.maxRoutineLevel)
-          reporter.reportRestriction("can't nest routines more than 7 deep");
-        else {
-          Frame frame1 = new Frame(frame.level + 1, 0);
-          argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
-          Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
-          valSize = ((Integer) ast.EXP.visit(this, frame2)).intValue();
-        }
-        emit(Machine.RETURNop, valSize, 0, argsSize);
-        patch(jumpAddr, nextInstrAddr);
-        return new Integer(0);
-    }
-
-    @Override
-    public Object visitProcFuncs(ProcFuncs ast, Object o) {
-        ast.PF1.visit(this,o);
-        if(ast.PF2 != null)
-            ast.PF2.visit(this, o);
-        return new Integer(0);
-    }
 
     @Override
     public Object visitAssignExpression(AssignExpression ast, Object o) {
@@ -1287,28 +1325,26 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitSequentialSingleDeclaration(SequentialSingleDeclaration ast, Object o) {
+        Frame frame = (Frame) o;
         Integer val = 0;
         val = (Integer) ast.D1.visit(this,o);
-        if(ast.D2 != null)
-            val += (Integer) ast.D2.visit(this,o);
+         Frame frame1 = new Frame (frame, val);
+         if(ast.D2 != null)
+        val = val +  ((Integer) ast.D2.visit(this, frame1)).intValue();
         return val;
     }
 
     @Override
     public Object visitCompoundDeclarationPrivate(CompoundDeclarationPrivate ast, Object o) {
+        Frame frame = (Frame) o;
         Integer val = 0;
         val = (Integer) ast.D1.visit(this,o);
-        if(ast.D2 != null)
-            val += (Integer) ast.D2.visit(this,o);
+       Frame frame1 = new Frame (frame, val);
+         if(ast.D2 != null)
+        val = val +  ((Integer) ast.D2.visit(this, frame1)).intValue();
         return val;
     }
 
-    @Override
-    public Object visitCompoundDeclarationRecursive(CompoundDeclarationRecursive ast, Object o) {
-         ast.PF.visit(this,o);
-        return null;
-         
-    }
 
     @Override
     public Object visitCompoundDeclarationSingleDeclaration(CompoundDeclarationSingleDeclaration ast, Object o) {

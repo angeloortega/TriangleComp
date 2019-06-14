@@ -12,7 +12,7 @@
  * of the authors.
  */
 
-package Triangle;
+package Triangle.tools.Triangle;
 
 import Triangle.tools.Triangle.AbstractSyntaxTrees.Program;
 import Triangle.tools.Triangle.CodeGenerator.Encoder;

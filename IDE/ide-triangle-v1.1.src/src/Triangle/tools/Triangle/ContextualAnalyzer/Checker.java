@@ -14,7 +14,7 @@
 
 package Triangle.tools.Triangle.ContextualAnalyzer;
 
-import Triangle.ErrorReporter;
+import Triangle.tools.Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;

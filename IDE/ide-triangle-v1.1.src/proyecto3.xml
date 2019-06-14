@@ -1,20 +1,31 @@
 <Program>
-<CallLoopCases>
-<LoopCasesFOR>
-<ConstDeclaration>
-<Identifier value="i"/>
+<LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
+<VarSingleDeclarationSingleDeclaration>
 <SecExpression>
 <IntegerExpression>
 <IntegerLiteral value="1"/>
 </IntegerExpression>
 </SecExpression>
-</ConstDeclaration>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="c"/>
+<VarSingleDeclarationSingleDeclaration>
 <SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="8"/>
-</IntegerExpression>
+<CharacterExpression>
+<CharacterLiteral value="'v'"/>
+</CharacterExpression>
 </SecExpression>
-<ForLoopDo>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
 <CallCommand>
 <CompoundIdentifier>
 <Identifier value="putint"/>
@@ -22,16 +33,12 @@
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="i"/>
-</SimpleVname>
-</AssignExpression>
+<IntegerExpression>
+<IntegerLiteral value="3"/>
+</IntegerExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</ForLoopDo>
-</LoopCasesFOR>
-</CallLoopCases>
+</LetCommand>
 </Program>

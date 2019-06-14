@@ -132,7 +132,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * Generates a DefaultTableModel, used to draw a Jable.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo Prez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class TableVisitor implements Visitor {
     
@@ -213,19 +213,34 @@ public class TableVisitor implements Visitor {
 
     @Override
     public Object visitProcProcFunc(ProcProcFunc ast, Object o) {
-        ast.ID.visit(this, null);
+        try {
+        addIdentifier(ast.ID.spelling, "KnownRoutine", 
+                (ast.entity!=null?ast.entity.size:0), 
+                ((KnownRoutine)ast.entity).address.level, 
+                ((KnownRoutine)ast.entity).address.displacement, 
+                -1);
+        } catch (NullPointerException e) { }
+
         ast.FPS.visit(this, null);
         ast.COM.visit(this, null);
-        return null;
+
+        return(null);
     }
 
     @Override
     public Object visitFuncProcFunc(FuncProcFunc ast, Object o) {
-        ast.ID.visit(this, null);
+                        try {
+        addIdentifier(ast.ID.spelling, 
+                "KnownRoutine", 
+                (ast.entity!=null?ast.entity.size:0), 
+                ((KnownRoutine)ast.entity).address.level, 
+                ((KnownRoutine)ast.entity).address.displacement, 
+                -1);       
+        } catch (NullPointerException e) { }            
         ast.FPS.visit(this, null);
         ast.TD.visit(this, null);
         ast.EXP.visit(this, null);
-        return null;
+        return(null);
     }
 
     @Override

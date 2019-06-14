@@ -1,37 +1,148 @@
 <Program>
-<CallLoopCases>
-<LoopCasesFOR>
-<ConstDeclaration>
-<Identifier value="i"/>
+<LetCommand>
+<CompoundDeclarationRecursive>
+<ProcFuncs>
+<ProcProcFunc>
+<Identifier value="Ping"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="x"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IfCommand>
 <SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value=">"/>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="0"/>
 </IntegerExpression>
+</BinaryExpression>
 </SecExpression>
-</ConstDeclaration>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="5"/>
-</IntegerExpression>
-</SecExpression>
-<ForLoopDo>
+<SequentialCommand>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="putint"/>
+<Identifier value="put"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="i"/>
-</SimpleVname>
-</AssignExpression>
+<CharacterExpression>
+<CharacterLiteral value="'I'"/>
+</CharacterExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</ForLoopDo>
-</LoopCasesFOR>
-</CallLoopCases>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="Pong"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="-"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</SequentialCommand>
+<EmptyCommand/>
+</IfCommand>
+</ProcProcFunc>
+<ProcProcFunc>
+<Identifier value="Pong"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="a"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IfCommand>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value=">"/>
+<IntegerExpression>
+<IntegerLiteral value="0"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+<SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="put"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<CharacterExpression>
+<CharacterLiteral value="'0'"/>
+</CharacterExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="Ping"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="-"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</SequentialCommand>
+<EmptyCommand/>
+</IfCommand>
+</ProcProcFunc>
+</ProcFuncs>
+</CompoundDeclarationRecursive>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="Pong"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="4"/>
+</IntegerExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</LetCommand>
 </Program>

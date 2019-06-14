@@ -12,15 +12,15 @@
  * of the authors.
  */
 
-package Triangle;
+package Triangle.tools.Triangle;
 
 import Triangle.tools.Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class ErrorReporter {
 
-  int numErrors;
+  public int numErrors;
 
-  ErrorReporter() {
+  public ErrorReporter() {
     numErrors = 0;
   }
 

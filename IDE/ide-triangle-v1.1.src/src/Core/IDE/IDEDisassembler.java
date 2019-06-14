@@ -8,7 +8,7 @@ package Core.IDE;
 /**
  * Just a small class to call the Triangle disassembler.
  *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
+ * @author Luis Leopoldo rez <luiperpe@ns.isi.ulatina.ac.cr>
  */
 public class IDEDisassembler {
     
@@ -26,7 +26,7 @@ public class IDEDisassembler {
     public void Disassemble(final String fileName) {
         new Thread(new Runnable() {
             public void run() {
-                TAM.Disassembler.main(new String[] {fileName});
+                Triangle.tools.TAM.Disassembler.main(new String[] {fileName});
             }
         }).start();        
     }
