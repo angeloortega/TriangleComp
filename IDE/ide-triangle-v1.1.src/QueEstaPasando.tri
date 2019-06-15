@@ -1,13 +1,13 @@
-let
- var a ::= 'b'
-in
-choose a from
-
-  when 'a' | 'e' | 'b' | 'c' | 'd'then putint (1)
-  when 'f' then putint (2)
-  when 'g' then putint (3)
-  when 'h' then putint (4)
-  else putint (5)
-
+choose 1 * (2 + 2) from
+  when 1 | 2 | 3 then putint (123)
+  when 4 then
+    choose 3 from
+      !no importa que se repita, est en select anidado
+      when 1 then putint (1) 
+      else putint (2)
+    end
+  else
+    put('E')
 end
-end
+
+! Imprime 2

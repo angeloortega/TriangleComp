@@ -1,64 +1,87 @@
 <Program>
-<LetCommand>
-<CompoundDeclarationSingleDeclaration>
-<VarDeclaration>
-<Identifier value="a"/>
-<VarSingleDeclarationSingleDeclaration>
-<SecExpression>
-<CharacterExpression>
-<CharacterLiteral value="'b'"/>
-</CharacterExpression>
-</SecExpression>
-</VarSingleDeclarationSingleDeclaration>
-</VarDeclaration>
-</CompoundDeclarationSingleDeclaration>
 <ChoooseCommand>
 <SecExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</AssignExpression>
+<BinaryExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+<Operator value="*"/>
+<LParenExpression>
+<SecExpression>
+<BinaryExpression>
+<IntegerExpression>
+<IntegerLiteral value="2"/>
+</IntegerExpression>
+<Operator value="+"/>
+<IntegerExpression>
+<IntegerLiteral value="2"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</LParenExpression>
+</BinaryExpression>
 </SecExpression>
 <Cases>
-<SequentialCase>
-<SequentialCase>
 <SequentialCase>
 <CaseWhen>
 <CaseLiterals>
 <SequentialCaseRange>
 <SequentialCaseRange>
-<SequentialCaseRange>
-<SequentialCaseRange>
 <CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'a'"/>
-</CaseLiteralCHAR>
+<CaseLiteralINT>
+<IntegerLiteral value="1"/>
+</CaseLiteralINT>
 </CaseRangeCase>
 <CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'e'"/>
-</CaseLiteralCHAR>
+<CaseLiteralINT>
+<IntegerLiteral value="2"/>
+</CaseLiteralINT>
 </CaseRangeCase>
 </SequentialCaseRange>
 <CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'b'"/>
-</CaseLiteralCHAR>
+<CaseLiteralINT>
+<IntegerLiteral value="3"/>
+</CaseLiteralINT>
 </CaseRangeCase>
 </SequentialCaseRange>
+</CaseLiterals>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="123"/>
+</IntegerExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</CaseWhen>
+<CaseWhen>
+<CaseLiterals>
 <CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'c'"/>
-</CaseLiteralCHAR>
+<CaseLiteralINT>
+<IntegerLiteral value="4"/>
+</CaseLiteralINT>
 </CaseRangeCase>
-</SequentialCaseRange>
+</CaseLiterals>
+<ChoooseCommand>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="3"/>
+</IntegerExpression>
+</SecExpression>
+<Cases>
+<CaseWhen>
+<CaseLiterals>
 <CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'d'"/>
-</CaseLiteralCHAR>
+<CaseLiteralINT>
+<IntegerLiteral value="1"/>
+</CaseLiteralINT>
 </CaseRangeCase>
-</SequentialCaseRange>
 </CaseLiterals>
 <CallCommand>
 <CompoundIdentifier>
@@ -75,14 +98,7 @@
 </SingleActualParameterSequence>
 </CallCommand>
 </CaseWhen>
-<CaseWhen>
-<CaseLiterals>
-<CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'f'"/>
-</CaseLiteralCHAR>
-</CaseRangeCase>
-</CaseLiterals>
+<ElseCase>
 <CallCommand>
 <CompoundIdentifier>
 <Identifier value="putint"/>
@@ -97,67 +113,22 @@
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</CaseWhen>
-</SequentialCase>
-<CaseWhen>
-<CaseLiterals>
-<CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'g'"/>
-</CaseLiteralCHAR>
-</CaseRangeCase>
-</CaseLiterals>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="putint"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="3"/>
-</IntegerExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
-</CaseWhen>
-</SequentialCase>
-<CaseWhen>
-<CaseLiterals>
-<CaseRangeCase>
-<CaseLiteralCHAR>
-<CharacterLiteral value="'h'"/>
-</CaseLiteralCHAR>
-</CaseRangeCase>
-</CaseLiterals>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="putint"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="4"/>
-</IntegerExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
+</ElseCase>
+</Cases>
+</ChoooseCommand>
 </CaseWhen>
 </SequentialCase>
 <ElseCase>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="putint"/>
+<Identifier value="put"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="5"/>
-</IntegerExpression>
+<CharacterExpression>
+<CharacterLiteral value="'E'"/>
+</CharacterExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
@@ -165,5 +136,4 @@
 </ElseCase>
 </Cases>
 </ChoooseCommand>
-</LetCommand>
 </Program>

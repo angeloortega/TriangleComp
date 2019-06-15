@@ -206,8 +206,11 @@ public class Interpreter {
       case failedIOError:
         System.out.println("Program has failed due to an IO error.");
         break;
+      case caseError:
+          System.out.println("Program has failed because no else clause was found inside choose statement and the expression did not match any option.");
+        break;
     }
-    if (status != halted)
+    if (status != halted && status != caseError)
       dump();
   }
 
@@ -571,11 +574,27 @@ public class Interpreter {
           status = halted;
           break;
         case Machine.CASEop:
-           if (data[ST-1] != data[ST-2]){
-            CP = d + content(r);
+            if(n == 1){
+             if (data[ST-1] > data[ST-2]){
+             CP = d + content(r);
+             }
+           else
+             CP = CP + 1;
             }
-          else
-            CP = CP + 1;
+            else if(n == 2){
+             if (data[ST-1] < data[ST-2]){
+             CP = d + content(r);
+             }
+           else
+             CP = CP + 1;
+            }
+            else{
+            if (data[ST-1] != data[ST-2]){
+             CP = d + content(r);
+             }
+           else
+             CP = CP + 1;
+            }
           break;
          case Machine.CASEERRORop:
           status = caseError;

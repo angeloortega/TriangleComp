@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Utilities;
+import Triangle.tools.Triangle.AbstractSyntaxTrees.CaseWhen;
 import Triangle.tools.Triangle.CodeGenerator.Frame;
 
 /**
@@ -13,6 +14,7 @@ import Triangle.tools.Triangle.CodeGenerator.Frame;
 public class ChooseCode {
     public Frame frame;
     public int address;
+    public CaseWhen ast;
     public ChooseCode(Frame pFrame, Integer pAddress){
         frame = pFrame;
         address = pAddress;
