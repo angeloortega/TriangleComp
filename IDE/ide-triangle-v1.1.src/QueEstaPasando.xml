@@ -1,138 +1,139 @@
 <Program>
 <LetCommand>
-<CompoundDeclarationRecursive>
-<ProcFuncs>
-<ProcProcFunc>
-<Identifier value="Ping"/>
-<SingleFormalParameterSequence>
-<ConstFormalParameter>
-<Identifier value="x"/>
-<IntTypeDenoter/>
-</ConstFormalParameter>
-</SingleFormalParameterSequence>
-<IfCommand>
-<SecExpression>
-<BinaryExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="x"/>
-</SimpleVname>
-</AssignExpression>
-<Operator value=">"/>
-<IntegerExpression>
-<IntegerLiteral value="0"/>
-</IntegerExpression>
-</BinaryExpression>
-</SecExpression>
-<SequentialCommand>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="put"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
+<VarSingleDeclarationSingleDeclaration>
 <SecExpression>
 <CharacterExpression>
-<CharacterLiteral value="'I'"/>
+<CharacterLiteral value="'b'"/>
 </CharacterExpression>
 </SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<ChoooseCommand>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+<Cases>
+<SequentialCase>
+<SequentialCase>
+<SequentialCase>
+<CaseWhen>
+<CaseLiterals>
+<SequentialCaseRange>
+<SequentialCaseRange>
+<SequentialCaseRange>
+<SequentialCaseRange>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'a'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'e'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</SequentialCaseRange>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'b'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</SequentialCaseRange>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'c'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</SequentialCaseRange>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'d'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</SequentialCaseRange>
+</CaseLiterals>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="Pong"/>
+<Identifier value="putint"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<BinaryExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="x"/>
-</SimpleVname>
-</AssignExpression>
-<Operator value="-"/>
 <IntegerExpression>
 <IntegerLiteral value="1"/>
 </IntegerExpression>
-</BinaryExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</SequentialCommand>
-<EmptyCommand/>
-</IfCommand>
-</ProcProcFunc>
-<ProcProcFunc>
-<Identifier value="Pong"/>
-<SingleFormalParameterSequence>
-<ConstFormalParameter>
-<Identifier value="a"/>
-<IntTypeDenoter/>
-</ConstFormalParameter>
-</SingleFormalParameterSequence>
-<IfCommand>
-<SecExpression>
-<BinaryExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</AssignExpression>
-<Operator value=">"/>
-<IntegerExpression>
-<IntegerLiteral value="0"/>
-</IntegerExpression>
-</BinaryExpression>
-</SecExpression>
-<SequentialCommand>
+</CaseWhen>
+<CaseWhen>
+<CaseLiterals>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'f'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</CaseLiterals>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="put"/>
+<Identifier value="putint"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<CharacterExpression>
-<CharacterLiteral value="'0'"/>
-</CharacterExpression>
+<IntegerExpression>
+<IntegerLiteral value="2"/>
+</IntegerExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
+</CaseWhen>
+</SequentialCase>
+<CaseWhen>
+<CaseLiterals>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'g'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</CaseLiterals>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="Ping"/>
+<Identifier value="putint"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<BinaryExpression>
-<AssignExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</AssignExpression>
-<Operator value="-"/>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="3"/>
 </IntegerExpression>
-</BinaryExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</SequentialCommand>
-<EmptyCommand/>
-</IfCommand>
-</ProcProcFunc>
-</ProcFuncs>
-</CompoundDeclarationRecursive>
+</CaseWhen>
+</SequentialCase>
+<CaseWhen>
+<CaseLiterals>
+<CaseRangeCase>
+<CaseLiteralCHAR>
+<CharacterLiteral value="'h'"/>
+</CaseLiteralCHAR>
+</CaseRangeCase>
+</CaseLiterals>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="Pong"/>
+<Identifier value="putint"/>
 </CompoundIdentifier>
 <SingleActualParameterSequence>
 <ConstActualParameter>
@@ -144,5 +145,25 @@
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
+</CaseWhen>
+</SequentialCase>
+<ElseCase>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="5"/>
+</IntegerExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</ElseCase>
+</Cases>
+</ChoooseCommand>
 </LetCommand>
 </Program>

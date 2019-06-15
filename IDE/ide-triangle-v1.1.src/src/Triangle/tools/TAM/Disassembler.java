@@ -326,7 +326,7 @@ public class Disassembler {
         System.out.print ("HALT  ");
          break;
        case Machine.CASEop:
-        System.out.print ("CASE");
+        System.out.print ("CASE  ");
         writeN(instr.n);
         writeD(instr.d);
         writeR('[', instr.r, ']');

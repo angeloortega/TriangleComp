@@ -1,18 +1,13 @@
-! Procedimientos mutuamente recursivos
 let
-
-  recursive
-
-    proc Ping (x : Integer) ~ if x > 0 then put ('I') ; Pong (x - 1) else pass end end
-
-    |
-
-    proc Pong (a : Integer) ~ if a > 0 then put ('0') ; Ping (a - 1) else pass end end
-
-  end
-
+ var a ::= 'b'
 in
+choose a from
 
-  Pong (4)
+  when 'a' | 'e' | 'b' | 'c' | 'd'then putint (1)
+  when 'f' then putint (2)
+  when 'g' then putint (3)
+  when 'h' then putint (4)
+  else putint (5)
 
+end
 end

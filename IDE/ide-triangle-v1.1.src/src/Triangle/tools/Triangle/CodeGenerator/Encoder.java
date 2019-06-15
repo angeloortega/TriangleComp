@@ -24,8 +24,7 @@ import Triangle.tools.TAM.Machine;
 import Triangle.tools.Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.tools.Triangle.AbstractSyntaxTrees.*;
-import Triangle.tools.Triangle.ContextualAnalyzer.IdentificationTable;
-import Utilities.LoopCasesFORData;
+import Utilities.ChooseCode;
 
 
 public final class Encoder implements Visitor {
@@ -823,18 +822,28 @@ public final class Encoder implements Visitor {
   }
   
   //Cases
-  
+        @Override
+    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
+        return null;
+    }
     @Override
     public Object visitChooseCommand(ChooseCommand ast, Object o) {
-        
+        ast.EXP.visit(this, o);
         ast.COM.visit(this,o);
+        emit(Machine.POPop, 0, 0, 1);
+
         return null;
     }
 
   @Override
     public Object visitCases(Cases ast, Object o) {
-        ast.CASE1.visit(this, o);
-        ast.CASE2.visit(this, o);
+        int jumpOutside = nextInstrAddr;
+        ChooseCode cc = new ChooseCode((Frame)o, jumpOutside);
+        ast.CASE1.visit(this, cc);
+        if(ast.CASE2 != null){
+            ast.CASE2.visit(this, o);
+        }
+        patchJumps(jumpOutside, nextInstrAddr);
         return null;
     }
 
@@ -845,24 +854,83 @@ public final class Encoder implements Visitor {
 
     @Override
     public Object visitSequentialCase(SequentialCase ast, Object o) {
-        return ast.C1.visit(this, o);
+        ast.C1.visit(this,o);
+        ast.C2.visit(this, o);
+        return null;
     }
 
     @Override
-    public Object visitCaseWhen(CaseWhen ast, Object o) {
-        return ast.CASELIT.visit(this, o);
+    public Object visitCaseWhen(CaseWhen ast, Object choosecode) { //TODO Aqui es donde estan los comandos
+        Frame o = ((ChooseCode) choosecode).frame;
+        int jmpOutside =((ChooseCode) choosecode).address;
+        ast.CASELIT.visit(this, o);
+        CharacterLiteral character1,character2;
+        IntegerLiteral integer1,integer2;
+        CaseRangeCase cases = ((CaseRangeCase)ast.CASELIT.CASERANGE);
+        if(cases.CASELIT2 != null ){
+                if( cases.CASELIT instanceof CaseLiteralCHAR){
+                    
+                    character1  =   (CharacterLiteral) ( ( (CaseLiteralCHAR) cases.CASELIT).CHARLIT);
+                    character2  =   (CharacterLiteral) ( ( (CaseLiteralCHAR) cases.CASELIT2).CHARLIT);
+                    emit(Machine.LOADLop, 0, 0, (int)character1.spelling.charAt(1));
+                            Frame frame = (Frame) o;
+                            int jumpifAddr,jumpifAddr2;
+                            jumpifAddr = nextInstrAddr;
+                            emit(Machine.CASEop, 0, Machine.CBr, 0);
+                            emit(Machine.POPop, 0, 0, 1);
+                            emit(Machine.LOADLop, 0, 0, (int)character1.spelling.charAt(1));
+                            jumpifAddr2 = nextInstrAddr;
+                            emit(Machine.CASEop, 0, Machine.CBr, 0);
+                            emit(Machine.POPop, 0, 0, 1);
+                            ast.COM.visit(this, frame);
+                            emit(Machine.JUMPop, 0, Machine.CBr, jmpOutside);
+                            patch(jumpifAddr, nextInstrAddr);
+                            patch(jumpifAddr2, nextInstrAddr);
+                            emit(Machine.POPop, 0, 0, 2);
+                    character2  =   (CharacterLiteral) ( ( (CaseLiteralCHAR) cases.CASELIT2).CHARLIT);
+                }
+                else if(cases.CASELIT instanceof CaseLiteralINT){
+                           integer1 = (IntegerLiteral) ( ( (CaseLiteralINT) cases.CASELIT).INTLIT);
+                           integer2 = (IntegerLiteral) ( ( (CaseLiteralINT) cases.CASELIT2).INTLIT);
+                }
+        }
+        else{
+                if( cases.CASELIT instanceof CaseLiteralCHAR){
+                    
+                    character1  =   (CharacterLiteral) ( ( (CaseLiteralCHAR) cases.CASELIT).CHARLIT);
+                    emit(Machine.LOADLop, 0, 0, (int)character1.spelling.charAt(1));
+                            Frame frame = (Frame) o;
+                            int jumpifAddr;
+                            jumpifAddr = nextInstrAddr;
+                            emit(Machine.CASEop, 0, Machine.CBr, 0);
+                            emit(Machine.POPop, 0, 0, 1);
+                            ast.COM.visit(this, frame);
+                            emit(Machine.JUMPop, 0, Machine.CBr, jmpOutside);
+                            patch(jumpifAddr, nextInstrAddr);
+                            emit(Machine.POPop, 0, 0, 1);
+                }
+                else if(cases.CASELIT instanceof CaseLiteralINT){
+                           integer1 = (IntegerLiteral) ( ( (CaseLiteralINT) cases.CASELIT).INTLIT);
+                           emit(Machine.LOADLop, 0, 0, Integer.parseInt(integer1.spelling));
+                            Frame frame = (Frame) o;
+                            int jumpifAddr;
+                            jumpifAddr = nextInstrAddr;
+                            emit(Machine.CASEop, 0, Machine.CBr, 0);
+                            emit(Machine.POPop, 0, 0, 1);
+                            ast.COM.visit(this, frame);
+                            emit(Machine.JUMPop, 0, Machine.CBr, jmpOutside);
+                            patch(jumpifAddr, nextInstrAddr);
+                            emit(Machine.POPop, 0, 0, 1);
+                }
+        }
+        return null;
     }
 
     @Override
     public Object visitCaseLiterals(CaseLiterals ast, Object o) {
         return ast.CASERANGE.visit(this, o);
     }
-
-    @Override
-    public Object visitCaseRangeCase(CaseRangeCase ast, Object o) {
-        return ast.CASELIT.visit(this, o);    
-    }
-
+   
     @Override
     public Object visitSequentialCaseRange(SequentialCaseRange ast, Object o) {
         return ast.C1.visit(this, o);
@@ -1131,6 +1199,16 @@ public final class Encoder implements Visitor {
     Machine.code[addr].d = d;
   }
   
+  private void patchJumps (int d1, int d2) {
+      int i = 0;
+    while(i < nextInstrAddr){
+        if(Machine.code[i].d == d1 && Machine.code[i].op == Machine.JUMPop){
+            Machine.code[i].d = d2;
+        }
+        i++;
+    }
+  }
+  
   private void patchRecursive(int addr,int d1, int d2){
   int i = 0;
     while(i < addr){
@@ -1363,7 +1441,6 @@ public final class Encoder implements Visitor {
         int extraSize;
         Integer temporal = ((Integer) ast.T.visit(this, o));
         extraSize = temporal.intValue();
-        //emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;
@@ -1375,7 +1452,6 @@ public final class Encoder implements Visitor {
         int extraSize;
         Integer temporal = ((Integer) ast.T.visit(this, o));
         extraSize = temporal.intValue();
-        //emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;

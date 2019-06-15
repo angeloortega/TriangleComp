@@ -571,9 +571,11 @@ public class Interpreter {
           status = halted;
           break;
         case Machine.CASEop:
-          ST = ST - 1;
-          if (data[ST] == n)
+           if (data[ST-1] != data[ST-2]){
             CP = d + content(r);
+            }
+          else
+            CP = CP + 1;
           break;
          case Machine.CASEERRORop:
           status = caseError;
