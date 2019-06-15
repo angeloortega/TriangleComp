@@ -1,0 +1,88 @@
+<Program>
+<LetCommand>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="0"/>
+</IntegerExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<LetCommand>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ConstDeclaration>
+<Identifier value="b"/>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
+<VarSingleDeclarationSingleDeclaration>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="b"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="+"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</VarSingleDeclarationSingleDeclaration>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<SequentialCommand>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="b"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="+"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</AssignCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</SequentialCommand>
+</LetCommand>
+</LetCommand>
+</Program>

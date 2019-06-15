@@ -1,0 +1,19 @@
+!  lets anidados
+let
+
+  var a : Integer
+
+in
+begin
+  a := 0;
+  let
+    const b ~ a ;
+    var   a : Integer
+  in
+  begin
+    a := b + 1;
+    putint (a) ! debe imprimir 1
+  end
+
+end
+ 

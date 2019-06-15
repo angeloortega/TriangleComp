@@ -562,8 +562,14 @@ public final class Encoder implements Visitor {
     int extraSize;
     extraSize = (Integer) ast.V.visit(this, o);
     //emit(Machine.PUSHop, 0, 0, extraSize);
-    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
+    ast.I.decl = ast;
+    ast.I.decl.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
+    if(ast.V instanceof VarSingleDeclarationSingleDeclaration){
+        SimpleVname v = new SimpleVname(ast.I,ast.getPosition());
+        v.I = ast.I;
+        encodeStore(v, new Frame (frame, extraSize),extraSize);
+    }
     return extraSize;
   }
 
@@ -1390,10 +1396,10 @@ public final class Encoder implements Visitor {
   private void patchRecursive(int addr,int d1, int d2){
   int i = 0;
     while(i < addr){
-        if(Machine.code[i].d == d1 && Machine.code[i].op == Machine.CALLop){
+        if(Machine.code[i].d == d1 && Machine.code[i].op == Machine.CALLop && Machine.code[i].r != Machine.PBr){
             Machine.code[i].d = d2;
         }
-        else if(Machine.code[i].d == d2 && Machine.code[i].op == Machine.CALLop){
+        else if(Machine.code[i].d == d2 && Machine.code[i].op == Machine.CALLop && Machine.code[i].r != Machine.PBr){
             Machine.code[i].d = d1;
         }
         i++;
@@ -1625,6 +1631,7 @@ public final class Encoder implements Visitor {
         int extraSize;
         Integer temporal = ((Integer) ast.T.visit(this, o));
         extraSize = temporal.intValue();
+        emit(Machine.PUSHop, 0, 0, extraSize);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;
@@ -1634,8 +1641,10 @@ public final class Encoder implements Visitor {
     public Object visitVarSingleDeclarationSingleDeclaration(VarSingleDeclarationSingleDeclaration ast, Object o) {
         Frame frame = (Frame) o;
         int extraSize;
-        Integer temporal = ((Integer) ast.T.visit(this, o));
+        Integer temporal = ((Integer) ast.T.type.visit(this, o));
         extraSize = temporal.intValue();
+        emit(Machine.PUSHop, 0, 0, extraSize);
+        ast.T.visit(this, o);
         ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
         writeTableDetails(ast);
         return extraSize;

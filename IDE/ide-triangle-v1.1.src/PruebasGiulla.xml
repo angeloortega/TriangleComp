@@ -3,46 +3,59 @@
 <CompoundDeclarationSingleDeclaration>
 <VarDeclaration>
 <Identifier value="a"/>
-<VarSingleDeclarationSingleDeclaration>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="0"/>
-</IntegerExpression>
-</SecExpression>
-</VarSingleDeclarationSingleDeclaration>
+<VarSingleDeclarationColon>
+<ArrayTypeDenoter>
+<IntegerLiteral value="5"/>
+<IntTypeDenoter/>
+</ArrayTypeDenoter>
+</VarSingleDeclarationColon>
 </VarDeclaration>
 </CompoundDeclarationSingleDeclaration>
 <SequentialCommand>
-<LetCommand>
-<CompoundDeclarationSingleDeclaration>
-<VarDeclaration>
-<Identifier value="a"/>
-<VarSingleDeclarationSingleDeclaration>
-<SecExpression>
-<CharacterExpression>
-<CharacterLiteral value="'a'"/>
-</CharacterExpression>
-</SecExpression>
-</VarSingleDeclarationSingleDeclaration>
-</VarDeclaration>
-</CompoundDeclarationSingleDeclaration>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="put"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<AssignExpression>
+<AssignCommand>
 <SimpleVname>
 <Identifier value="a"/>
 </SimpleVname>
-</AssignExpression>
+<SecExpression>
+<LBracketExpression>
+<MultipleArrayAggregate>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
 </SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
-</LetCommand>
+<MultipleArrayAggregate>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="2"/>
+</IntegerExpression>
+</SecExpression>
+<MultipleArrayAggregate>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="3"/>
+</IntegerExpression>
+</SecExpression>
+<MultipleArrayAggregate>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="4"/>
+</IntegerExpression>
+</SecExpression>
+<SingleArrayAggregate>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="5"/>
+</IntegerExpression>
+</SecExpression>
+</SingleArrayAggregate>
+</MultipleArrayAggregate>
+</MultipleArrayAggregate>
+</MultipleArrayAggregate>
+</MultipleArrayAggregate>
+</LBracketExpression>
+</SecExpression>
+</AssignCommand>
 <CallCommand>
 <CompoundIdentifier>
 <Identifier value="putint"/>
@@ -51,9 +64,16 @@
 <ConstActualParameter>
 <SecExpression>
 <AssignExpression>
+<SubscriptVname>
 <SimpleVname>
 <Identifier value="a"/>
 </SimpleVname>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</SecExpression>
+</SubscriptVname>
 </AssignExpression>
 </SecExpression>
 </ConstActualParameter>

@@ -1,0 +1,88 @@
+<Program>
+<LetCommand>
+<CompoundDeclarationRecursive>
+<ProcFuncs>
+<FuncProcFunc>
+<Identifier value="f"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="a"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IntTypeDenoter/>
+<SecExpression>
+<BinaryExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+<Operator value="+"/>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="g"/>
+</LongIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<BinaryExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+<Operator value="-"/>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</BinaryExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallExpression>
+</BinaryExpression>
+</SecExpression>
+</FuncProcFunc>
+<FuncProcFunc>
+<Identifier value="g"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="b"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IntTypeDenoter/>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+</SecExpression>
+</FuncProcFunc>
+</ProcFuncs>
+</CompoundDeclarationRecursive>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="f"/>
+</LongIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="10"/>
+</IntegerExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</LetCommand>
+</Program>

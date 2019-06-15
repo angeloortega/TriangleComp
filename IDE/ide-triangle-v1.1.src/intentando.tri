@@ -1,0 +1,9 @@
+let
+	var b : Integer;
+	var a : Integer
+in
+begin
+  b := 5;
+  a := 4;
+	putint (b + a)
+end
