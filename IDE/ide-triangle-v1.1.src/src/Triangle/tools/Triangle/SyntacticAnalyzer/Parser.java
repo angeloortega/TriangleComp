@@ -883,7 +883,7 @@ public class Parser {
     Identifier iAST = null;
     if(currentToken.kind == Token.DOLLAR){
       acceptIt();
-      pckgAST = (PackageIdentifier) initAST;
+      pckgAST = new PackageIdentifier(initAST.spelling,initAST.position);
       iAST = parseIdentifier();
     }
     else{

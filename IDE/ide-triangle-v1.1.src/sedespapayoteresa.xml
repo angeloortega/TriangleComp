@@ -1,64 +1,39 @@
 <Program>
-<LetCommand>
-<CompoundDeclarationRecursive>
-<ProcFuncs>
-<FuncProcFunc>
-<Identifier value="f"/>
-<SingleFormalParameterSequence>
-<ConstFormalParameter>
-<Identifier value="a"/>
-<IntTypeDenoter/>
-</ConstFormalParameter>
-</SingleFormalParameterSequence>
-<IntTypeDenoter/>
+<CallLoopCases>
+<LoopCasesFOR>
+<ConstDeclaration>
+<Identifier value="i"/>
 <SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="0"/>
+</IntegerExpression>
+</SecExpression>
+</ConstDeclaration>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="10"/>
+</IntegerExpression>
+</SecExpression>
+<ForLoopWhile>
+<SecExpression>
+<BinaryExpression>
 <BinaryExpression>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="2"/>
 </IntegerExpression>
-<Operator value="+"/>
-<CallExpression>
-<LongIdentifier>
-<Identifier value="g"/>
-</LongIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<BinaryExpression>
+<Operator value="*"/>
 <AssignExpression>
 <SimpleVname>
-<Identifier value="a"/>
+<Identifier value="i"/>
 </SimpleVname>
 </AssignExpression>
-<Operator value="-"/>
+</BinaryExpression>
+<Operator value="&lt;"/>
 <IntegerExpression>
-<IntegerLiteral value="1"/>
+<IntegerLiteral value="10"/>
 </IntegerExpression>
 </BinaryExpression>
 </SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallExpression>
-</BinaryExpression>
-</SecExpression>
-</FuncProcFunc>
-<FuncProcFunc>
-<Identifier value="g"/>
-<SingleFormalParameterSequence>
-<ConstFormalParameter>
-<Identifier value="b"/>
-<IntTypeDenoter/>
-</ConstFormalParameter>
-</SingleFormalParameterSequence>
-<IntTypeDenoter/>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="1"/>
-</IntegerExpression>
-</SecExpression>
-</FuncProcFunc>
-</ProcFuncs>
-</CompoundDeclarationRecursive>
 <CallCommand>
 <CompoundIdentifier>
 <Identifier value="putint"/>
@@ -66,23 +41,16 @@
 <SingleActualParameterSequence>
 <ConstActualParameter>
 <SecExpression>
-<CallExpression>
-<LongIdentifier>
-<Identifier value="f"/>
-</LongIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="10"/>
-</IntegerExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="i"/>
+</SimpleVname>
+</AssignExpression>
 </SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</LetCommand>
+</ForLoopWhile>
+</LoopCasesFOR>
+</CallLoopCases>
 </Program>

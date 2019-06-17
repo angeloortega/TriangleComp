@@ -188,19 +188,69 @@ public final class Encoder implements Visitor {
     @Override
     public Object visitLoopCasesFOR(LoopCasesFOR ast, Object o) { 
          Frame frame = (Frame) o;
-         int repeat, evalCond,exit, expSize;
+         int repeat, evalCond,exit, expSize,execute,evalCond2,jmpAddress;
+         
          expSize = (Integer)ast.EXP2.visit(this, frame);
          ast.DECL.visit(this, new Frame(frame.level, frame.size + expSize));
          evalCond = nextInstrAddr;
          emit(Machine.JUMPop, 0, Machine.CBr, 0);
          repeat = nextInstrAddr;
-         ast.FOR.visit(this, frame);
-         emit(Machine.CALLop, frame.level, Machine.PBr, Machine.succDisplacement);
-         patch(evalCond, nextInstrAddr);
-         emit(Machine.LOADop,2, Machine.STr,-2);
-         emit(Machine.CALLop, frame.level, Machine.PBr, Machine.geDisplacement);
-         emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repeat);
-         emit(Machine.POPop, 0, 0, 2);
+         if(ast.FOR instanceof ForLoopDo){
+             ast.FOR.visit(this, frame);
+             emit(Machine.CALLop, frame.level, Machine.PBr, Machine.succDisplacement);
+            patch(evalCond, nextInstrAddr);
+            emit(Machine.LOADop,2, Machine.STr,-2);
+            emit(Machine.CALLop, frame.level, Machine.PBr, Machine.geDisplacement);
+            emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repeat);
+            emit(Machine.POPop, 0, 0, 2);
+         }
+         else if(ast.FOR instanceof ForLoopWhile){
+             ForLoopWhile whileLoop =(ForLoopWhile) ast.FOR;
+             jmpAddress = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            repeat = nextInstrAddr;
+            whileLoop.COM.visit(this, frame);
+            emit(Machine.CALLop, frame.level, Machine.PBr, Machine.succDisplacement);
+            patch(evalCond, nextInstrAddr);
+            emit(Machine.LOADop,2, Machine.STr,-2);
+            emit(Machine.CALLop, frame.level, Machine.PBr, Machine.geDisplacement);
+            evalCond2 = nextInstrAddr;
+            emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, evalCond2);
+            execute = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            patch(evalCond2, nextInstrAddr);
+            whileLoop.EXP.visit(this, frame);
+            exit = nextInstrAddr;
+            emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, exit);
+            emit(Machine.JUMPop, 0, Machine.CBr, repeat);
+            patch(exit, nextInstrAddr);
+            patch(execute, nextInstrAddr);
+            emit(Machine.POPop, 0, 0, 2);
+         }
+         else if(ast.FOR instanceof ForLoopUntil){
+             ForLoopUntil whileLoop =(ForLoopUntil) ast.FOR;
+             jmpAddress = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            repeat = nextInstrAddr;
+            whileLoop.COM.visit(this, frame);
+            emit(Machine.CALLop, frame.level, Machine.PBr, Machine.succDisplacement);
+            patch(evalCond, nextInstrAddr);
+            emit(Machine.LOADop,2, Machine.STr,-2);
+            emit(Machine.CALLop, frame.level, Machine.PBr, Machine.geDisplacement);
+            evalCond2 = nextInstrAddr;
+            emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, evalCond2);
+            execute = nextInstrAddr;
+            emit(Machine.JUMPop, 0, Machine.CBr, 0);
+            patch(evalCond2, nextInstrAddr);
+            whileLoop.EXP.visit(this, frame);
+            exit = nextInstrAddr;
+            emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, exit);
+            emit(Machine.JUMPop, 0, Machine.CBr, repeat);
+            patch(exit, nextInstrAddr);
+            patch(execute, nextInstrAddr);
+            emit(Machine.POPop, 0, 0, 2);
+         }
+         
          return null;
     }
 
@@ -227,7 +277,7 @@ public final class Encoder implements Visitor {
      * @return 
      */
     @Override
-    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {//Todo
+    public Object visitForLoopUntil(ForLoopUntil ast, Object o) {
          Frame frame = (Frame) o;
          int jumpAddr, loopAddr;
          jumpAddr = nextInstrAddr;

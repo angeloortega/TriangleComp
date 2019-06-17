@@ -15,12 +15,15 @@
 package Triangle.tools.Triangle.ContextualAnalyzer;
 
 import Triangle.tools.Triangle.AbstractSyntaxTrees.Declaration;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class IdentificationTable {
 
   private int level;
   private IdEntry latest;
-
+  private boolean parallel = false;
+  private HashMap<String, Declaration> declarations;
   public IdentificationTable () {
     level = 0;
     latest = null;
@@ -70,7 +73,20 @@ public final class IdentificationTable {
   // and attribute. The new entry belongs to the current level.
   // duplicated is set to to true iff there is already an entry for the
   // same identifier at the current level.
-
+  public void openParallel(){
+      declarations = new HashMap<>();
+      parallel = true;
+  }
+  public void closeParallel(){
+      IdEntry entry = this.latest;
+      for(String  id : declarations.keySet()){
+        entry = new IdEntry(id,declarations.get(id), this.level, this.latest);
+        this.latest = entry;
+        if(entry.previous != null)
+            entry.previous.next = entry;
+      }
+      parallel = false;
+  }
   public void enter (String id, Declaration attr) {
 
     IdEntry entry = this.latest;
@@ -89,6 +105,11 @@ public final class IdentificationTable {
     }
 
     attr.duplicated = present;
+    //In case its a parallel
+    if(parallel){
+        declarations.put(id,attr);
+        return;
+    }
     // Add new entry ...
     entry = new IdEntry(id, attr, this.level, this.latest);
     this.latest = entry;

@@ -775,9 +775,10 @@ its expression matches it, also, visits its command. */
         hashIdTables.get(packageName).openScope();
         ast.D2.visit(this, o);
         hashIdTables.get(packageName).closeScope();
-        
+         hashIdTables.get(packageName).openParallel();
         ast.D1.visit(this, o);
         ast.D2.visit(this, o);
+        hashIdTables.get(packageName).closeParallel();
         
         return null;
     }

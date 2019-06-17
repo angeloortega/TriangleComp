@@ -1,139 +1,243 @@
 <Program>
-<ChoooseCommand>
+<LetCommand>
+<CompoundDeclarationPrivate>
+<CompoundDeclarationSingleDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
+<VarSingleDeclarationColon>
+<IntTypeDenoter/>
+</VarSingleDeclarationColon>
+</VarDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<SequentialDeclaration>
+<SequentialDeclaration>
+<SequentialDeclaration>
+<SequentialDeclaration>
+<SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<FuncDeclaration>
+<Identifier value="succ"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="x"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<IntTypeDenoter/>
 <SecExpression>
 <BinaryExpression>
-<IntegerExpression>
-<IntegerLiteral value="1"/>
-</IntegerExpression>
-<Operator value="*"/>
-<LParenExpression>
-<SecExpression>
-<BinaryExpression>
-<IntegerExpression>
-<IntegerLiteral value="2"/>
-</IntegerExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</AssignExpression>
 <Operator value="+"/>
 <IntegerExpression>
-<IntegerLiteral value="2"/>
+<IntegerLiteral value="1"/>
 </IntegerExpression>
 </BinaryExpression>
 </SecExpression>
-</LParenExpression>
+</FuncDeclaration>
+</CompoundDeclarationSingleDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ProcDeclaration>
+<Identifier value="initA"/>
+<EmptyFormalParameterSequence/>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+<SecExpression>
+<IntegerExpression>
+<IntegerLiteral value="0"/>
+</IntegerExpression>
+</SecExpression>
+</AssignCommand>
+</ProcDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ProcDeclaration>
+<Identifier value="incrA"/>
+<EmptyFormalParameterSequence/>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+<SecExpression>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="succ"/>
+</LongIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallExpression>
+</SecExpression>
+</AssignCommand>
+</ProcDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ProcDeclaration>
+<Identifier value="printA"/>
+<EmptyFormalParameterSequence/>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</ProcDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<FuncDeclaration>
+<Identifier value="getA"/>
+<EmptyFormalParameterSequence/>
+<IntTypeDenoter/>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</FuncDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+<CompoundDeclarationSingleDeclaration>
+<ProcDeclaration>
+<Identifier value="setA"/>
+<SingleFormalParameterSequence>
+<ConstFormalParameter>
+<Identifier value="x"/>
+<IntTypeDenoter/>
+</ConstFormalParameter>
+</SingleFormalParameterSequence>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+<SecExpression>
+<AssignExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</AssignExpression>
+</SecExpression>
+</AssignCommand>
+</ProcDeclaration>
+</CompoundDeclarationSingleDeclaration>
+</SequentialDeclaration>
+</CompoundDeclarationPrivate>
+<SequentialCommand>
+<SequentialCommand>
+<SequentialCommand>
+<SequentialCommand>
+<SequentialCommand>
+<SequentialCommand>
+<SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="initA"/>
+</CompoundIdentifier>
+<EmptyActualParameterSequence/>
+</CallCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="printA"/>
+</CompoundIdentifier>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="incrA"/>
+</CompoundIdentifier>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="incrA"/>
+</CompoundIdentifier>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="printA"/>
+</CompoundIdentifier>
+<EmptyActualParameterSequence/>
+</CallCommand>
+</SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="putint"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="getA"/>
+</LongIdentifier>
+<EmptyActualParameterSequence/>
+</CallExpression>
+</SecExpression>
+</ConstActualParameter>
+</SingleActualParameterSequence>
+</CallCommand>
+</SequentialCommand>
+<CallCommand>
+<CompoundIdentifier>
+<Identifier value="setA"/>
+</CompoundIdentifier>
+<SingleActualParameterSequence>
+<ConstActualParameter>
+<SecExpression>
+<BinaryExpression>
+<IntegerExpression>
+<IntegerLiteral value="1"/>
+</IntegerExpression>
+<Operator value="+"/>
+<CallExpression>
+<LongIdentifier>
+<Identifier value="getA"/>
+</LongIdentifier>
+<EmptyActualParameterSequence/>
+</CallExpression>
 </BinaryExpression>
 </SecExpression>
-<Cases>
-<SequentialCase>
-<CaseWhen>
-<CaseLiterals>
-<SequentialCaseRange>
-<SequentialCaseRange>
-<CaseRangeCase>
-<CaseLiteralINT>
-<IntegerLiteral value="1"/>
-</CaseLiteralINT>
-</CaseRangeCase>
-<CaseRangeCase>
-<CaseLiteralINT>
-<IntegerLiteral value="2"/>
-</CaseLiteralINT>
-</CaseRangeCase>
-</SequentialCaseRange>
-<CaseRangeCase>
-<CaseLiteralINT>
-<IntegerLiteral value="3"/>
-</CaseLiteralINT>
-</CaseRangeCase>
-</SequentialCaseRange>
-</CaseLiterals>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="putint"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="123"/>
-</IntegerExpression>
-</SecExpression>
 </ConstActualParameter>
 </SingleActualParameterSequence>
 </CallCommand>
-</CaseWhen>
-<CaseWhen>
-<CaseLiterals>
-<CaseRangeCase>
-<CaseLiteralINT>
-<IntegerLiteral value="4"/>
-</CaseLiteralINT>
-</CaseRangeCase>
-</CaseLiterals>
-<ChoooseCommand>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="3"/>
-</IntegerExpression>
-</SecExpression>
-<Cases>
-<CaseWhen>
-<CaseLiterals>
-<CaseRangeCase>
-<CaseLiteralINT>
-<IntegerLiteral value="1"/>
-</CaseLiteralINT>
-</CaseRangeCase>
-</CaseLiterals>
+</SequentialCommand>
 <CallCommand>
 <CompoundIdentifier>
-<Identifier value="putint"/>
+<Identifier value="printA"/>
 </CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="1"/>
-</IntegerExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
+<EmptyActualParameterSequence/>
 </CallCommand>
-</CaseWhen>
-<ElseCase>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="putint"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<IntegerExpression>
-<IntegerLiteral value="2"/>
-</IntegerExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
-</ElseCase>
-</Cases>
-</ChoooseCommand>
-</CaseWhen>
-</SequentialCase>
-<ElseCase>
-<CallCommand>
-<CompoundIdentifier>
-<Identifier value="put"/>
-</CompoundIdentifier>
-<SingleActualParameterSequence>
-<ConstActualParameter>
-<SecExpression>
-<CharacterExpression>
-<CharacterLiteral value="'E'"/>
-</CharacterExpression>
-</SecExpression>
-</ConstActualParameter>
-</SingleActualParameterSequence>
-</CallCommand>
-</ElseCase>
-</Cases>
-</ChoooseCommand>
+</SequentialCommand>
+</LetCommand>
 </Program>

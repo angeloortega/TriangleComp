@@ -1,20 +1,6 @@
-! Funciones mutuamente recursivas, anterior ve a posterior
+loop for i from 0 to 10 while 2*i < 10 do 
 
-
-let
-
-  recursive
-
-    func f (a : Integer): Integer ~ 1 + g(a - 1)
-
-    |
-
-    func g (b : Integer): Integer ~ 1
-
-  end
-
-in
-
-  putint(f(10))
+    putint (i) ! debe imprimir del 0 al 4
 
 end
+
