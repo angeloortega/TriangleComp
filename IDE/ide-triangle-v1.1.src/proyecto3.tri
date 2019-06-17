@@ -1,6 +1,0 @@
-let
-var a::= 1;
-var c::= 'v'
-in
-putint(3)
-end

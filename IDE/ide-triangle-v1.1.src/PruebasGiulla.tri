@@ -1,7 +1,0 @@
-let
-  var a : array 5 of Integer
-in
-    a := [1,2,3,4,5];
-    putint(a[1])
-
-end
